@@ -1,17 +1,14 @@
 package com.rms.entity;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,9 +18,9 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="category")
-public class Category {
-
+@Table(name="customer")
+public class Customer {
+	
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -33,11 +30,16 @@ public class Category {
 	@Column(name="name")
 	private String name;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
-    private Set<Product> product;
-
+	@Email
+	@Column(name="email")
+	private String email;
 	
+	@Min(value=10,message="Password should not be less than 10")
+	@Column(name="password")
+	private String password;
 	
+	@Max(value=10 ,message="Phone Number should not be greater than 10")
+	@Column(name="phone_number")
+	private Long phoneNumber;
 	
 }

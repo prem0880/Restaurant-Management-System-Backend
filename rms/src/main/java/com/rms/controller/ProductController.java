@@ -2,6 +2,8 @@ package com.rms.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -43,19 +45,19 @@ public class ProductController {
 	}
 	
 	@PostMapping("/product")
-	public ResponseEntity<String> addProduct(@RequestBody ProductDto productDto){
+	public ResponseEntity<String> addProduct(@Valid @RequestBody ProductDto productDto){
 		
 		return new ResponseEntity<>(productService.addProduct(productDto),new HttpHeaders(),HttpStatus.OK);
 	}
 	
 	@PutMapping("/product/{id}")
-	public ResponseEntity<String> updateProduct(@PathVariable("id") Long id,@RequestBody ProductDto productDto){
+	public ResponseEntity<String> updateProduct(@PathVariable("id") Long id,@Valid @RequestBody ProductDto productDto){
 		
 		return new ResponseEntity<>(productService.updateProduct(id, productDto),new HttpHeaders(),HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/product/{pid}/category/{cid}/meal/{mid}")
-	public ResponseEntity<String> deleteProduct(@PathVariable("pid") Long pid,@PathVariable("cid") Long cid,@PathVariable("mid") Long mid){
+	public ResponseEntity<String> deleteProduct(@PathVariable("pid") Long pid,@Valid @PathVariable("cid") Long cid,@PathVariable("mid") Long mid){
 		
 		return new ResponseEntity<>(productService.deleteProduct(pid,cid,mid),new HttpHeaders(),HttpStatus.OK);
 	}

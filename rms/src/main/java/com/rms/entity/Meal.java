@@ -29,7 +29,7 @@ public class Meal {
 	@Column(name="id")
 	private Long id;
 	
-	@Column(name="name",nullable=false)
+	@Column(name="name")
 	private String name;
 	
 	@JsonIgnore

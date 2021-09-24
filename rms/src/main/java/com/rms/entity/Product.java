@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
+import javax.validation.constraints.Max;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,30 +29,31 @@ public class Product {
 	@Column(name="id")
 	private Long id;
 	
-	@Column(name="name",nullable=false,length=20)
+	@Column(name="name")
 	private String name;
 	
-	@Column(name="image",nullable=false)
+	@Column(name="image")
 	private String image;
 	
-	@Column(name="type",nullable=false)
+	@Column(name="type")
 	private String type;
 	
-	@Column(name="price",nullable=false)
+	@Column(name="price")
 	private Double price;
 	
-	@Column(name="description",nullable=false,length=50)
+	@Max(value=50 ,message="Description should not be greater than 50")
+	@Column(name="description")
 	private String description;
 	
-	@Column(name="tax",nullable=false)
+	@Column(name="tax")
 	private Double tax;
 	
 	@ManyToOne
-    @JoinColumn(name = "category_id",referencedColumnName="id",foreignKey = @ForeignKey(name = "FK_CATEGORY"), nullable = false)
+    @JoinColumn(name = "category_id",foreignKey = @ForeignKey(name = "FK_CATEGORY_ID"))
     private Category category;
 	
 	@ManyToOne
-    @JoinColumn(name = "meal_id",referencedColumnName="id",foreignKey = @ForeignKey(name = "FK_MEAL"), nullable = false)
+    @JoinColumn(name = "meal_id",foreignKey = @ForeignKey(name = "FK_MEAL_ID"))
     private Meal meal;
 	
 	
