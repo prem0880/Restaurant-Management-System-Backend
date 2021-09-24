@@ -21,7 +21,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="Meal")
+@Table(name="meal")
 public class Meal {
 
 	@Id

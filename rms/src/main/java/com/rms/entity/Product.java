@@ -21,7 +21,7 @@ import javax.persistence.ForeignKey;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="Product")
+@Table(name="product")
 public class Product {
 	
 	@Id
