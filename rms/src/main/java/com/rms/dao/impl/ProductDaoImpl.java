@@ -52,13 +52,8 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		
 		if(stat) {
-			updateProduct.setImage(product.getName());
-			updateProduct.setCategory(product.getCategory());
-			updateProduct.setDescription(product.getDescription());
-			updateProduct.setMeal(product.getMeal());
-			updateProduct.setPrice(product.getPrice());
-			updateProduct.setTax(product.getTax());
-			updateProduct.setType(product.getType());
+			product.setId(id);
+			session.merge(product);
 			session.flush();
 			result="Product Updation is successful for id: "+id;
 		}

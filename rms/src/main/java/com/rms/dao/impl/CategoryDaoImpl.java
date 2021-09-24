@@ -71,7 +71,8 @@ public class CategoryDaoImpl implements CategoryDao{
 		}
 		
 		if(stat) {
-			categoryEntity.setName(category.getName());
+			category.setId(id);
+			session.merge(category);
 			session.flush();
 			result="Category Updation is successful for id: "+id;
 		}

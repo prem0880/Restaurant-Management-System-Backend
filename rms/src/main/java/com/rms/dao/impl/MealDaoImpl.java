@@ -72,7 +72,8 @@ public class MealDaoImpl implements MealDao {
 		}
 		
 		if(stat) {
-			mealEntity.setName(meal.getName());
+			meal.setId(id);
+			session.merge(meal);
 			session.flush();
 			result="Meal Updation is successful for id: "+id;
 		}

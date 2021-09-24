@@ -20,9 +20,7 @@ public class CategoryServiceImpl implements CategoryService{
 	
 	@Override
 	public String deleteCategory(Long id) {
-		
 		return categoryDao.deleteCategory(id);
-
 	}
 
 	@Override
