@@ -31,27 +31,27 @@ public class MealController {
 	@Autowired
 	private MealService mealService;
 	
-	@GetMapping("/meal")
+	@GetMapping("/getAllMeal")
 	public ResponseEntity<List<Meal>> getAllMeal(){
 		return new ResponseEntity<>(mealService.getAllMeal(),new HttpHeaders(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/meal/{id}")
+	@GetMapping("/getMeal/{id}")
 	public ResponseEntity<Meal> getMealById(@PathVariable Long id){
 		return new ResponseEntity<>(mealService.getMealById(id),new HttpHeaders(),HttpStatus.OK);
 	}
 	
-	@PostMapping("/meal")
+	@PostMapping("/addMeal")
 	public ResponseEntity<String> addMeal(@RequestBody MealDto mealDto){
 		return new ResponseEntity<>(mealService.addMeal(mealDto),new HttpHeaders(),HttpStatus.OK);
 	}
 	
-	@PutMapping("/meal/{id}")
+	@PutMapping("/updateMeal/{id}")
 	public ResponseEntity<String> updateMeal(@PathVariable Long id, @RequestBody MealDto mealDto){
 		return new ResponseEntity<>(mealService.updateMeal(id,mealDto),new HttpHeaders(),HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/meal/{id}")
+	@DeleteMapping("/deleteMeal/{id}")
 	public ResponseEntity<String> deleteMeal(@PathVariable Long id){
 		
 		return new ResponseEntity<>(mealService.deleteMeal(id),new HttpHeaders(),HttpStatus.OK);

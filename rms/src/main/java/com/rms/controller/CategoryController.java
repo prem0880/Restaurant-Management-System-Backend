@@ -31,27 +31,27 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 	
-	@GetMapping("/category")
+	@GetMapping("/getAllCategory")
 	public ResponseEntity<List<Category>> getAllCategory(){
 		return new ResponseEntity<>(categoryService.getAllCategory(),new HttpHeaders(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/category/{id}")
+	@GetMapping("/getCategory/{id}")
 	public ResponseEntity<Category> getCategoryById(@PathVariable Long id){
 		return new ResponseEntity<>(categoryService.getCategoryById(id),new HttpHeaders(),HttpStatus.OK);
 	}
 	
-	@PostMapping("/category")
+	@PostMapping("/addCategory")
 	public ResponseEntity<String> addCategory(@RequestBody CategoryDto categoryDto){
 		return new ResponseEntity<>(categoryService.addCategory(categoryDto),new HttpHeaders(),HttpStatus.OK);
 	}
 	
-	@PutMapping("/category/{id}")
+	@PutMapping("/updateCategory/{id}")
 	public ResponseEntity<String> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto){
 		return new ResponseEntity<>(categoryService.updateCategory(id,categoryDto),new HttpHeaders(),HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/category/{id}")
+	@DeleteMapping("/deleteCategory/{id}")
 	public ResponseEntity<String> deleteCategory(@PathVariable Long id){
 		
 		return new ResponseEntity<>(categoryService.deleteCategory(id),new HttpHeaders(),HttpStatus.OK);

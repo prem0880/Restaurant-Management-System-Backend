@@ -1,6 +1,5 @@
 package com.rms.dto;
 
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -8,14 +7,7 @@ import lombok.NonNull;
 @NonNull
 @NoArgsConstructor
 @Data
-public class CustomerDto {
-
+public class CountryDto {
 	private Long id;
 	private String name;
-	private String email;
-	private String password;
-	private Long phoneNumber;
-	private String createdOn;
-	private	String updatedOn;
-
 }

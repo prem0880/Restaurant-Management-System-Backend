@@ -31,12 +31,12 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 	    
-	@PostMapping("/customer")
+	@PostMapping("/addCustomer")
 	public ResponseEntity<String> addCustomer(@Valid @RequestBody CustomerDto customerDto){
 		return new ResponseEntity<>(customerService.addCustomer(customerDto),new HttpHeaders(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/customer")
+	@GetMapping("/getAllCustomer")
 	public ResponseEntity<List<Customer>> getAllCustomer(){
 		return new ResponseEntity<>(customerService.getAllCustomer(),new HttpHeaders(),HttpStatus.OK);
 	}

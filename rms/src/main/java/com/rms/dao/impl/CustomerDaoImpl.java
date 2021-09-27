@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.rms.dao.CustomerDao;
 import com.rms.entity.Customer;
 import com.rms.exception.IdNotFoundException;
+import com.rms.util.TimeStamp;
 
 @Repository
 @Transactional
@@ -20,7 +21,6 @@ public class CustomerDaoImpl implements CustomerDao {
 	static final String ID_NOT_FOUND="Customer not found with id ";
 	static final String COULDNT_UPDATE="Couldn't update Customer...";
 
-	
 	@Autowired
 	private SessionFactory sessionFactory;
 	
@@ -29,6 +29,7 @@ public class CustomerDaoImpl implements CustomerDao {
 		Session session=sessionFactory.getCurrentSession();
 		String result = null;
 		session.save(customer);
+		customer.setCreatedOn(TimeStamp.getTimeStamp());
 		result="Customer added successfully.....";
 		session.flush();
 		return result;
@@ -73,7 +74,9 @@ public class CustomerDaoImpl implements CustomerDao {
 		}
 		
 		if(stat) {
+			customer.setCreatedOn(customerEntity.getCreatedOn());
 			customer.setId(id);
+			customer.setUpdatedOn(TimeStamp.getTimeStamp());
 			session.merge(customer);
 			session.flush();
 			result="Customer Updation is successful for id: "+id;

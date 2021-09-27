@@ -1,6 +1,8 @@
 package com.rms.dto;
 
 
+import com.rms.entity.Country;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -8,14 +10,8 @@ import lombok.NonNull;
 @NonNull
 @NoArgsConstructor
 @Data
-public class CustomerDto {
-
+public class StateDto {
 	private Long id;
 	private String name;
-	private String email;
-	private String password;
-	private Long phoneNumber;
-	private String createdOn;
-	private	String updatedOn;
-
+	private Country country;
 }
