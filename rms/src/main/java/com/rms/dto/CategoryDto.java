@@ -1,9 +1,6 @@
 package com.rms.dto;
 
-import java.util.Set;
-
-import com.rms.entity.Product;
-
+import java.sql.Timestamp;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -15,5 +12,6 @@ import lombok.NonNull;
 public class CategoryDto {
 	private Long id;
 	private String name;
-    private Set<Product> product;
+	private Timestamp createdOn;
+	private	Timestamp updatedOn;
 }

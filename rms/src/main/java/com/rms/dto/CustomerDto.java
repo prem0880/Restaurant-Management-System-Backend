@@ -1,6 +1,8 @@
 package com.rms.dto;
 
 
+import java.sql.Timestamp;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -15,7 +17,7 @@ public class CustomerDto {
 	private String email;
 	private String password;
 	private Long phoneNumber;
-	private String createdOn;
-	private	String updatedOn;
+	private Timestamp createdOn;
+	private	Timestamp updatedOn;
 
 }

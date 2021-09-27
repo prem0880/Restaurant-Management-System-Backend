@@ -28,8 +28,8 @@ public class StateController {
 	@Autowired
 	private StateService stateService;
 	
-	@GetMapping("/getstate/{countryId}")
-	public ResponseEntity<List<State>> getStatesByCountry(@PathVariable("countryId")Long countryId) {
+	@GetMapping("/getState/{countryId}")
+	public ResponseEntity<List<State>> getStatesByCountry(@PathVariable("countryId") Long countryId) {
 		return new ResponseEntity<>(stateService.getStatesByCountry(countryId),new HttpHeaders(),HttpStatus.OK);
 	}
 

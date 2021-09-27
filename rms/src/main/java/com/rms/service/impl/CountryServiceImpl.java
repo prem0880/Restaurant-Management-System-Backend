@@ -27,4 +27,20 @@ public class CountryServiceImpl implements CountryService {
 	public List<Country> getAllCountry() {
 		return countryDao.getAllCountry();
 	}
+
+	@Override
+	public String deleteCountry(Long id) {
+		return countryDao.deleteCountry(id);
+	}
+
+	@Override
+	public String updateCountry(Long id, CountryDto countryDto) {
+		Country country  = CountryMapper.toEntity(countryDto);
+		return countryDao.updateCountry(id, country);
+	}
+
+	@Override
+	public Country getCountryById(Long id) {
+		return countryDao.getCountryById(id);
+	}
 }

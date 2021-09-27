@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.rms.dao.StateDao;
 import com.rms.entity.State;
+import com.rms.util.TimeStamp;
 
 @Repository
 @Transactional
@@ -26,6 +27,7 @@ public class StateDaoImpl implements StateDao{
 	public String addState(State state) {
 		Session session=sessionFactory.getCurrentSession();
 		String result = null;
+		state.setCreatedOn(TimeStamp.getTimeStamp());
 		session.save(state);
 		result="State added successfully.....";
 		session.flush();

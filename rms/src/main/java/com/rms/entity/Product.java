@@ -1,6 +1,8 @@
 package com.rms.entity;
 
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -55,6 +57,12 @@ public class Product {
 	@ManyToOne
     @JoinColumn(name = "meal_id",foreignKey = @ForeignKey(name = "FK_MEAL_ID"))
     private Meal meal;
+	
+	@Column(name="created_on")
+	private Timestamp createdOn;
+	
+	@Column(name="updated_on")
+	private Timestamp updatedOn;
 	
 	
 	

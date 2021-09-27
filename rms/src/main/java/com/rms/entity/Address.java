@@ -1,5 +1,7 @@
 package com.rms.entity;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -43,6 +45,13 @@ public class Address {
 	@ManyToOne
 	@JoinColumn(name = "customer_id",foreignKey = @ForeignKey(name = "FK_CUSTOMER_ID")) 
 	private Customer customer;
+	
+	@Column(name="created_on")
+	private Timestamp createdOn;
+	
+	@Column(name="updated_on")
+	private Timestamp updatedOn;
+
 
 		
 }

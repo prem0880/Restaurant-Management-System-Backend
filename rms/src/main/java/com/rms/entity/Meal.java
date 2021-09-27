@@ -1,17 +1,14 @@
 package com.rms.entity;
 
-import java.util.Set;
+import java.sql.Timestamp;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,9 +29,11 @@ public class Meal {
 	@Column(name="name")
 	private String name;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "meal",cascade = CascadeType.ALL)
-    private Set<Product> product;
+	@Column(name="created_on")
+	private Timestamp createdOn;
+	
+	@Column(name="updated_on")
+	private Timestamp updatedOn;
 
 	
 	

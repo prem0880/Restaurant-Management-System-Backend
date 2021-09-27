@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.rms.dao.ProductDao;
 import com.rms.entity.Product;
 import com.rms.exception.IdNotFoundException;
+import com.rms.util.TimeStamp;
 
 
 @Repository
@@ -52,7 +53,9 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		
 		if(stat) {
+			product.setCreatedOn(updateProduct.getCreatedOn());
 			product.setId(id);
+			product.setUpdatedOn(TimeStamp.getTimeStamp());
 			session.merge(product);
 			session.flush();
 			result="Product Updation is successful for id: "+id;
@@ -65,6 +68,7 @@ public class ProductDaoImpl implements ProductDao {
 	public String addProduct(Product product) {
 		Session session=sessionFactory.getCurrentSession();
 		String result = null;
+		product.setCreatedOn(TimeStamp.getTimeStamp());
 		session.save(product);
 		session.flush();
 		result="Product Added Successfully...";

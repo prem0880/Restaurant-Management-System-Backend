@@ -1,5 +1,7 @@
 package com.rms.entity;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -32,6 +34,12 @@ public class State {
 	@ManyToOne
 	@JoinColumn(name = "country_id",foreignKey = @ForeignKey(name = "FK_COUNTRY_ID")) 
 	private Country country;
+	
+	@Column(name="created_on")
+	private Timestamp createdOn;
+	
+	@Column(name="updated_on")
+	private Timestamp updatedOn;
 	
 	
 }

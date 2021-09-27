@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.rms.dao.MealDao;
 import com.rms.entity.Meal;
 import com.rms.exception.IdNotFoundException;
+import com.rms.util.TimeStamp;
 
 
 @Repository
@@ -72,7 +73,9 @@ public class MealDaoImpl implements MealDao {
 		}
 		
 		if(stat) {
+			meal.setCreatedOn(mealEntity.getCreatedOn());
 			meal.setId(id);
+			meal.setUpdatedOn(TimeStamp.getTimeStamp());
 			session.merge(meal);
 			session.flush();
 			result="Meal Updation is successful for id: "+id;
@@ -86,6 +89,7 @@ public class MealDaoImpl implements MealDao {
 		Session session=sessionFactory.getCurrentSession();
 		String result = null;
 		session.save(meal);
+		meal.setCreatedOn(TimeStamp.getTimeStamp());
 		result="Meal added successfully.....";
 		session.flush();
 		return result;

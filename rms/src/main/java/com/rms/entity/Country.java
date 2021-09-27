@@ -1,5 +1,7 @@
 package com.rms.entity;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +25,13 @@ public class Country {
 	@Column(name = "id")
 	private Long id;
 	
-	@Column(name = "name")
+	@Column(name = "name",unique=true)
 	private String name;
+	
+	@Column(name="created_on")
+	private Timestamp createdOn;
+	
+	@Column(name="updated_on")
+	private Timestamp updatedOn;
 	
 }

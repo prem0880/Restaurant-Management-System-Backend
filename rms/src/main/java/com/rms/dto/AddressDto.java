@@ -1,5 +1,7 @@
 package com.rms.dto;
 
+import java.sql.Timestamp;
+
 import com.rms.entity.Customer;
 import com.rms.entity.State;
 import lombok.Data;
@@ -16,4 +18,6 @@ public class AddressDto {
 	private Long pincode;
 	private State state;
 	private Customer customer;
+	private Timestamp createdOn;
+	private	Timestamp updatedOn;
 }

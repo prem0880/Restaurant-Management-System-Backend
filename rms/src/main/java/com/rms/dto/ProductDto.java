@@ -1,6 +1,8 @@
 package com.rms.dto;
 
 
+import java.sql.Timestamp;
+
 import com.rms.entity.Category;
 import com.rms.entity.Meal;
 
@@ -22,6 +24,8 @@ public class ProductDto {
 	private String description;
     private Category category;
     private Meal meal;
+	private Timestamp createdOn;
+	private	Timestamp updatedOn;
     
         
     

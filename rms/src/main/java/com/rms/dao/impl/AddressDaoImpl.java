@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.rms.dao.AddressDao;
 import com.rms.entity.Address;
+import com.rms.util.TimeStamp;
 
 @Repository
 @Transactional
@@ -24,6 +25,7 @@ public class AddressDaoImpl implements AddressDao {
 	public String addAddress(Address address) {
 		Session session=sessionFactory.getCurrentSession();
 		String result = null;
+		address.setCreatedOn(TimeStamp.getTimeStamp());
 		session.save(address);
 		result="Address added successfully.....";
 		session.flush();

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.rms.dao.CategoryDao;
 import com.rms.entity.Category;
 import com.rms.exception.IdNotFoundException;
+import com.rms.util.TimeStamp;
                        
 @Repository
 @Transactional
@@ -71,7 +72,9 @@ public class CategoryDaoImpl implements CategoryDao{
 		}
 		
 		if(stat) {
+			category.setCreatedOn(categoryEntity.getCreatedOn());
 			category.setId(id);
+			category.setUpdatedOn(TimeStamp.getTimeStamp());
 			session.merge(category);
 			session.flush();
 			result="Category Updation is successful for id: "+id;
@@ -84,6 +87,7 @@ public class CategoryDaoImpl implements CategoryDao{
 	public String addCategory(Category category) {
 		Session session=sessionFactory.getCurrentSession();
 		String result = null;
+		category.setCreatedOn(TimeStamp.getTimeStamp());
 		session.save(category);
 		result="Category added successfully.....";
 		session.flush();
