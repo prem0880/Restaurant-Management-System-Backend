@@ -3,7 +3,7 @@ package com.rms.util;
 import com.rms.dto.AddressDto;
 import com.rms.entity.Address;
 
-public class AddressMapper {
+public class AddressUtil {
 
 	public static Address toEntity(AddressDto addressDto) {
 		Address address = new Address();
@@ -14,5 +14,16 @@ public class AddressMapper {
 		address.setState(addressDto.getState());
 		return address;
 	}
+	
+	public static AddressDto toDto(Address address) {
+		AddressDto addressDto = new AddressDto();
+		addressDto.setAddressLine(address.getAddressLine());
+		addressDto.setCity(address.getCity());
+		addressDto.setCustomer(address.getCustomer());
+		addressDto.setPincode(address.getPincode());
+		addressDto.setState(address.getState());
+		return addressDto;
+	}
+	
 	
 }

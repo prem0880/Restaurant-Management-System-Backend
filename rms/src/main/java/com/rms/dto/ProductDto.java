@@ -1,6 +1,7 @@
 package com.rms.dto;
 
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import com.rms.entity.Category;
@@ -14,7 +15,10 @@ import lombok.NonNull;
 @NonNull
 @NoArgsConstructor
 @Data
-public class ProductDto {
+public class ProductDto implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private String name;
 	private String image;

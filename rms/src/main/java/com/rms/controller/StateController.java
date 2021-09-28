@@ -1,9 +1,7 @@
 package com.rms.controller;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,30 +14,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.dto.StateDto;
-import com.rms.entity.State;
-import com.rms.exception.IdNotFoundException;
+import com.rms.exception.BusinessLogicException;
+import com.rms.exception.DataBaseException;
+import com.rms.response.HttpResponse;
 import com.rms.service.StateService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/state")
 @CrossOrigin("http://localhost:4200")
 public class StateController {
 
 	@Autowired
 	private StateService stateService;
 	
-	@GetMapping("/getState/{countryId}")
-	public ResponseEntity<List<State>> getStatesByCountry(@PathVariable("countryId") Long countryId) {
-		return new ResponseEntity<>(stateService.getStatesByCountry(countryId),new HttpHeaders(),HttpStatus.OK);
+	@GetMapping("/get/{countryId}")
+	public ResponseEntity<HttpResponse> getStatesByCountry(@PathVariable("countryId") Long countryId) {
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),"State Data Retrieval is Success",stateService.getStatesByCountry(countryId)),HttpStatus.OK);
+		}
+		catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
 	}
 
-	@PostMapping("/addState")
-	public ResponseEntity<String> addState(@RequestBody StateDto stateDto) {
-		return new ResponseEntity<>(stateService.addState(stateDto),new HttpHeaders(),HttpStatus.OK);
+	@PostMapping("/add")
+	public ResponseEntity<HttpResponse> addState(@RequestBody StateDto stateDto) {
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),stateService.addState(stateDto)),HttpStatus.OK);
+		}
+		catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
-	@ExceptionHandler(IdNotFoundException.class)
-	public ResponseEntity<String> userNotFound(IdNotFoundException e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	@ExceptionHandler(BusinessLogicException.class)
+	public ResponseEntity<HttpResponse> businessException (BusinessLogicException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	}
+		
+
+	@ExceptionHandler(DataBaseException.class)
+	public ResponseEntity<HttpResponse> dataBaseException (DataBaseException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
 	}
 }

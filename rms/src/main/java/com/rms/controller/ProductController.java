@@ -1,11 +1,10 @@
 package com.rms.controller;
 
-import java.util.List;
+
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,54 +19,78 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.dto.ProductDto;
-import com.rms.entity.Product;
-import com.rms.exception.IdNotFoundException;
+import com.rms.exception.BusinessLogicException;
+import com.rms.exception.DataBaseException;
+import com.rms.response.HttpResponse;
 import com.rms.service.ProductService;
 
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/product")
 @CrossOrigin("http://localhost:4200")
 public class ProductController {
 
 	@Autowired
 	private ProductService productService;
 	
-	@GetMapping("/getAllProduct")
-	public ResponseEntity<List<Product>> getAllProduct(){
-		return new ResponseEntity<>(productService.getAllProduct(),new HttpHeaders(),HttpStatus.OK);
+	static final String DATA_SUCCESS="Category Data Retrieval is Success!";
+	
+	@GetMapping("/getAll")
+	public ResponseEntity<HttpResponse> getAllProduct(){
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),DATA_SUCCESS,productService.getAllProduct()),HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
-	@GetMapping("/getProduct/{id}")
-	public ResponseEntity<Product> getProductById(@PathVariable Long id){
-		return new ResponseEntity<>(productService.getProductById(id),new HttpHeaders(),HttpStatus.OK);
+	@GetMapping("/get/{id}")
+	public ResponseEntity<HttpResponse> getProductById(@PathVariable Long id){
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),DATA_SUCCESS,productService.getProductById(id)),HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
-	@PostMapping("/addProduct")
-	public ResponseEntity<String> addProduct(@Valid @RequestBody ProductDto productDto){
+	@PostMapping("/add")
+	public ResponseEntity<HttpResponse> addProduct(@Valid @RequestBody ProductDto productDto){
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),productService.addProduct(productDto)),HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/update/{id}")
+	public ResponseEntity<HttpResponse> updateProduct(@PathVariable("id") Long id,@Valid @RequestBody ProductDto productDto){
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),productService.updateProduct(id, productDto)),HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<HttpResponse> deleteProduct(@PathVariable("id") Long id){
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),productService.deleteProduct(id)),HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@ExceptionHandler(BusinessLogicException.class)
+	public ResponseEntity<HttpResponse> businessException (BusinessLogicException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	}
 		
-		return new ResponseEntity<>(productService.addProduct(productDto),new HttpHeaders(),HttpStatus.OK);
-	}
-	
-	@PutMapping("/updateProduct/{id}")
-	public ResponseEntity<String> updateProduct(@PathVariable("id") Long id,@Valid @RequestBody ProductDto productDto){
-		
-		return new ResponseEntity<>(productService.updateProduct(id, productDto),new HttpHeaders(),HttpStatus.OK);
-	}
-	
-	@DeleteMapping("/deleteProduct/{pid}/category/{cid}/meal/{mid}")
-	public ResponseEntity<String> deleteProduct(@PathVariable("pid") Long pid,@Valid @PathVariable("cid") Long cid,@PathVariable("mid") Long mid){
-		
-		return new ResponseEntity<>(productService.deleteProduct(pid,cid,mid),new HttpHeaders(),HttpStatus.OK);
-	}
-	
-	@ExceptionHandler(IdNotFoundException.class)
-	public ResponseEntity<String> userNotFound(IdNotFoundException e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-	}
 
-	
+	@ExceptionHandler(DataBaseException.class)
+	public ResponseEntity<HttpResponse> dataBaseException (DataBaseException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	}
 
 	
 }

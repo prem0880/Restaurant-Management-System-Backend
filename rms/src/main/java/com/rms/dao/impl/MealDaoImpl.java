@@ -6,22 +6,23 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.rms.dao.MealDao;
 import com.rms.entity.Meal;
-import com.rms.exception.IdNotFoundException;
-import com.rms.util.TimeStamp;
+import com.rms.exception.DataBaseException;
+import com.rms.util.TimeStampUtil;
 
 
 @Repository
 @Transactional
 public class MealDaoImpl implements MealDao {
 
-	
 	static final String ID_NOT_FOUND="Meal not found with id ";
 	static final String COULDNT_UPDATE="Couldn't update Meal...";
+	static final String DB_FETCH_ERROR="Error in Fetching Data from Database";
 
 	
 	@Autowired
@@ -30,92 +31,81 @@ public class MealDaoImpl implements MealDao {
 	
 	@Override
 	public String deleteMeal(Long id) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		Meal meal=null;
-		boolean stat=false;
-		try {
+		try{
+			String result = null;
+			Meal meal=null;
+			Session session=sessionFactory.getCurrentSession();
 			meal=session.load(Meal.class, id);
-			if(meal.getName()!=null) {
-				stat=true;
-			}
-		}
-		catch(org.hibernate.ObjectNotFoundException e)
-		{
-			throw new IdNotFoundException("Deletion has failed. "+ID_NOT_FOUND+id);
-		}
-		if(stat)
-		{
 			session.delete(meal);
 			session.flush();
 			result="Deletion is successful with id: "+id;
+			return result;
+		}catch (Exception e) {
+			throw new DataBaseException("Error in Deletion"+ID_NOT_FOUND);
 		}
-		return result;
-		
-		
 	}
 
 	@Override
-	public String updateMeal(Long id, Meal meal) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		Meal mealEntity=null;
-		boolean stat=false;
-		try {
-				mealEntity=session.load(Meal.class, id);
-				if(mealEntity.getName()!=null) {
-					stat=true;
-				}
-		}
-		catch(org.hibernate.ObjectNotFoundException e)
-		{
-			throw new IdNotFoundException(COULDNT_UPDATE+ID_NOT_FOUND+id);
-		}
-		
-		if(stat) {
+	public boolean updateMeal(Long id, Meal meal) {
+		boolean flag=false;
+		try{
+			Session session=sessionFactory.getCurrentSession();
+			Meal mealEntity=null;
+			mealEntity=session.load(Meal.class, id);
 			meal.setCreatedOn(mealEntity.getCreatedOn());
 			meal.setId(id);
-			meal.setUpdatedOn(TimeStamp.getTimeStamp());
-			session.merge(meal);
+			meal.setUpdatedOn(TimeStampUtil.getTimeStamp());
+			Long value=(Long)session.merge(meal);
+			if(value!=null) {
+				flag=true;
+			}
 			session.flush();
-			result="Meal Updation is successful for id: "+id;
+			return flag;
+		}catch (Exception e) {
+			throw new DataBaseException(ID_NOT_FOUND+COULDNT_UPDATE);
 		}
-	
-		return result;
 	}
 
 	@Override
-	public String addMeal(Meal meal) {
+	public boolean addMeal(Meal meal) {
+		boolean flag=false;
+		try {
 		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		session.save(meal);
-		meal.setCreatedOn(TimeStamp.getTimeStamp());
-		result="Meal added successfully.....";
+		meal.setCreatedOn(TimeStampUtil.getTimeStamp());
+		Long value=(Long)session.save(meal);
+		if(value!=null) {
+			flag=true;
+		}
 		session.flush();
-		return result;
-		
-		
+		return flag;
+		}catch (Exception e) {
+			throw new DataBaseException("Error in Creation");
+		}
 	}
 
 	@Override
 	public Meal getMealById(Long id) {
+		try {
 		Session session=sessionFactory.getCurrentSession();
-		Meal meal =null;
+		Meal meal=null;
+		
 		meal=session.get(Meal.class, id);
-		if(meal!=null)
-		{
-			return meal;
-			
-		}else {
-    		throw new IdNotFoundException("Sorry, Meal could not be retrived " + ID_NOT_FOUND+ id);
-    	}
+		return meal;
+		}catch (Exception e) {
+			throw new DataBaseException(DB_FETCH_ERROR+ ID_NOT_FOUND+ id);
+		}
 		
 	}
 
 	@Override
 	public List<Meal> getAllMeal() {
+		try {
 		Session session=sessionFactory.getCurrentSession();
-		return session.createQuery("from Meal",Meal.class).getResultList();
+		Query<Meal> query=session.createQuery("from Meal",Meal.class);
+		return query.list();
+		}catch (Exception e) {
+			throw new DataBaseException(DB_FETCH_ERROR);
+		}
 	}
 
 }

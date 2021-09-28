@@ -1,5 +1,6 @@
 package com.rms.dto;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import lombok.Data;
@@ -9,7 +10,10 @@ import lombok.NonNull;
 @NonNull
 @NoArgsConstructor
 @Data
-public class MealDto {
+public class MealDto implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private String name;
 	private Timestamp createdOn;

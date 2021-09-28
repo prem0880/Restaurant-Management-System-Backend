@@ -4,9 +4,9 @@ import java.util.List;
 import com.rms.entity.Country;
 
 public interface CountryDao {
-	public String addCountry(Country country);
-	public List<Country> getAllCountry();
-	public String deleteCountry(Long id);
-	public String updateCountry(Long id, Country country);
-	public Country getCountryById(Long id);
+	 boolean addCountry(Country country);
+	 List<Country> getAllCountry();
+	 String deleteCountry(Long id);
+	 boolean updateCountry(Long id, Country country);
+	 Country getCountryById(Long id);
 }

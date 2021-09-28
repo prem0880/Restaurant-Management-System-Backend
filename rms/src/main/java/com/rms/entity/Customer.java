@@ -1,5 +1,6 @@
 package com.rms.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -21,9 +22,10 @@ import lombok.NonNull;
 @Data
 @Entity
 @Table(name="customer")
-public class Customer {
-	
-	
+public class Customer implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
@@ -41,7 +43,7 @@ public class Customer {
 	private String password;
 	
 	@Max(value=10 ,message="Phone Number should not be greater than 10")
-	@Column(name="phone_number")
+	@Column(name="phone_number",unique=true)
 	private Long phoneNumber;
 	
 	

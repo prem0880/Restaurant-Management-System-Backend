@@ -5,7 +5,7 @@ import java.util.List;
 import com.rms.entity.State;
 
 public interface StateDao {
-	public String addState(State state);
-	public List<State> getStatesByCountry(Long countryId);
+	 boolean addState(State state);
+	 List<State> getStatesByCountry(Long countryId);
 
 }

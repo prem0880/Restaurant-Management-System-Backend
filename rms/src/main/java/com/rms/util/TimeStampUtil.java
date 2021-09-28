@@ -3,7 +3,7 @@ package com.rms.util;
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class TimeStamp {
+public class TimeStampUtil {
 
 	public static Timestamp getTimeStamp() {
 		Date date= new Date();

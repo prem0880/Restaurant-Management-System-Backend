@@ -12,32 +12,44 @@ import org.springframework.stereotype.Repository;
 
 import com.rms.dao.AddressDao;
 import com.rms.entity.Address;
-import com.rms.util.TimeStamp;
+import com.rms.exception.DataBaseException;
+import com.rms.util.TimeStampUtil;
 
 @Repository
 @Transactional
 public class AddressDaoImpl implements AddressDao {
 
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
 	@Override
-	public String addAddress(Address address) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		address.setCreatedOn(TimeStamp.getTimeStamp());
-		session.save(address);
-		result="Address added successfully.....";
-		session.flush();
-		return result;
+	public boolean addAddress(Address address) {
+		boolean flag=false;
+		try {
+			Session session=sessionFactory.getCurrentSession();
+			address.setCreatedOn(TimeStampUtil.getTimeStamp());
+			Long id=(Long)session.save(address);
+			if(id!=0)
+				flag=true;
+			session.flush();
+		}catch (Exception e) {
+			throw new DataBaseException("Error in Creation of Address");
+		}
+		return flag;
 	}
 
 	@Override
 	public List<Address> getAddressByPhoneNumber(Long phoneNumber) {
+		try {
 		Session session=sessionFactory.getCurrentSession();
 		Query<Address> query=session.createQuery("FROM Address a WHERE a.customer.phoneNumber=:phoneNumber",Address.class);
 		query.setParameter("phoneNumber", phoneNumber);
 		return query.list();
+		}catch (Exception e) {
+			throw new DataBaseException("Error in Fetching Address Data From Database");
+		}
+		
 	}
 
 }

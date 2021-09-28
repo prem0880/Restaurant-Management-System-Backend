@@ -1,5 +1,6 @@
 package com.rms.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -13,16 +14,14 @@ import com.rms.dto.ProductDto;
 import com.rms.entity.Category;
 import com.rms.entity.Meal;
 import com.rms.entity.Product;
-import com.rms.exception.IdNotFoundException;
+import com.rms.exception.BusinessLogicException;
+import com.rms.exception.DataBaseException;
 import com.rms.service.ProductService;
-import com.rms.util.ProductMapper;
+import com.rms.util.ProductUtil;
 
 @Service
 public class ProductServiceImpl implements ProductService{
 	
-	static final String ID_NOT_FOUND="Product not found with id ";
-	static final String CATEGORY_NOT_FOUND="Category not found with id";
-	static final String MEAL_NOT_FOUND="Meal not found with id";
 
 	@Autowired
 	private ProductDao productDao;
@@ -32,76 +31,105 @@ public class ProductServiceImpl implements ProductService{
 	
 	@Autowired
 	private MealDao mealDao;
-	
-
-
-	
+		
 	@Override
-	public String deleteProduct(Long id,Long categoryId,Long mealId) {
+	public String deleteProduct(Long id) {
 		
-		Product product = productDao.getProductById(id);
-		Category category=categoryDao.getCategoryById(categoryId);
-		Meal meal = mealDao.getMealById(mealId);
-		
-		if(product == null) {
-			throw new IdNotFoundException(ID_NOT_FOUND);
+		try{
+			Product product = productDao.getProductById(id);
+			return productDao.deleteProduct(product);
+		}catch(DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
 		}
-		if(category == null){
-			throw new IdNotFoundException(CATEGORY_NOT_FOUND);
-		}
-		if(meal == null){
-			throw new IdNotFoundException(MEAL_NOT_FOUND);
-		}
-		return productDao.deleteProduct(product);
 	}
 
 	@Override
 	public String updateProduct(Long id, ProductDto productDto) {
 		
-		Product product = ProductMapper.toEntity(productDto);	
-		Category category=categoryDao.getCategoryById(productDto.getCategory().getId());
-		Meal meal = mealDao.getMealById(productDto.getMeal().getId());
-	
-		if(category == null)
-		{
-			throw new IdNotFoundException(CATEGORY_NOT_FOUND);
+		try{
+			String result=null;
+			Product product = ProductUtil.toEntity(productDto);
+			Category category=categoryDao.getCategoryById(productDto.getCategory().getId());
+			if(category!=null) {
+				Meal meal = mealDao.getMealById(productDto.getMeal().getId());
+				if(meal!=null) {
+					boolean flag=productDao.updateProduct(id, product);
+					if(flag) {
+						result="Product Updation is Successful";
+					}
+					return result;
+				}else {
+					throw new BusinessLogicException("No records Found for Meal");
+				}
+			}
+			else {
+				throw new BusinessLogicException("No records Found for Category");
+			}
+		}catch(DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
 		}
-		if(meal == null)
-		{
-			throw new IdNotFoundException(MEAL_NOT_FOUND);
-		}
-		return productDao.updateProduct(id, product);
 	}
 
 	@Override
 	public String addProduct(ProductDto productDto) {
 		
-		Product product = ProductMapper.toEntity(productDto);
-		Category category=categoryDao.getCategoryById(productDto.getCategory().getId());
-		Meal meal = mealDao.getMealById(productDto.getMeal().getId());
-		
-		if(category == null)
-		{
-			throw new IdNotFoundException(CATEGORY_NOT_FOUND);
+		try{
+			String result=null;
+			Product product = ProductUtil.toEntity(productDto);
+			Category category=categoryDao.getCategoryById(productDto.getCategory().getId());
+			if(category!=null) {
+				Meal meal = mealDao.getMealById(productDto.getMeal().getId());
+				if(meal!=null) {
+					product.setCategory(category);
+					product.setMeal(meal);
+					boolean flag=productDao.addProduct(product);
+					if(flag) {
+						result="Product Creation is Successful";
+					}
+					return result;
+				}else {
+					throw new BusinessLogicException("No records Found for Meal");
+				}
+			}
+			else {
+				throw new BusinessLogicException("No records Found for Category");
+			}
+		}catch(DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
 		}
-		if(meal == null)
-		{
-			throw new IdNotFoundException(MEAL_NOT_FOUND);
-		}
-		product.setCategory(category);
-		product.setMeal(meal);
-		return productDao.addProduct(product);
 	
 	}
 
 	@Override
-	public Product getProductById(Long id) {
-		return productDao.getProductById(id);
+	public ProductDto getProductById(Long id) {
+		try {
+			Product product=productDao.getProductById(id);
+			if(product!=null) {
+				return ProductUtil.toDto(product);
+			}
+			else {
+				throw new BusinessLogicException("No records Found for Product");
+			}
+		}catch(DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
+		}
 	}
 
 	@Override
-	public List<Product> getAllProduct() {
-		return productDao.getAllProduct();
+	public List<ProductDto> getAllProduct() {
+		try {
+			List<Product> productEntity= productDao.getAllProduct();
+			if(productEntity!=null) {
+				List<ProductDto> productDto=new ArrayList<>();
+				productEntity.stream().forEach(entity->productDto.add(ProductUtil.toDto(entity)));
+				return productDto;
+			}
+			else {
+				throw new BusinessLogicException("No records Found for Product");
+			}
+		}catch(DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
+		}
 	}
 	
 	

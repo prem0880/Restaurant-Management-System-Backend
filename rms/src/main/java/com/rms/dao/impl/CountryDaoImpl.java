@@ -6,104 +6,104 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.rms.dao.CountryDao;
 import com.rms.entity.Country;
-import com.rms.exception.IdNotFoundException;
-import com.rms.util.TimeStamp;
+import com.rms.exception.DataBaseException;
+import com.rms.util.TimeStampUtil;
 
 @Repository
 @Transactional
 public class CountryDaoImpl implements CountryDao{
 
+	static final String ID_NOT_FOUND="Country not found with id ";
+	static final String DB_FETCH_ERROR="Error in Fetching Data from Database";
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 
 	
 	@Override
-	public String addCountry(Country country) {
+	public boolean addCountry(Country country) {
+		boolean flag=false;
+		try {
 		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		country.setCreatedOn(TimeStamp.getTimeStamp());
-		session.save(country);
-		result="Country added successfully.....";
+		country.setCreatedOn(TimeStampUtil.getTimeStamp());
+		Long value=(Long)session.save(country);
+		if(value!=null) {
+			flag=true;
+		}
 		session.flush();
-		return result;
+		return flag;
+		}catch (Exception e) {
+			throw new DataBaseException("Error in Creation");
+		}
 	}
 
 	@Override
 	public List<Country> getAllCountry() {
+		List<Country> list=null;
+		try {
 		Session session=sessionFactory.getCurrentSession();
-		return session.createQuery("from Country",Country.class).getResultList();
+		Query<Country> query = session.createQuery("from Country",Country.class);
+		list=query.list();
+		return list;
+		}
+		catch (Exception e) {
+			throw new DataBaseException(DB_FETCH_ERROR);
+		}
 	}
 
 	@Override
 	public String deleteCountry(Long id) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		Country country=null;
-		boolean stat=false;
 		try {
+			Session session=sessionFactory.getCurrentSession();
+			String result = null;
+			Country country=null;
 			country=session.load(Country.class, id);
-			if(country.getName()!=null) {
-				stat=true;
-			}
-		}
-		catch(org.hibernate.ObjectNotFoundException e)
-		{
-			throw new IdNotFoundException("Deletion has failed with id: "+id);
-		}
-		if(stat)
-		{
 			session.delete(country);
 			session.flush();
 			result="Deletion is successful with id: "+id;
+			return result;
+		}catch (Exception e) {
+			throw new DataBaseException("Error in Deletion"+ID_NOT_FOUND);
 		}
-		return result;
 	}
 
 	@Override
-	public String updateCountry(Long id, Country country) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		Country updateCountry=null;
-		boolean stat=false;
+	public boolean updateCountry(Long id, Country country) {
+		boolean flag=false;
 		try {
-			updateCountry=session.load(Country.class, id);
-			if(updateCountry.getName()!=null) {
-				stat=true;
-			}
+		Session session=sessionFactory.getCurrentSession();
+		Country updateCountry=null;
+		updateCountry=session.load(Country.class, id);
+		country.setCreatedOn(updateCountry.getCreatedOn());
+		country.setId(id);
+		country.setUpdatedOn(TimeStampUtil.getTimeStamp());
+		Long value=(Long)session.merge(country);
+		if(value!=null) {
+			flag=true;
 		}
-		catch(org.hibernate.ObjectNotFoundException e)
-		{
-			throw new IdNotFoundException("Updation has failed with id: "+id);
+		session.flush();
+		return flag;
+		}catch (Exception e) {
+			throw new DataBaseException("Error in Updation"+ID_NOT_FOUND);
 		}
-		if(stat) {
-			country.setCreatedOn(updateCountry.getCreatedOn());
-			country.setId(id);
-			country.setUpdatedOn(TimeStamp.getTimeStamp());
-			session.merge(country);
-			session.flush();
-			result="Country Updation is successful for id: "+id;
-		}
-		return result;
 	}
 
 	@Override
 	public Country getCountryById(Long id) {
+		try{
 		Session session=sessionFactory.getCurrentSession();
-		Country country =null;
+		Country country=null;
 		country=session.get(Country.class, id);
-		if(country!=null)
-		{
-			return country;
-			
-		}else {
-    		throw new IdNotFoundException("Sorry, Category could not be retrived with  " +  id);
-    	}
-		
+		return country;
+		}catch (Exception e) {
+			throw new DataBaseException(DB_FETCH_ERROR+ID_NOT_FOUND);
+		}	
 	}
 
 

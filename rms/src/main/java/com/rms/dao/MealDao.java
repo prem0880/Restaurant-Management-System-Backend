@@ -6,14 +6,14 @@ import com.rms.entity.Meal;
 
 public interface MealDao {
 
-	public String deleteMeal(Long id);
+	 String deleteMeal(Long id);
 	
-	public String updateMeal(Long id, Meal meal);
+	 boolean updateMeal(Long id, Meal meal);
 	
-	public String addMeal(Meal meal);
+	 boolean addMeal(Meal meal);
 	
-	public Meal getMealById(Long id);
+	 Meal getMealById(Long id);
 	
-	public List<Meal> getAllMeal();
+	 List<Meal> getAllMeal();
 	
 }

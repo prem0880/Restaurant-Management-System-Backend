@@ -8,15 +8,15 @@ import com.rms.entity.Product;
 public interface ProductDao {
 
 	
-	public String deleteProduct(Product product);
+	 String deleteProduct(Product product);
 
-	public String updateProduct(Long id, Product product);
+	 boolean updateProduct(Long id, Product product);
 
-	public String addProduct(Product product);
+	 boolean addProduct(Product product);
 
-	public Product getProductById(Long id);
+	 Product getProductById(Long id);
 
-	public List<Product> getAllProduct();
+	 List<Product> getAllProduct();
 	
 	
 }

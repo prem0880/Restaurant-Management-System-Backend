@@ -1,11 +1,9 @@
 package com.rms.controller;
 
-import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,40 +17,63 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.dto.CustomerDto;
-import com.rms.entity.Customer;
-import com.rms.exception.IdNotFoundException;
+import com.rms.exception.BusinessLogicException;
+import com.rms.exception.DataBaseException;
+import com.rms.response.HttpResponse;
 import com.rms.service.CustomerService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/customer")
 @CrossOrigin("http://localhost:4200")
 public class CustomerController {
 	
 	@Autowired
 	private CustomerService customerService;
+	
+	static final String DATA_SUCCESS="Customer Data Retrieval is Success!";
+	
 	    
-	@PostMapping("/addCustomer")
-	public ResponseEntity<String> addCustomer(@Valid @RequestBody CustomerDto customerDto){
-		return new ResponseEntity<>(customerService.addCustomer(customerDto),new HttpHeaders(),HttpStatus.OK);
+	@PostMapping("/add")
+	public ResponseEntity<HttpResponse> addCustomer(@Valid @RequestBody CustomerDto customerDto){
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),customerService.addCustomer(customerDto)),HttpStatus.OK);
+	
 	}
 	
-	@GetMapping("/getAllCustomer")
-	public ResponseEntity<List<Customer>> getAllCustomer(){
-		return new ResponseEntity<>(customerService.getAllCustomer(),new HttpHeaders(),HttpStatus.OK);
+	@GetMapping("/getAll")
+	public ResponseEntity<HttpResponse> getAllCustomer(){
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),DATA_SUCCESS,customerService.getAllCustomer()),HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
 	}
 
-	@GetMapping("/customer/{id}")
-	public ResponseEntity<Customer> getCustomerById(@PathVariable("id") Long id){
-		return new ResponseEntity<>(customerService.getCustomerById(id),new HttpHeaders(),HttpStatus.OK);
+	@GetMapping("/get/{id}")
+	public ResponseEntity<HttpResponse> getCustomerById(@PathVariable("id") Long id){
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),DATA_SUCCESS,customerService.getCustomerById(id)),HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
-	@PutMapping("/customer/{id}")
-	public ResponseEntity<String> updateCustomer(@PathVariable("id") Long id,@Valid @RequestBody CustomerDto customerDto){
-		return new ResponseEntity<>(customerService.updateCustomer(id, customerDto),new HttpHeaders(),HttpStatus.OK);
+	@PutMapping("/update/{id}")
+	public ResponseEntity<HttpResponse> updateCustomer(@PathVariable("id") Long id,@Valid @RequestBody CustomerDto customerDto){
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),customerService.updateCustomer(id, customerDto)),HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
-	@ExceptionHandler(IdNotFoundException.class)
-	public ResponseEntity<String> userNotFound(IdNotFoundException e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	@ExceptionHandler(BusinessLogicException.class)
+	public ResponseEntity<HttpResponse> businessException (BusinessLogicException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	}
+		
+
+	@ExceptionHandler(DataBaseException.class)
+	public ResponseEntity<HttpResponse> dataBaseException (DataBaseException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
 	}
 }

@@ -6,15 +6,15 @@ import com.rms.entity.Category;
 
 public interface CategoryDao {
 
-    public String deleteCategory(Long id);
+     String deleteCategory(Long id);
 	
-	public String updateCategory(Long id, Category category);
+	 boolean updateCategory(Long id, Category category);
 	
-	public String addCategory(Category category);
+	 boolean addCategory(Category category);
 	
-	public Category getCategoryById(Long id);
+	 Category getCategoryById(Long id);
 	
-	public List<Category> getAllCategory();
+	 List<Category> getAllCategory();
 	
 	
 }

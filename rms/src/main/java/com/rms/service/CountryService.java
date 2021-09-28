@@ -3,16 +3,15 @@ package com.rms.service;
 import java.util.List;
 
 import com.rms.dto.CountryDto;
-import com.rms.entity.Country;
 
 public interface CountryService {
-	public String addCountry(CountryDto countryDto);
+	String addCountry(CountryDto countryDto);
 
-	public List<Country> getAllCountry();
+	List<CountryDto> getAllCountry();
 	
-	public String deleteCountry(Long id);
+	String deleteCountry(Long id);
 	
-	public String updateCountry(Long id, CountryDto countryDto);
+	String updateCountry(Long id, CountryDto countryDto);
 	
-	public Country getCountryById(Long id);
+	CountryDto getCountryById(Long id);
 }
