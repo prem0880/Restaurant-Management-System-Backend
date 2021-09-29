@@ -17,11 +17,14 @@ public class AddressUtil {
 	
 	public static AddressDto toDto(Address address) {
 		AddressDto addressDto = new AddressDto();
+		addressDto.setId(address.getId());
 		addressDto.setAddressLine(address.getAddressLine());
 		addressDto.setCity(address.getCity());
 		addressDto.setCustomer(address.getCustomer());
 		addressDto.setPincode(address.getPincode());
 		addressDto.setState(address.getState());
+		addressDto.setCreatedOn(address.getCreatedOn());
+		addressDto.setUpdatedOn(address.getUpdatedOn());
 		return addressDto;
 	}
 	

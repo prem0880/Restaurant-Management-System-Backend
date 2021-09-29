@@ -65,7 +65,8 @@ public class CategoryController {
 	@PutMapping("/update/{id}")
 	public ResponseEntity<HttpResponse> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto){
 		try {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),categoryService.updateCategory(id,categoryDto)),HttpStatus.OK);
+			String message=categoryService.updateCategory(id,categoryDto);
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),message),HttpStatus.OK);
 		}catch(BusinessLogicException e) {
 			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
 		}

@@ -16,10 +16,13 @@ public class CustomerUtil {
 	
 	public static CustomerDto toDto(Customer customer) {
 		CustomerDto customerDto = new CustomerDto();
+		customerDto.setId(customer.getId());
 		customerDto.setName(customer.getName());
 		customerDto.setEmail(customer.getEmail());
 		customerDto.setPhoneNumber(customer.getPhoneNumber());
 		customerDto.setPassword(String.valueOf(customer.getPhoneNumber()));
+		customerDto.setCreatedOn(customer.getCreatedOn());
+		customerDto.setUpdatedOn(customer.getUpdatedOn());
 		return customerDto;
 	}
 	

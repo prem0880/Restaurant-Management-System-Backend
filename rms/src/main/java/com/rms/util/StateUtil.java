@@ -14,8 +14,11 @@ public class StateUtil {
 	
 	public static StateDto toDto(State state) {
 		StateDto stateDto = new StateDto();
+		stateDto.setId(state.getId());
 		stateDto.setName(state.getName());
 		stateDto.setCountry(state.getCountry());
+		stateDto.setCreatedOn(state.getCreatedOn());
+		stateDto.setUpdatedOn(state.getUpdatedOn());
 		return stateDto;
 	}
 	

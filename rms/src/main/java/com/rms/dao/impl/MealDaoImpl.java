@@ -55,7 +55,7 @@ public class MealDaoImpl implements MealDao {
 			meal.setCreatedOn(mealEntity.getCreatedOn());
 			meal.setId(id);
 			meal.setUpdatedOn(TimeStampUtil.getTimeStamp());
-			Long value=(Long)session.merge(meal);
+			Object value=session.merge(meal);
 			if(value!=null) {
 				flag=true;
 			}

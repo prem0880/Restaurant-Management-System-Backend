@@ -83,8 +83,8 @@ public class CountryDaoImpl implements CountryDao{
 		country.setCreatedOn(updateCountry.getCreatedOn());
 		country.setId(id);
 		country.setUpdatedOn(TimeStampUtil.getTimeStamp());
-		Long value=(Long)session.merge(country);
-		if(value!=null) {
+		Object obj=session.merge(country);
+		if(obj!=null) {
 			flag=true;
 		}
 		session.flush();

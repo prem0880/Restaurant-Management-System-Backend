@@ -13,7 +13,10 @@ public class CountryUtil {
 	
 	public static CountryDto toDto(Country country) {
 		CountryDto countryDto = new CountryDto();
+		countryDto.setId(country.getId());
 		countryDto.setName(country.getName());
+		countryDto.setCreatedOn(country.getCreatedOn());
+		countryDto.setUpdatedOn(country.getUpdatedOn());
 		return countryDto;
 	}
 }

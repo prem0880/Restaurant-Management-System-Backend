@@ -76,7 +76,7 @@ public class CustomerDaoImpl implements CustomerDao {
 			customer.setCreatedOn(customerEntity.getCreatedOn());
 			customer.setId(id);
 			customer.setUpdatedOn(TimeStampUtil.getTimeStamp());
-			Long value=(Long)session.merge(customer);
+			Object value=session.merge(customer);
 			if(value!=null) {
 				flag=true;
 			}

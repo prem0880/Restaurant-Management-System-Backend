@@ -13,7 +13,10 @@ public class MealUtil {
 	
 	public static MealDto toDto(Meal meal) {
 		MealDto mealDto = new MealDto();
+		mealDto.setId(meal.getId());
 		mealDto.setName(meal.getName());
+		mealDto.setCreatedOn(meal.getCreatedOn());
+		mealDto.setUpdatedOn(meal.getUpdatedOn());
 		return mealDto;
 	}
 		

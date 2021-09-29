@@ -35,7 +35,7 @@ public class Customer implements Serializable{
 	private String name;
 	
 	@Email
-	@Column(name="email")
+	@Column(name="email",unique=true)
 	private String email;
 	
 	@Min(value=10,message="Password should not be less than 10")

@@ -55,8 +55,8 @@ public class CategoryDaoImpl implements CategoryDao{
 			category.setCreatedOn(categoryObj.getCreatedOn());
 			category.setId(id);
 			category.setUpdatedOn(TimeStampUtil.getTimeStamp());
-			Long value=(Long)session.merge(category);
-			if(value!=null) {
+			Object obj=session.merge(category);
+			if(obj!=null) {
 				flag=true;
 			}
 			session.flush();

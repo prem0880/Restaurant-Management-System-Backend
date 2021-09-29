@@ -20,6 +20,7 @@ public class ProductUtil {
 	
 	public static ProductDto toDto(Product product) {
 		ProductDto productDto = new ProductDto();
+		productDto.setId(product.getId());
 		productDto.setName(product.getName());
 		productDto.setImage(product.getImage());
 		productDto.setPrice(product.getPrice());
@@ -28,6 +29,8 @@ public class ProductUtil {
 		productDto.setType(product.getType());
 		productDto.setCategory(product.getCategory());
 		productDto.setMeal(product.getMeal());
+		productDto.setCreatedOn(product.getCreatedOn());
+		productDto.setUpdatedOn(product.getUpdatedOn());
 		return productDto;	
 	}
 	

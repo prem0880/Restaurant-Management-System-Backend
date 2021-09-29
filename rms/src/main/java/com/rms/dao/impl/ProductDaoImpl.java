@@ -53,7 +53,7 @@ public class ProductDaoImpl implements ProductDao {
 		product.setCreatedOn(updateProduct.getCreatedOn());
 		product.setId(id);
 		product.setUpdatedOn(TimeStampUtil.getTimeStamp());
-		Long value=(Long)session.merge(product);
+		Object value=session.merge(product);
 		if(value!=null) {
 			flag=true;
 		}
