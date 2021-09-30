@@ -20,6 +20,8 @@ public class AddressServiceImpl implements AddressService{
 	@Autowired
 	private AddressDao addressDao;
 	
+	static final String ADDR_NOT_FOUND="No records Found for Address";
+	
 	@Override
 	public String addAddress(AddressDto addressDto) {
 		String result = null;
@@ -45,11 +47,47 @@ public class AddressServiceImpl implements AddressService{
 				return addressDto;
 			}
 			else {
-				throw new BusinessLogicException("No records Found for Address");
+				throw new BusinessLogicException(ADDR_NOT_FOUND);
 			}
 		}catch(DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
+	}
+
+	@Override
+	public Long getAddressByCustomerId(Long customerId) {
+
+		try{
+			Long result=null;
+			Address addressEntity=addressDao.getAddressByCustomerId(customerId);
+			if(addressEntity!=null) {	
+					result=addressEntity.getId();
+			
+				return result;
+			}
+			else {
+				throw new BusinessLogicException(ADDR_NOT_FOUND);
+			}
+		}catch(DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
+		}
+		
+	}
+
+	@Override
+	public AddressDto getAddressById(Long id) {
+		try{
+			Address address = addressDao.getAddressById(id);
+			if(address!=null) {
+				return AddressUtil.toDto(address);
+			}else {
+				throw new BusinessLogicException(ADDR_NOT_FOUND);
+			}
+		}catch(DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
+		}
+		
+		
 	}
 
 }

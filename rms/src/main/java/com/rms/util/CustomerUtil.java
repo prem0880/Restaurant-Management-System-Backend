@@ -10,7 +10,7 @@ public class CustomerUtil {
 		customer.setName(customerDto.getName());
 		customer.setEmail(customerDto.getEmail());
 		customer.setPhoneNumber(customerDto.getPhoneNumber());
-		customer.setPassword(String.valueOf(customerDto.getPhoneNumber()));
+		customer.setPassword(customerDto.getPassword());
 		return customer;
 	}
 	

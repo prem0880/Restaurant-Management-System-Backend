@@ -6,4 +6,6 @@ import com.rms.dto.AddressDto;
 public interface AddressService {
 	String addAddress(AddressDto addressDto);
 	List<AddressDto> getAddressByPhoneNumber(Long phoneNumber);
+	Long getAddressByCustomerId(Long customerId);
+	AddressDto getAddressById(Long id);
 }

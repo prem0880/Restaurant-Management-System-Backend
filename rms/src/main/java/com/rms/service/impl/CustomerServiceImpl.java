@@ -21,15 +21,11 @@ public class CustomerServiceImpl implements CustomerService {
 	private CustomerDao customerDao;
 	
 	@Override
-	public String addCustomer(CustomerDto customerDto) {
+	public Long addCustomer(CustomerDto customerDto) {
 		try{
-			String result=null;
 			Customer customer = CustomerUtil.toEntity(customerDto);
-			boolean flag=customerDao.addCustomer(customer);
-			if(flag) {
-				result="Customer Creation is Successful";
-			}
-			return result;
+			customer.setPassword(String.valueOf(customer.getPhoneNumber()));
+			return customerDao.addCustomer(customer);
 		}catch(DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
@@ -80,6 +76,21 @@ public class CustomerServiceImpl implements CustomerService {
 			throw new BusinessLogicException(e.getMessage());
 		}
 
+	}
+
+	@Override
+	public Long customerLogin(CustomerDto customerDto) {
+		try{
+			Long result=null;
+			Customer customer = CustomerUtil.toEntity(customerDto);
+			Customer customerEntity=customerDao.getCustomerByEmail(customer);
+			if(customerEntity!=null && customerEntity.getPassword().equals(customer.getPassword())) {
+				result=customerEntity.getId();
+			}
+			return result;
+		}catch(DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
+		}
 	}
 
 }

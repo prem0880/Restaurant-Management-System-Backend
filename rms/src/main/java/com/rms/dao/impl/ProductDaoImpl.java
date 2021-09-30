@@ -105,6 +105,22 @@ public class ProductDaoImpl implements ProductDao {
 		}
 	}
 
+	@Override
+	public List<Product> getProductByTypeAndCategory(Long categoryId, String type) {
+		try{
+			Session session=sessionFactory.getCurrentSession();
+			Query<Product> query=session.createQuery("from Product p where p.category.id=:categoryId AND p.type=:type",Product.class);
+			query.setParameter("categoryId", categoryId);
+			query.setParameter("type",type);
+			return query.list();
+		}catch (Exception e) {
+			throw new DataBaseException(DB_FETCH_ERROR);
+		}
+		
+	}
+
+
+
 	
 
 }

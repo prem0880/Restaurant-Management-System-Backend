@@ -3,7 +3,6 @@ package com.rms.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +30,8 @@ public class ProductServiceImpl implements ProductService{
 	
 	@Autowired
 	private MealDao mealDao;
+	
+	static final String PROD_NOT_FOUND="No records Found for Product";
 		
 	@Override
 	public String deleteProduct(Long id) {
@@ -108,7 +109,7 @@ public class ProductServiceImpl implements ProductService{
 				return ProductUtil.toDto(product);
 			}
 			else {
-				throw new BusinessLogicException("No records Found for Product");
+				throw new BusinessLogicException(PROD_NOT_FOUND);
 			}
 		}catch(DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -125,12 +126,30 @@ public class ProductServiceImpl implements ProductService{
 				return productDto;
 			}
 			else {
-				throw new BusinessLogicException("No records Found for Product");
+				throw new BusinessLogicException(PROD_NOT_FOUND);
 			}
 		}catch(DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
+
+	@Override
+	public List<ProductDto> getProductByTypeAndCategory(Long categoryId, String type) {
+		try {
+			List<Product> productEntity= productDao.getProductByTypeAndCategory(categoryId, type);
+			if(productEntity!=null) {
+				List<ProductDto> productDto=new ArrayList<>();
+				productEntity.stream().forEach(entity->productDto.add(ProductUtil.toDto(entity)));
+				return productDto;
+			}
+			else {
+				throw new BusinessLogicException(PROD_NOT_FOUND);
+			}
+		}catch(DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
+		}
+	}
+
 	
 	
 

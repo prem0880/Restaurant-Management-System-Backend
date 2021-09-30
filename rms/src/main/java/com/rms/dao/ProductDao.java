@@ -16,6 +16,8 @@ public interface ProductDao {
 
 	 Product getProductById(Long id);
 
+	 List<Product> getProductByTypeAndCategory(Long categoryId,String type);
+	 
 	 List<Product> getAllProduct();
 	
 	

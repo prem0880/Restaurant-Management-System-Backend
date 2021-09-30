@@ -4,34 +4,27 @@ package com.rms.dto;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import com.rms.entity.Category;
-import com.rms.entity.Meal;
+import com.rms.entity.Order;
+
+import com.rms.entity.Product;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-
 @NonNull
 @NoArgsConstructor
 @Data
-public class ProductDto implements Serializable{
+public class OrderItemDto implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	private String name;
-	private String image;
+	private Integer quantity;
 	private Double price;
-	private String type;
-	private Double tax;
-	private String description;
-    private Category category;
-    private Meal meal;
+	private Order order;
+	private Product product;
 	private Timestamp createdOn;
 	private	Timestamp updatedOn;
-    
-        
-    
-    
+
 }

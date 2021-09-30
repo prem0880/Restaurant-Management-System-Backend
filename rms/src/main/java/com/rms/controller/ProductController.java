@@ -54,6 +54,16 @@ public class ProductController {
 		}
 	}
 	
+	@GetMapping("/category/{id}/type/{type}")
+	public ResponseEntity<HttpResponse> getProductByTypeAndCategory(@PathVariable Long id,@PathVariable String type){
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),DATA_SUCCESS,productService.getProductByTypeAndCategory(id, type)),HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
 	@PostMapping("/add")
 	public ResponseEntity<HttpResponse> addProduct(@Valid @RequestBody ProductDto productDto){
 		try{

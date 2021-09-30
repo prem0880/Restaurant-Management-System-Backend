@@ -1,8 +1,5 @@
 package com.rms.controller;
 
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,64 +13,51 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rms.dto.CustomerDto;
+import com.rms.dto.OrderDto;
 import com.rms.exception.BusinessLogicException;
 import com.rms.exception.DataBaseException;
 import com.rms.response.HttpResponse;
-import com.rms.service.CustomerService;
+import com.rms.service.OrderService;
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/order")
 @CrossOrigin("http://localhost:4200")
-public class CustomerController {
-	
-	@Autowired
-	private CustomerService customerService;
-	
-	static final String DATA_SUCCESS="Customer Data Retrieval is Success!";
-	
-	    
-	@PostMapping("/add")
-	public ResponseEntity<HttpResponse> addCustomer(@Valid @RequestBody CustomerDto customerDto){
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),"Customer Added Successfully",customerService.addCustomer(customerDto)),HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
-		}
-	
-	}
-	
-	@PostMapping("/login")
-	public ResponseEntity<HttpResponse> customerLogin(@RequestBody CustomerDto customerDto){
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),"Login is Successful",customerService.customerLogin(customerDto)),HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@GetMapping("/getAll")
-	public ResponseEntity<HttpResponse> getAllCustomer(){
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),DATA_SUCCESS,customerService.getAllCustomer()),HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
-		}
-	}
+public class OrderController {
 
-	@GetMapping("/get/{id}")
-	public ResponseEntity<HttpResponse> getCustomerById(@PathVariable("id") Long id){
+	@Autowired
+	private OrderService orderService;
+	
+	@PostMapping("/add")
+	public ResponseEntity<HttpResponse> addOrder(@RequestBody OrderDto orderDto){
 		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),DATA_SUCCESS,customerService.getCustomerById(id)),HttpStatus.OK);
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), orderService.addOrder(orderDto)),  HttpStatus.OK);
 		}catch(BusinessLogicException e) {
 			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@PutMapping("/update/{id}")
-	public ResponseEntity<HttpResponse> updateCustomer(@PathVariable("id") Long id,@Valid @RequestBody CustomerDto customerDto){
-		try {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),customerService.updateCustomer(id, customerDto)),HttpStatus.OK);
+	@GetMapping("/orderId/{customerId}")
+	public ResponseEntity<HttpResponse> getOrderId(@PathVariable Long customerId){
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), "Customer Id retrieval success",orderService.getOrderId(customerId)),  HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/id/{orderId}")
+	public  ResponseEntity<HttpResponse> getOrderById(@PathVariable("orderId") Long orderId) {
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), "Order Id retrieval success",orderService.getOrderById(orderId)),  HttpStatus.OK);
+		}catch(BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/update-order/{orderId}")
+	public ResponseEntity<HttpResponse> updateOrder(@PathVariable("orderId") Long orderId,@RequestBody OrderDto orderDto) {
+		try{
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), orderService.updateOrder(orderId, orderDto)),  HttpStatus.OK);
 		}catch(BusinessLogicException e) {
 			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
 		}
@@ -89,4 +73,6 @@ public class CustomerController {
 	public ResponseEntity<HttpResponse> dataBaseException (DataBaseException e) {
 		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
 	}
+	
+	
 }
