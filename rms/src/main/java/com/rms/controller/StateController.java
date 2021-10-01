@@ -1,6 +1,5 @@
 package com.rms.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,35 +25,38 @@ public class StateController {
 
 	@Autowired
 	private StateService stateService;
-	
+
 	@GetMapping("/get/{countryId}")
 	public ResponseEntity<HttpResponse> getStatesByCountry(@PathVariable("countryId") Long countryId) {
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),"State Data Retrieval is Success",stateService.getStatesByCountry(countryId)),HttpStatus.OK);
-		}
-		catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), "State Data Retrieval is Success",
+					stateService.getStatesByCountry(countryId)), HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@PostMapping("/add")
 	public ResponseEntity<HttpResponse> addState(@RequestBody StateDto stateDto) {
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),stateService.addState(stateDto)),HttpStatus.OK);
-		}
-		catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), stateService.addState(stateDto)),
+					HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@ExceptionHandler(BusinessLogicException.class)
-	public ResponseEntity<HttpResponse> businessException (BusinessLogicException e) {
-		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> businessException(BusinessLogicException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+				HttpStatus.BAD_REQUEST);
 	}
-		
 
 	@ExceptionHandler(DataBaseException.class)
-	public ResponseEntity<HttpResponse> dataBaseException (DataBaseException e) {
-		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> dataBaseException(DataBaseException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+				HttpStatus.BAD_REQUEST);
 	}
 }

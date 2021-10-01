@@ -13,7 +13,7 @@ public class OrderItemUtil {
 		orderItem.setOrder(orderItemDto.getOrder());
 		return orderItem;
 	}
-	
+
 	public static OrderItemDto toDto(OrderItem orderItem) {
 		OrderItemDto orderItemDto = new OrderItemDto();
 		orderItemDto.setId(orderItem.getId());
@@ -25,5 +25,5 @@ public class OrderItemUtil {
 		orderItemDto.setOrder(orderItem.getOrder());
 		return orderItemDto;
 	}
-	
+
 }

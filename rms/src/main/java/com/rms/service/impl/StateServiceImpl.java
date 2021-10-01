@@ -15,23 +15,22 @@ import com.rms.service.StateService;
 import com.rms.util.StateUtil;
 
 @Service
-public class StateServiceImpl implements StateService{
+public class StateServiceImpl implements StateService {
 
-	
 	@Autowired
 	private StateDao stateDao;
-	
+
 	@Override
 	public String addState(StateDto stateDto) {
-		try{
-			String result=null;
+		try {
+			String result = null;
 			State state = StateUtil.toEntity(stateDto);
-			boolean flag=stateDao.addState(state);
-			if(flag) {
-				result="State Creation is Successful";
+			boolean flag = stateDao.addState(state);
+			if (flag) {
+				result = "State Creation is Successful";
 			}
 			return result;
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -39,16 +38,15 @@ public class StateServiceImpl implements StateService{
 	@Override
 	public List<StateDto> getStatesByCountry(Long id) {
 		try {
-			List<State> stateEntity=stateDao.getStatesByCountry(id);
-			if(stateEntity!=null) {
-				List<StateDto> stateDto=new ArrayList<>();
-				stateEntity.stream().forEach(entity->stateDto.add(StateUtil.toDto(entity)));
+			List<State> stateEntity = stateDao.getStatesByCountry(id);
+			if (stateEntity != null) {
+				List<StateDto> stateDto = new ArrayList<>();
+				stateEntity.stream().forEach(entity -> stateDto.add(StateUtil.toDto(entity)));
 				return stateDto;
-			}
-			else {
+			} else {
 				throw new BusinessLogicException("No records Found for State");
 			}
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}

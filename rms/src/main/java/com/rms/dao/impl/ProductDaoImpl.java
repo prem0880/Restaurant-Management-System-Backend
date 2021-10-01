@@ -14,113 +14,107 @@ import com.rms.entity.Product;
 import com.rms.exception.DataBaseException;
 import com.rms.util.TimeStampUtil;
 
-
 @Repository
 @Transactional
 public class ProductDaoImpl implements ProductDao {
-	
 
-	
-	static final String ID_NOT_FOUND="Product not found with id ";
-	static final String COULDNT_UPDATE="Couldn't update Product...";
-	static final String DB_FETCH_ERROR="Error in Fetching Data from Database";
-		
+	static final String ID_NOT_FOUND = "Product not found with id ";
+	static final String COULDNT_UPDATE = "Couldn't update Product...";
+	static final String DB_FETCH_ERROR = "Error in Fetching Data from Database";
+
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	@Override
 	public String deleteProduct(Product product) {
 		try {
-		String result = null;
-		Session session=sessionFactory.getCurrentSession();
-		session.delete(product);
-		session.flush();
-		result="Product Deletion is Successfully!";
-		return result;
-		}catch (Exception e) {
-			throw new DataBaseException("Error in Deletion"+ID_NOT_FOUND);
+			String result = null;
+			Session session = sessionFactory.getCurrentSession();
+			session.delete(product);
+			session.flush();
+			result = "Product Deletion is Successfully!";
+			return result;
+		} catch (Exception e) {
+			throw new DataBaseException("Error in Deletion" + ID_NOT_FOUND);
 		}
-		
+
 	}
 
 	@Override
 	public boolean updateProduct(Long id, Product product) {
-		boolean flag=false;
+		boolean flag = false;
 		try {
-		Session session=sessionFactory.getCurrentSession();
-		Product updateProduct=null;
-		updateProduct=session.load(Product.class, id);
-		product.setCreatedOn(updateProduct.getCreatedOn());
-		product.setId(id);
-		product.setUpdatedOn(TimeStampUtil.getTimeStamp());
-		Object value=session.merge(product);
-		if(value!=null) {
-			flag=true;
-		}
-		session.flush();
-		return flag;
-		}catch (Exception e) {
-			throw new DataBaseException(ID_NOT_FOUND+COULDNT_UPDATE);
+			Session session = sessionFactory.getCurrentSession();
+			Product updateProduct = null;
+			updateProduct = session.load(Product.class, id);
+			product.setCreatedOn(updateProduct.getCreatedOn());
+			product.setId(id);
+			product.setUpdatedOn(TimeStampUtil.getTimeStamp());
+			Object value = session.merge(product);
+			if (value != null) {
+				flag = true;
+			}
+			session.flush();
+			return flag;
+		} catch (Exception e) {
+			throw new DataBaseException(ID_NOT_FOUND + COULDNT_UPDATE);
 		}
 	}
 
 	@Override
 	public boolean addProduct(Product product) {
-		boolean flag=false;
-		try{
-		Session session=sessionFactory.getCurrentSession();
-		product.setCreatedOn(TimeStampUtil.getTimeStamp());
-		Long value=(Long)session.save(product);
-		if(value!=null) {
-			flag=true;
-		}
-		session.flush();
-		return flag;
-		}catch (Exception e) {
+		boolean flag = false;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			product.setCreatedOn(TimeStampUtil.getTimeStamp());
+			Long value = (Long) session.save(product);
+			if (value != null) {
+				flag = true;
+			}
+			session.flush();
+			return flag;
+		} catch (Exception e) {
 			throw new DataBaseException("Error in Creation");
 		}
 	}
 
 	@Override
 	public Product getProductById(Long id) {
-		try{
-			Session session=sessionFactory.getCurrentSession();
-			Product product =null;
-			product=session.get(Product.class, id);
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Product product = null;
+			product = session.get(Product.class, id);
 			return product;
-		}catch (Exception e) {
-			throw new DataBaseException(DB_FETCH_ERROR+ ID_NOT_FOUND+ id);
+		} catch (Exception e) {
+			throw new DataBaseException(DB_FETCH_ERROR + ID_NOT_FOUND + id);
 		}
 
 	}
 
 	@Override
 	public List<Product> getAllProduct() {
-		try{
-			Session session=sessionFactory.getCurrentSession();
-			Query<Product> query=session.createQuery("from Product",Product.class);
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Product> query = session.createQuery("from Product", Product.class);
 			return query.list();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new DataBaseException(DB_FETCH_ERROR);
 		}
 	}
 
 	@Override
 	public List<Product> getProductByTypeAndCategory(Long categoryId, String type) {
-		try{
-			Session session=sessionFactory.getCurrentSession();
-			Query<Product> query=session.createQuery("from Product p where p.category.id=:categoryId AND p.type=:type",Product.class);
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Product> query = session
+					.createQuery("from Product p where p.category.id=:categoryId AND p.type=:type", Product.class);
 			query.setParameter("categoryId", categoryId);
-			query.setParameter("type",type);
+			query.setParameter("type", type);
 			return query.list();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new DataBaseException(DB_FETCH_ERROR);
 		}
-		
+
 	}
-
-
-
-	
 
 }

@@ -14,51 +14,48 @@ import com.rms.exception.DataBaseException;
 import com.rms.service.MealService;
 import com.rms.util.MealUtil;
 
-
 @Service
 public class MealServiceImpl implements MealService {
 
-	
 	@Autowired
 	private MealDao mealDao;
-	
+
 	@Override
 	public String deleteMeal(Long id) {
-		try{
+		try {
 			return mealDao.deleteMeal(id);
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
 	@Override
 	public String updateMeal(Long id, MealDto mealDto) {
-		try{
-			String result=null;
+		try {
+			String result = null;
 			Meal meal = MealUtil.toEntity(mealDto);
-			boolean flag=mealDao.updateMeal(id, meal);
-			if(flag) {
-				result="Meal Updation is Successful";
+			boolean flag = mealDao.updateMeal(id, meal);
+			if (flag) {
+				result = "Meal Updation is Successful";
 			}
 			return result;
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
-		
+
 	}
 
 	@Override
 	public String addMeal(MealDto mealDto) {
-		try{
-			String result=null;
+		try {
+			String result = null;
 			Meal meal = MealUtil.toEntity(mealDto);
-			boolean flag=mealDao.addMeal(meal);
-			if(flag) {
-				result="Meal Creation is Successful";
+			boolean flag = mealDao.addMeal(meal);
+			if (flag) {
+				result = "Meal Creation is Successful";
 			}
 			return result;
-		}
-		catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -66,31 +63,29 @@ public class MealServiceImpl implements MealService {
 	@Override
 	public MealDto getMealById(Long id) {
 		try {
-			Meal meal=mealDao.getMealById(id);
-			if(meal!=null) {
+			Meal meal = mealDao.getMealById(id);
+			if (meal != null) {
 				return MealUtil.toDto(meal);
-			}
-			else {
+			} else {
 				throw new BusinessLogicException("No records Found for Meal");
 			}
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
 	@Override
 	public List<MealDto> getAllMeal() {
-		try{
-			List<Meal> mealEntity=mealDao.getAllMeal();
-			if(mealEntity!=null) {
-				List<MealDto> mealDto=new ArrayList<>();
-				mealEntity.stream().forEach(entity->mealDto.add(MealUtil.toDto(entity)));
+		try {
+			List<Meal> mealEntity = mealDao.getAllMeal();
+			if (mealEntity != null) {
+				List<MealDto> mealDto = new ArrayList<>();
+				mealEntity.stream().forEach(entity -> mealDto.add(MealUtil.toDto(entity)));
 				return mealDto;
-			}
-			else {
+			} else {
 				throw new BusinessLogicException("No records Found for Meal");
 			}
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}

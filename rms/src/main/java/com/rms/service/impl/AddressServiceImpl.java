@@ -15,41 +15,40 @@ import com.rms.service.AddressService;
 import com.rms.util.AddressUtil;
 
 @Service
-public class AddressServiceImpl implements AddressService{
+public class AddressServiceImpl implements AddressService {
 
 	@Autowired
 	private AddressDao addressDao;
-	
-	static final String ADDR_NOT_FOUND="No records Found for Address";
-	
+
+	static final String ADDR_NOT_FOUND = "No records Found for Address";
+
 	@Override
 	public String addAddress(AddressDto addressDto) {
 		String result = null;
-		try{
+		try {
 			Address address = AddressUtil.toEntity(addressDto);
-			boolean stat=addressDao.addAddress(address);
-			if(stat) {
-				result="Address Added Successfully!";
+			boolean stat = addressDao.addAddress(address);
+			if (stat) {
+				result = "Address Added Successfully!";
 			}
-		  return result;
-		}catch(DataBaseException e) {
+			return result;
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
 	@Override
 	public List<AddressDto> getAddressByPhoneNumber(Long phoneNumber) {
-		try{
-			List<Address> addressEntity=addressDao.getAddressByPhoneNumber(phoneNumber);
-			if(addressEntity!=null) {
-				List<AddressDto> addressDto=new ArrayList<>();
-				addressEntity.stream().forEach(entity->addressDto.add(AddressUtil.toDto(entity)));
+		try {
+			List<Address> addressEntity = addressDao.getAddressByPhoneNumber(phoneNumber);
+			if (addressEntity != null) {
+				List<AddressDto> addressDto = new ArrayList<>();
+				addressEntity.stream().forEach(entity -> addressDto.add(AddressUtil.toDto(entity)));
 				return addressDto;
-			}
-			else {
+			} else {
 				throw new BusinessLogicException(ADDR_NOT_FOUND);
 			}
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -57,37 +56,35 @@ public class AddressServiceImpl implements AddressService{
 	@Override
 	public Long getAddressByCustomerId(Long customerId) {
 
-		try{
-			Long result=null;
-			Address addressEntity=addressDao.getAddressByCustomerId(customerId);
-			if(addressEntity!=null) {	
-					result=addressEntity.getId();
-			
+		try {
+			Long result = null;
+			Address addressEntity = addressDao.getAddressByCustomerId(customerId);
+			if (addressEntity != null) {
+				result = addressEntity.getId();
+
 				return result;
-			}
-			else {
+			} else {
 				throw new BusinessLogicException(ADDR_NOT_FOUND);
 			}
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
-		
+
 	}
 
 	@Override
 	public AddressDto getAddressById(Long id) {
-		try{
+		try {
 			Address address = addressDao.getAddressById(id);
-			if(address!=null) {
+			if (address != null) {
 				return AddressUtil.toDto(address);
-			}else {
+			} else {
 				throw new BusinessLogicException(ADDR_NOT_FOUND);
 			}
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
-		
-		
+
 	}
 
 }

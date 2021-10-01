@@ -1,6 +1,5 @@
 package com.rms.dto;
 
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -11,7 +10,7 @@ import lombok.NonNull;
 @NonNull
 @NoArgsConstructor
 @Data
-public class CustomerDto implements Serializable{
+public class CustomerDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,6 +20,6 @@ public class CustomerDto implements Serializable{
 	private String password;
 	private Long phoneNumber;
 	private Timestamp createdOn;
-	private	Timestamp updatedOn;
+	private Timestamp updatedOn;
 
 }

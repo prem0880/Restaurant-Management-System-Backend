@@ -10,7 +10,7 @@ public class CountryUtil {
 		country.setName(countryDto.getName());
 		return country;
 	}
-	
+
 	public static CountryDto toDto(Country country) {
 		CountryDto countryDto = new CountryDto();
 		countryDto.setId(country.getId());

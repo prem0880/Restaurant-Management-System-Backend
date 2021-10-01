@@ -14,7 +14,7 @@ public class AddressUtil {
 		address.setState(addressDto.getState());
 		return address;
 	}
-	
+
 	public static AddressDto toDto(Address address) {
 		AddressDto addressDto = new AddressDto();
 		addressDto.setId(address.getId());
@@ -27,6 +27,5 @@ public class AddressUtil {
 		addressDto.setUpdatedOn(address.getUpdatedOn());
 		return addressDto;
 	}
-	
-	
+
 }

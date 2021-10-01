@@ -5,14 +5,14 @@ import lombok.Setter;
 
 // HTTP RESPONSE FORMAT
 
-@Getter 
+@Getter
 @Setter
-public class HttpResponse{
+public class HttpResponse {
 
 	private int statusCode;
 	private String message;
 	private Object data;
-	
+
 	public HttpResponse(int statusCode, String message, Object data) {
 		this.statusCode = statusCode;
 		this.message = message;
@@ -23,5 +23,5 @@ public class HttpResponse{
 		this.statusCode = statusCode;
 		this.message = message;
 	}
-	
+
 }

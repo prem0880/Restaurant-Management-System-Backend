@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-
 @NonNull
 @NoArgsConstructor
 @Data
@@ -17,5 +16,5 @@ public class CategoryDto implements Serializable {
 	private Long id;
 	private String name;
 	private Timestamp createdOn;
-	private	Timestamp updatedOn;
+	private Timestamp updatedOn;
 }

@@ -1,6 +1,5 @@
 package com.rms.dto;
 
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -13,7 +12,7 @@ import lombok.NonNull;
 @NonNull
 @NoArgsConstructor
 @Data
-public class StateDto implements Serializable{
+public class StateDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,5 +20,5 @@ public class StateDto implements Serializable{
 	private String name;
 	private Country country;
 	private Timestamp createdOn;
-	private	Timestamp updatedOn;
+	private Timestamp updatedOn;
 }

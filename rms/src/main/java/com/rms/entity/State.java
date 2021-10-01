@@ -22,27 +22,26 @@ import lombok.NonNull;
 @Data
 @Entity
 @Table(name = "state")
-public class State implements Serializable{
+public class State implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id 
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-		
+
 	@Column(name = "name")
 	private String name;
-		
+
 	@ManyToOne
-	@JoinColumn(name = "country_id",foreignKey = @ForeignKey(name = "FK_COUNTRY_ID")) 
+	@JoinColumn(name = "country_id", foreignKey = @ForeignKey(name = "FK_COUNTRY_ID"))
 	private Country country;
-	
-	@Column(name="created_on")
+
+	@Column(name = "created_on")
 	private Timestamp createdOn;
-	
-	@Column(name="updated_on")
+
+	@Column(name = "updated_on")
 	private Timestamp updatedOn;
-	
-	
+
 }

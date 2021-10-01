@@ -1,6 +1,5 @@
 package com.rms.entity;
 
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -24,50 +23,47 @@ import javax.persistence.ForeignKey;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="product")
+@Table(name = "product")
 public class Product implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
-	
-	@Column(name="name")
+
+	@Column(name = "name")
 	private String name;
-	
-	@Column(name="image")
+
+	@Column(name = "image")
 	private String image;
-	
-	@Column(name="type")
+
+	@Column(name = "type")
 	private String type;
-	
-	@Column(name="price")
+
+	@Column(name = "price")
 	private Double price;
-	
-	@Max(value=50 ,message="Description should not be greater than 50")
-	@Column(name="description")
+
+	@Max(value = 50, message = "Description should not be greater than 50")
+	@Column(name = "description")
 	private String description;
-	
-	@Column(name="tax")
+
+	@Column(name = "tax")
 	private Double tax;
-	
+
 	@ManyToOne
-    @JoinColumn(name = "category_id",foreignKey = @ForeignKey(name = "FK_PRODUCT_CATEGORY_ID"))
-    private Category category;
-	
+	@JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "FK_PRODUCT_CATEGORY_ID"))
+	private Category category;
+
 	@ManyToOne
-    @JoinColumn(name = "meal_id",foreignKey = @ForeignKey(name = "FK_PRODUCT_MEAL_ID"))
-    private Meal meal;
-	
-	@Column(name="created_on")
+	@JoinColumn(name = "meal_id", foreignKey = @ForeignKey(name = "FK_PRODUCT_MEAL_ID"))
+	private Meal meal;
+
+	@Column(name = "created_on")
 	private Timestamp createdOn;
-	
-	@Column(name="updated_on")
+
+	@Column(name = "updated_on")
 	private Timestamp updatedOn;
-	
-	
-	
-	
+
 }

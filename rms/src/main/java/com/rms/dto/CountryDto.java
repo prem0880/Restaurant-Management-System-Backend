@@ -10,12 +10,12 @@ import lombok.NonNull;
 @NonNull
 @NoArgsConstructor
 @Data
-public class CountryDto implements Serializable{
+public class CountryDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
 	private String name;
 	private Timestamp createdOn;
-	private	Timestamp updatedOn;
+	private Timestamp updatedOn;
 }

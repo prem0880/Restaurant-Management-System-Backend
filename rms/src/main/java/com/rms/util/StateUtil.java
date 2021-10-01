@@ -11,7 +11,7 @@ public class StateUtil {
 		state.setCountry(stateDto.getCountry());
 		return state;
 	}
-	
+
 	public static StateDto toDto(State state) {
 		StateDto stateDto = new StateDto();
 		stateDto.setId(state.getId());
@@ -21,9 +21,5 @@ public class StateUtil {
 		stateDto.setUpdatedOn(state.getUpdatedOn());
 		return stateDto;
 	}
-	
-	
-	
-	
-	
+
 }

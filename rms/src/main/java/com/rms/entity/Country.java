@@ -19,22 +19,22 @@ import lombok.NonNull;
 @Data
 @Entity
 @Table(name = "country")
-public class Country implements Serializable{
+public class Country implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	
-	@Column(name = "name",unique=true)
+
+	@Column(name = "name", unique = true)
 	private String name;
-	
-	@Column(name="created_on")
+
+	@Column(name = "created_on")
 	private Timestamp createdOn;
-	
-	@Column(name="updated_on")
+
+	@Column(name = "updated_on")
 	private Timestamp updatedOn;
-	
+
 }

@@ -19,14 +19,14 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private CustomerDao customerDao;
-	
+
 	@Override
 	public Long addCustomer(CustomerDto customerDto) {
-		try{
+		try {
 			Customer customer = CustomerUtil.toEntity(customerDto);
 			customer.setPassword(String.valueOf(customer.getPhoneNumber()));
 			return customerDao.addCustomer(customer);
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -34,45 +34,44 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public List<CustomerDto> getAllCustomer() {
 		try {
-			List<Customer> customerEntity=customerDao.getAllCustomer();	
-			if(customerEntity!=null) {
-				List<CustomerDto> customerDto=new ArrayList<>();
-				customerEntity.stream().forEach(entity->customerDto.add(CustomerUtil.toDto(entity)));
+			List<Customer> customerEntity = customerDao.getAllCustomer();
+			if (customerEntity != null) {
+				List<CustomerDto> customerDto = new ArrayList<>();
+				customerEntity.stream().forEach(entity -> customerDto.add(CustomerUtil.toDto(entity)));
 				return customerDto;
-			}
-			else {
+			} else {
 				throw new BusinessLogicException("No records Found for Customer");
 			}
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
 	@Override
 	public CustomerDto getCustomerById(Long id) {
-		try{
-			Customer customer=customerDao.getCustomerById(id);
-			if(customer!=null) {
+		try {
+			Customer customer = customerDao.getCustomerById(id);
+			if (customer != null) {
 				return CustomerUtil.toDto(customer);
-			}else {
+			} else {
 				throw new BusinessLogicException("No records Found for Customer");
 			}
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
 	@Override
 	public String updateCustomer(Long id, CustomerDto customerDto) {
-		try{
-			String result=null;
+		try {
+			String result = null;
 			Customer customer = CustomerUtil.toEntity(customerDto);
-			boolean flag=customerDao.updateCustomer(id,customer);
-			if(flag) {
-				result="Customer Updation is Successful";
+			boolean flag = customerDao.updateCustomer(id, customer);
+			if (flag) {
+				result = "Customer Updation is Successful";
 			}
 			return result;
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 
@@ -80,15 +79,15 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Long customerLogin(CustomerDto customerDto) {
-		try{
-			Long result=null;
+		try {
+			Long result = null;
 			Customer customer = CustomerUtil.toEntity(customerDto);
-			Customer customerEntity=customerDao.getCustomerByEmail(customer);
-			if(customerEntity!=null && customerEntity.getPassword().equals(customer.getPassword())) {
-				result=customerEntity.getId();
+			Customer customerEntity = customerDao.getCustomerByEmail(customer);
+			if (customerEntity != null && customerEntity.getPassword().equals(customer.getPassword())) {
+				result = customerEntity.getId();
 			}
 			return result;
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}

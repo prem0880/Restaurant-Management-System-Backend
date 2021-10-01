@@ -2,7 +2,6 @@ package com.rms.dao.impl;
 
 import java.util.List;
 
-
 import javax.transaction.Transactional;
 
 import org.hibernate.Session;
@@ -18,27 +17,26 @@ import com.rms.util.TimeStampUtil;
 
 @Repository
 @Transactional
-public class StateDaoImpl implements StateDao{
+public class StateDaoImpl implements StateDao {
 
-	static final String ID_NOT_FOUND="State not found with id ";
-	static final String DB_FETCH_ERROR="Error in Fetching Data from Database";
+	static final String ID_NOT_FOUND = "State not found with id ";
+	static final String DB_FETCH_ERROR = "Error in Fetching Data from Database";
 	@Autowired
 	private SessionFactory sessionFactory;
-	
-	
+
 	@Override
 	public boolean addState(State state) {
-		boolean flag=false;
-		try{
-		Session session=sessionFactory.getCurrentSession();
-		state.setCreatedOn(TimeStampUtil.getTimeStamp());
-		Long value=(Long)session.save(state);
-		if(value!=null) {
-			flag=true;
-		}
-		session.flush();
-		return flag;
-		}catch (Exception e) {
+		boolean flag = false;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			state.setCreatedOn(TimeStampUtil.getTimeStamp());
+			Long value = (Long) session.save(state);
+			if (value != null) {
+				flag = true;
+			}
+			session.flush();
+			return flag;
+		} catch (Exception e) {
 			throw new DataBaseException("Error in Creation of State");
 		}
 	}
@@ -46,14 +44,14 @@ public class StateDaoImpl implements StateDao{
 	@Override
 	public List<State> getStatesByCountry(Long countryId) {
 		try {
-		Session session=sessionFactory.getCurrentSession();
-		Query<State> query=session.createQuery("FROM State s WHERE s.country.id=:countryId",State.class);
-		query.setParameter("countryId", countryId);
-		return query.list();
-		}catch (Exception e) {
-			throw new DataBaseException(DB_FETCH_ERROR+ ID_NOT_FOUND+ countryId);
+			Session session = sessionFactory.getCurrentSession();
+			Query<State> query = session.createQuery("FROM State s WHERE s.country.id=:countryId", State.class);
+			query.setParameter("countryId", countryId);
+			return query.list();
+		} catch (Exception e) {
+			throw new DataBaseException(DB_FETCH_ERROR + ID_NOT_FOUND + countryId);
 		}
-		
+
 	}
 
 }

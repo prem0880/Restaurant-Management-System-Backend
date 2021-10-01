@@ -6,8 +6,8 @@ import java.util.Date;
 public class TimeStampUtil {
 
 	public static Timestamp getTimeStamp() {
-		Date date= new Date();
+		Date date = new Date();
 		long time = date.getTime();
-        return new Timestamp(time);
+		return new Timestamp(time);
 	}
 }

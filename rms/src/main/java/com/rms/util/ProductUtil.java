@@ -15,9 +15,9 @@ public class ProductUtil {
 		product.setType(productDto.getType());
 		product.setCategory(productDto.getCategory());
 		product.setMeal(productDto.getMeal());
-		return product;	
+		return product;
 	}
-	
+
 	public static ProductDto toDto(Product product) {
 		ProductDto productDto = new ProductDto();
 		productDto.setId(product.getId());
@@ -31,8 +31,7 @@ public class ProductUtil {
 		productDto.setMeal(product.getMeal());
 		productDto.setCreatedOn(product.getCreatedOn());
 		productDto.setUpdatedOn(product.getUpdatedOn());
-		return productDto;	
+		return productDto;
 	}
-	
-	
+
 }

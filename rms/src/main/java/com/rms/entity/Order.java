@@ -29,14 +29,13 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "orders")
-public class Order implements Serializable{
-	
+public class Order implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	@Column(name = "date")
@@ -52,23 +51,23 @@ public class Order implements Serializable{
 	private String status;
 
 	@ManyToOne
-	@JoinColumn(name = "customer_id",foreignKey = @ForeignKey(name = "FK_ORDER_CUSTOMER_ID"))
+	@JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "FK_ORDER_CUSTOMER_ID"))
 	@JsonIgnore
 	private Customer customer;
 
 	@ManyToOne
-	@JoinColumn(name = "address_id",foreignKey = @ForeignKey(name = "FK_ORDER_ADDRESS_ID"))
+	@JoinColumn(name = "address_id", foreignKey = @ForeignKey(name = "FK_ORDER_ADDRESS_ID"))
 	@JsonIgnore
 	private Address address;
-	
-	@OneToMany(mappedBy="order") 
-	@Column(name="orders")
+
+	@OneToMany(mappedBy = "order")
+	@Column(name = "orders")
 	private List<OrderItem> orderItem;
-	
-	@Column(name="created_on")
+
+	@Column(name = "created_on")
 	private Timestamp createdOn;
-	
-	@Column(name="updated_on")
+
+	@Column(name = "updated_on")
 	private Timestamp updatedOn;
 
 }

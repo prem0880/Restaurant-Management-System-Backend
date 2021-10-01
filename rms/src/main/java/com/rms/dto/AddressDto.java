@@ -13,9 +13,9 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Data
 public class AddressDto implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private Long id;
 	private String addressLine;
 	private String city;
@@ -23,5 +23,5 @@ public class AddressDto implements Serializable {
 	private State state;
 	private Customer customer;
 	private Timestamp createdOn;
-	private	Timestamp updatedOn;
+	private Timestamp updatedOn;
 }

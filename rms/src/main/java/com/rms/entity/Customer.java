@@ -21,36 +21,35 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="customer")
-public class Customer implements Serializable{
+@Table(name = "customer")
+public class Customer implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
-	
-	@Column(name="name")
+
+	@Column(name = "name")
 	private String name;
-	
+
 	@Email
-	@Column(name="email",unique=true)
+	@Column(name = "email", unique = true)
 	private String email;
-	
-	@Min(value=10,message="Password should not be less than 10")
-	@Column(name="password")
+
+	@Min(value = 10, message = "Password should not be less than 10")
+	@Column(name = "password")
 	private String password;
-	
-	@Max(value=10 ,message="Phone Number should not be greater than 10")
-	@Column(name="phone_number",unique=true)
+
+	@Max(value = 10, message = "Phone Number should not be greater than 10")
+	@Column(name = "phone_number", unique = true)
 	private Long phoneNumber;
-	
-	
-	@Column(name="created_on")
+
+	@Column(name = "created_on")
 	private Timestamp createdOn;
-	
-	@Column(name="updated_on")
+
+	@Column(name = "updated_on")
 	private Timestamp updatedOn;
-	
+
 }

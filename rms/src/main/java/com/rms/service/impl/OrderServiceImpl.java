@@ -1,5 +1,7 @@
 package com.rms.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ import com.rms.service.OrderService;
 import com.rms.util.OrderUtil;
 
 @Service
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderDao orderDao;
@@ -27,111 +29,130 @@ public class OrderServiceImpl implements OrderService{
 
 	@Autowired
 	private AddressDao addressDao;
-	
-
 
 	@Override
 	public String addOrder(OrderDto orderDto) {
 
-		try{
-			String result=null;
+		try {
+			String result = null;
 			Order order = OrderUtil.toEntity(orderDto);
 			Customer customer = customerDao.getCustomerById(orderDto.getCustomer().getId());
-			if(customer!=null) {
+			if (customer != null) {
 				order.setCustomer(customer);
 				Address address = addressDao.getAddressById(orderDto.getAddress().getId());
-				if(address!=null) {
+				if (address != null) {
 					order.setAddress(address);
 					order.setStatus("Pending");
 					order.setTotalPrice(0.0);
-					boolean flag=orderDao.addOrder(order);
-					if(flag) {
-						result="Order Creation is Successful";
+					boolean flag = orderDao.addOrder(order);
+					if (flag) {
+						result = "Order Creation is Successful";
 					}
 					return result;
-				}else {
+				} else {
 					throw new BusinessLogicException("No records Found for Address");
 				}
-			}
-			else {
+			} else {
 				throw new BusinessLogicException("No records Found for Customer");
 			}
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
-		
-		
-	}
 
+	}
 
 	@Override
 	public Long getOrderId(Long customerId) {
 		try {
-			Order order=orderDao.getOrderId(customerId);
-			OrderDto orderDto=OrderUtil.toDto(order);
-			
-			if(orderDto!=null) {
+			Order order = orderDao.getOrderId(customerId);
+			OrderDto orderDto = OrderUtil.toDto(order);
+
+			if (orderDto != null) {
 				return orderDto.getId();
-			}
-			else {
+			} else {
 				throw new BusinessLogicException("No records Found for Product");
 			}
-		}catch(DataBaseException e) {
-			throw new BusinessLogicException(e.getMessage());		
-		
-	}
-	}
+		} catch (DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
 
+		}
+	}
 
 	@Override
 	public String updateTotalPrice(Double price, Long orderId) {
-		try{
-		String result=null;
-		boolean flag=orderDao.updateTotalPrice(price, orderId);
-		if(flag) {
-			result="Order Updation is Successful";
-		}
-		return result;
-		}catch(DataBaseException e) {
+		try {
+			String result = null;
+			boolean flag = orderDao.updateTotalPrice(price, orderId);
+			if (flag) {
+				result = "Order Updation is Successful";
+			}
+			return result;
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
-
 
 	@Override
 	public OrderDto getOrderById(Long id) {
 
 		try {
-			Order order=orderDao.getOrderById(id);
-			if(order!=null) {
+			Order order = orderDao.getOrderById(id);
+			if (order != null) {
 				return OrderUtil.toDto(order);
-			}
-			else {
+			} else {
 				throw new BusinessLogicException("No records Found for Orders");
 			}
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
-		
-	}
 
+	}
 
 	@Override
 	public String updateOrder(Long orderId, OrderDto orderDto) {
-		try{
-		String result=null;
-		Order order=OrderUtil.toEntity(orderDto);
-		boolean flag=orderDao.updateOrder(orderId, order);
-		if(flag) {
-			result="Order Updation is Successful";
-		}
-		return result;
-		}catch(DataBaseException e) {
+		try {
+			String result = null;
+			Order order = OrderUtil.toEntity(orderDto);
+			boolean flag = orderDao.updateOrder(orderId, order);
+			if (flag) {
+				result = "Order Updation is Successful";
+			}
+			return result;
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
-	
-	
-	
-	
+
+	@Override
+	public List<OrderDto> getOrderByCustomerId(Long customerId) {
+		try {
+			List<Order> orderEntity = orderDao.getOrderByCustomerId(customerId);
+			if (orderEntity != null) {
+				List<OrderDto> orderDto = new ArrayList<>();
+				orderEntity.stream().forEach(entity -> orderDto.add(OrderUtil.toDto(entity)));
+				return orderDto;
+			} else {
+				throw new BusinessLogicException("Customer Not Found");
+			}
+		} catch (DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
+		}
+	}
+
+	@Override
+	public List<OrderDto> getAllOrder() {
+		try {
+			List<Order> orderEntity = orderDao.getAllOrder();
+			if (orderEntity != null) {
+				List<OrderDto> orderDto = new ArrayList<>();
+				orderEntity.stream().forEach(entity -> orderDto.add(OrderUtil.toDto(entity)));
+				return orderDto;
+			} else {
+				throw new BusinessLogicException("Order Not Found");
+			}
+		} catch (DataBaseException e) {
+			throw new BusinessLogicException(e.getMessage());
+		}
+	}
+
 }

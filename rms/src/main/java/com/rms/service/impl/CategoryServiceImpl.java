@@ -15,87 +15,79 @@ import com.rms.service.CategoryService;
 import com.rms.util.CategoryUtil;
 
 @Service
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryDao categoryDao;
-	
-	
+
 	@Override
 	public String deleteCategory(Long id) {
-		try{
+		try {
 			return categoryDao.deleteCategory(id);
-		}catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
 	@Override
 	public String updateCategory(Long id, CategoryDto categoryDto) {
-		try{
-		String result=null;
-		Category category = CategoryUtil.toEntity(categoryDto);	
-		boolean flag=categoryDao.updateCategory(id, category);
-		if(flag) {
-			result="Category Updation is Successful";
-		}
-		return result;
-		}catch(DataBaseException e) {
+		try {
+			String result = null;
+			Category category = CategoryUtil.toEntity(categoryDto);
+			boolean flag = categoryDao.updateCategory(id, category);
+			if (flag) {
+				result = "Category Updation is Successful";
+			}
+			return result;
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
 	@Override
 	public String addCategory(CategoryDto categoryDto) {
-		try{
-		String result=null;
-		Category category = CategoryUtil.toEntity(categoryDto);
-		boolean flag=categoryDao.addCategory(category);
-		if(flag) {
-			result="Category Creation is Successful";
-		}
-		return result;
-		}
-		catch(DataBaseException e) {
+		try {
+			String result = null;
+			Category category = CategoryUtil.toEntity(categoryDto);
+			boolean flag = categoryDao.addCategory(category);
+			if (flag) {
+				result = "Category Creation is Successful";
+			}
+			return result;
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
 	@Override
 	public CategoryDto getCategoryById(Long id) {
-		try{
-			Category category=categoryDao.getCategoryById(id);
-			if(category!=null) {
+		try {
+			Category category = categoryDao.getCategoryById(id);
+			if (category != null) {
 				return CategoryUtil.toDto(category);
-			}
-			else {
+			} else {
 				throw new BusinessLogicException("No records Found for Category");
 			}
-		}
-		catch(DataBaseException e) {
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
 	@Override
 	public List<CategoryDto> getAllCategory() {
-		try{
-			List<Category> categoryEntity=categoryDao.getAllCategory();
-			if(categoryEntity!=null) {
+		try {
+			List<Category> categoryEntity = categoryDao.getAllCategory();
+			if (categoryEntity != null) {
 				List<CategoryDto> categoryDto = new ArrayList<>();
-				categoryEntity.stream().forEach(entity->categoryDto.add(CategoryUtil.toDto(entity)));
+				categoryEntity.stream().forEach(entity -> categoryDto.add(CategoryUtil.toDto(entity)));
 				return categoryDto;
-			}else {
+			} else {
 				throw new BusinessLogicException("No records Found for Category");
 			}
-		
-		}catch(DataBaseException e) {
+
+		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
-
-	
-	
-	
 }

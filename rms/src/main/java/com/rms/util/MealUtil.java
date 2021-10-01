@@ -10,7 +10,7 @@ public class MealUtil {
 		meal.setName(mealDto.getName());
 		return meal;
 	}
-	
+
 	public static MealDto toDto(Meal meal) {
 		MealDto mealDto = new MealDto();
 		mealDto.setId(meal.getId());
@@ -19,5 +19,5 @@ public class MealUtil {
 		mealDto.setUpdatedOn(meal.getUpdatedOn());
 		return mealDto;
 	}
-		
+
 }

@@ -1,6 +1,5 @@
 package com.rms.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,66 +18,70 @@ import com.rms.exception.DataBaseException;
 import com.rms.response.HttpResponse;
 import com.rms.service.AddressService;
 
-
 @RestController
 @RequestMapping("/address")
 @CrossOrigin("http://localhost:4200")
 public class AddressController {
 
-	static final String DATA_SUCCESS="Address Data Retrieval is Success";
-	
-	
+	static final String DATA_SUCCESS = "Address Data Retrieval is Success";
+
 	@Autowired
 	private AddressService addressService;
-	
+
 	@PostMapping("/add")
-	public ResponseEntity<HttpResponse> addAddress(@RequestBody AddressDto addressDto){
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), addressService.addAddress(addressDto)),  HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> addAddress(@RequestBody AddressDto addressDto) {
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), addressService.addAddress(addressDto)),
+					HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@GetMapping("/get/phoneNumber/{phoneNumber}")
-	public ResponseEntity<HttpResponse> getAddressByPhoneNumber(@PathVariable("phoneNumber")Long phoneNumber)
-	{
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), DATA_SUCCESS,addressService.getAddressByPhoneNumber(phoneNumber)),  HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> getAddressByPhoneNumber(@PathVariable("phoneNumber") Long phoneNumber) {
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), DATA_SUCCESS,
+					addressService.getAddressByPhoneNumber(phoneNumber)), HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@GetMapping("/get/customer/{customerId}")
-	public ResponseEntity<HttpResponse> getAddressByCustomerId(@PathVariable("customerId")Long customerId)
-	{
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), DATA_SUCCESS,addressService.getAddressByCustomerId(customerId)),  HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> getAddressByCustomerId(@PathVariable("customerId") Long customerId) {
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), DATA_SUCCESS,
+					addressService.getAddressByCustomerId(customerId)), HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@GetMapping("/get/{id}")
-	public ResponseEntity<HttpResponse> getAddressById(@PathVariable("id") Long id)
-	{
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), DATA_SUCCESS,addressService.getAddressById(id)),  HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> getAddressById(@PathVariable("id") Long id) {
+		try {
+			return new ResponseEntity<>(
+					new HttpResponse(HttpStatus.OK.value(), DATA_SUCCESS, addressService.getAddressById(id)),
+					HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-		
-	
+
 	@ExceptionHandler(BusinessLogicException.class)
-	public ResponseEntity<HttpResponse> businessException (BusinessLogicException e) {
-		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> businessException(BusinessLogicException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+				HttpStatus.BAD_REQUEST);
 	}
-		
 
 	@ExceptionHandler(DataBaseException.class)
-	public ResponseEntity<HttpResponse> dataBaseException (DataBaseException e) {
-		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> dataBaseException(DataBaseException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+				HttpStatus.BAD_REQUEST);
 	}
 }

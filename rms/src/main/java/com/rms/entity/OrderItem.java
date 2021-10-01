@@ -1,6 +1,5 @@
 package com.rms.entity;
 
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -25,35 +24,34 @@ import lombok.NonNull;
 @Data
 @Entity
 @Table(name = "order_item")
-public class OrderItem implements Serializable{
-	
+public class OrderItem implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
-		
-	@Column(name="quantity")
+
+	@Column(name = "quantity")
 	private Integer quantity;
-		
-	@Column(name="price")
+
+	@Column(name = "price")
 	private Double price;
-	
+
 	@ManyToOne
-	@JoinColumn(name="order_id",foreignKey = @ForeignKey(name = "FK_ORDER_ID")) 
+	@JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "FK_ORDER_ID"))
 	@JsonIgnore
 	private Order order;
-		
-	@ManyToOne 
-	@JoinColumn(name="product_id",foreignKey = @ForeignKey(name = "FK_PRODUCT_ID"))
+
+	@ManyToOne
+	@JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "FK_PRODUCT_ID"))
 	private Product product;
 
-	@Column(name="created_on")
+	@Column(name = "created_on")
 	private Timestamp createdOn;
-	
-	@Column(name="updated_on")
+
+	@Column(name = "updated_on")
 	private Timestamp updatedOn;
 
 }

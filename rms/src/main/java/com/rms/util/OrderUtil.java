@@ -14,7 +14,7 @@ public class OrderUtil {
 		order.setTotalPrice(orderDto.getTotalPrice());
 		return order;
 	}
-	
+
 	public static OrderDto toDto(Order order) {
 		OrderDto orderDto = new OrderDto();
 		orderDto.setId(order.getId());
@@ -28,8 +28,5 @@ public class OrderUtil {
 		orderDto.setUpdatedOn(order.getUpdatedOn());
 		return orderDto;
 	}
-	
-		
-	
-	
+
 }

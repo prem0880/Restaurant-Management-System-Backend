@@ -26,53 +26,85 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
-	
+
 	@PostMapping("/add")
-	public ResponseEntity<HttpResponse> addOrder(@RequestBody OrderDto orderDto){
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), orderService.addOrder(orderDto)),  HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> addOrder(@RequestBody OrderDto orderDto) {
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), orderService.addOrder(orderDto)),
+					HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@GetMapping("/orderId/{customerId}")
-	public ResponseEntity<HttpResponse> getOrderId(@PathVariable Long customerId){
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), "Customer Id retrieval success",orderService.getOrderId(customerId)),  HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> getOrderId(@PathVariable Long customerId) {
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), "Customer Id retrieval success",
+					orderService.getOrderId(customerId)), HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
+	@GetMapping("/customer/{customerId}")
+	public ResponseEntity<HttpResponse> getOrderByCustomerId(@PathVariable Long customerId) {
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), "Customer Id retrieval success",
+					orderService.getOrderByCustomerId(customerId)), HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@GetMapping("/getAll")
+	public ResponseEntity<HttpResponse> getAllOrder() {
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), "Customer Id retrieval success",
+					orderService.getAllOrder()), HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	@GetMapping("/id/{orderId}")
-	public  ResponseEntity<HttpResponse> getOrderById(@PathVariable("orderId") Long orderId) {
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), "Order Id retrieval success",orderService.getOrderById(orderId)),  HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> getOrderById(@PathVariable("orderId") Long orderId) {
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), "Order Id retrieval success",
+					orderService.getOrderById(orderId)), HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@PutMapping("/update-order/{orderId}")
-	public ResponseEntity<HttpResponse> updateOrder(@PathVariable("orderId") Long orderId,@RequestBody OrderDto orderDto) {
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), orderService.updateOrder(orderId, orderDto)),  HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> updateOrder(@PathVariable("orderId") Long orderId,
+			@RequestBody OrderDto orderDto) {
+		try {
+			return new ResponseEntity<>(
+					new HttpResponse(HttpStatus.OK.value(), orderService.updateOrder(orderId, orderDto)),
+					HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@ExceptionHandler(BusinessLogicException.class)
-	public ResponseEntity<HttpResponse> businessException (BusinessLogicException e) {
-		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> businessException(BusinessLogicException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+				HttpStatus.BAD_REQUEST);
 	}
-		
 
 	@ExceptionHandler(DataBaseException.class)
-	public ResponseEntity<HttpResponse> dataBaseException (DataBaseException e) {
-		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> dataBaseException(DataBaseException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+				HttpStatus.BAD_REQUEST);
 	}
-	
-	
+
 }

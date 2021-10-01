@@ -13,7 +13,7 @@ public class CustomerUtil {
 		customer.setPassword(customerDto.getPassword());
 		return customer;
 	}
-	
+
 	public static CustomerDto toDto(Customer customer) {
 		CustomerDto customerDto = new CustomerDto();
 		customerDto.setId(customer.getId());
@@ -25,5 +25,5 @@ public class CustomerUtil {
 		customerDto.setUpdatedOn(customer.getUpdatedOn());
 		return customerDto;
 	}
-	
+
 }

@@ -18,45 +18,46 @@ import com.rms.exception.DataBaseException;
 import com.rms.response.HttpResponse;
 import com.rms.service.OrderItemService;
 
-
 @RestController
 @RequestMapping("/order-item")
 @CrossOrigin("http://localhost:4200")
 public class OrderItemController {
-	
+
 	@Autowired
 	private OrderItemService orderItemService;
-	
+
 	@PostMapping("/add")
-	public ResponseEntity<HttpResponse> addItems(@RequestBody OrderItemDto orderItemDto)
-	{
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),orderItemService.addItems(orderItemDto)),  HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> addItems(@RequestBody OrderItemDto orderItemDto) {
+		try {
+			return new ResponseEntity<>(
+					new HttpResponse(HttpStatus.OK.value(), orderItemService.addItems(orderItemDto)), HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@GetMapping("/get-items/{orderId}")
-	public ResponseEntity<HttpResponse> getOrderedItems(@PathVariable("orderId") Long orderId)
-	{
-		try{
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(),"Order Items Retrieval is Success",orderItemService.getOrderedItems(orderId)),  HttpStatus.OK);
-		}catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
-		}	
+	public ResponseEntity<HttpResponse> getOrderedItems(@PathVariable("orderId") Long orderId) {
+		try {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.OK.value(), "Order Items Retrieval is Success",
+					orderItemService.getOrderedItems(orderId)), HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
+		}
 	}
-	
+
 	@ExceptionHandler(BusinessLogicException.class)
-	public ResponseEntity<HttpResponse> businessException (BusinessLogicException e) {
-		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> businessException(BusinessLogicException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+				HttpStatus.BAD_REQUEST);
 	}
-		
 
 	@ExceptionHandler(DataBaseException.class)
-	public ResponseEntity<HttpResponse> dataBaseException (DataBaseException e) {
-		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value() ,e.getMessage()), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<HttpResponse> dataBaseException(DataBaseException e) {
+		return new ResponseEntity<>(new HttpResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+				HttpStatus.BAD_REQUEST);
 	}
-	
 
 }

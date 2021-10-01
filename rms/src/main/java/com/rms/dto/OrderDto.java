@@ -18,8 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class OrderDto implements Serializable{
-
+public class OrderDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,6 +31,6 @@ public class OrderDto implements Serializable{
 	private Address address;
 	private List<OrderItem> orderItem;
 	private Timestamp createdOn;
-	private	Timestamp updatedOn;
+	private Timestamp updatedOn;
 
 }
