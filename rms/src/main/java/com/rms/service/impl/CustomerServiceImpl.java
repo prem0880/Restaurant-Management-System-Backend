@@ -3,9 +3,12 @@ package com.rms.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.CustomerDao;
 import com.rms.dto.CustomerDto;
 import com.rms.entity.Customer;
@@ -19,9 +22,13 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private CustomerDao customerDao;
+	
+	private static final Logger logger = LogManager.getLogger(CustomerServiceImpl.class);
+
 
 	@Override
 	public Long addCustomer(CustomerDto customerDto) {
+		logger.trace("Entering addCustomer method");
 		try {
 			Customer customer = CustomerUtil.toEntity(customerDto);
 			customer.setPassword(String.valueOf(customer.getPhoneNumber()));
@@ -33,6 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<CustomerDto> getAllCustomer() {
+		logger.trace("Entering getAllCustomer method");
 		try {
 			List<Customer> customerEntity = customerDao.getAllCustomer();
 			if (customerEntity != null) {
@@ -40,7 +48,7 @@ public class CustomerServiceImpl implements CustomerService {
 				customerEntity.stream().forEach(entity -> customerDto.add(CustomerUtil.toDto(entity)));
 				return customerDto;
 			} else {
-				throw new BusinessLogicException("No records Found for Customer");
+				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -49,12 +57,13 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerDto getCustomerById(Long id) {
+		logger.trace("Entering getCustomerById method");
 		try {
 			Customer customer = customerDao.getCustomerById(id);
 			if (customer != null) {
 				return CustomerUtil.toDto(customer);
 			} else {
-				throw new BusinessLogicException("No records Found for Customer");
+				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -63,12 +72,13 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public String updateCustomer(Long id, CustomerDto customerDto) {
+		logger.trace("Entering updateCustomer method");
 		try {
 			String result = null;
 			Customer customer = CustomerUtil.toEntity(customerDto);
 			boolean flag = customerDao.updateCustomer(id, customer);
 			if (flag) {
-				result = "Customer Updation is Successful";
+				result = ApplicationConstants.CUSTOMER_UPDATE_SUCCESS;
 			}
 			return result;
 		} catch (DataBaseException e) {
@@ -79,6 +89,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Long customerLogin(CustomerDto customerDto) {
+		logger.trace("Entering customerLogin method");
 		try {
 			Long result = null;
 			Customer customer = CustomerUtil.toEntity(customerDto);

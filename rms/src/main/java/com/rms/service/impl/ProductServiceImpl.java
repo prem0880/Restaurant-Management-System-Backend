@@ -3,9 +3,12 @@ package com.rms.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.CategoryDao;
 import com.rms.dao.MealDao;
 import com.rms.dao.ProductDao;
@@ -29,12 +32,12 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private MealDao mealDao;
-
-	static final String PROD_NOT_FOUND = "No records Found for Product";
+	
+	private static final Logger logger = LogManager.getLogger(ProductServiceImpl.class);
 
 	@Override
 	public String deleteProduct(Long id) {
-
+		logger.trace("Entering deleteProduct method");
 		try {
 			Product product = productDao.getProductById(id);
 			return productDao.deleteProduct(product);
@@ -45,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public String updateProduct(Long id, ProductDto productDto) {
-
+		logger.trace("Entering updateProduct method");
 		try {
 			String result = null;
 			Product product = ProductUtil.toEntity(productDto);
@@ -55,14 +58,14 @@ public class ProductServiceImpl implements ProductService {
 				if (meal != null) {
 					boolean flag = productDao.updateProduct(id, product);
 					if (flag) {
-						result = "Product Updation is Successful";
+						result = ApplicationConstants.PRODUCT_UPDATE_SUCCESS;
 					}
 					return result;
 				} else {
-					throw new BusinessLogicException("No records Found for Meal");
+					throw new BusinessLogicException(ApplicationConstants.MEAL_NOT_FOUND);
 				}
 			} else {
-				throw new BusinessLogicException("No records Found for Category");
+				throw new BusinessLogicException(ApplicationConstants.CATEGORY_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -71,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public String addProduct(ProductDto productDto) {
-
+		logger.trace("Entering addProduct method");
 		try {
 			String result = null;
 			Product product = ProductUtil.toEntity(productDto);
@@ -83,14 +86,14 @@ public class ProductServiceImpl implements ProductService {
 					product.setMeal(meal);
 					boolean flag = productDao.addProduct(product);
 					if (flag) {
-						result = "Product Creation is Successful";
+						result = ApplicationConstants.PRODUCT_SAVE_SUCCESS;
 					}
 					return result;
 				} else {
-					throw new BusinessLogicException("No records Found for Meal");
+					throw new BusinessLogicException(ApplicationConstants.MEAL_NOT_FOUND);
 				}
 			} else {
-				throw new BusinessLogicException("No records Found for Category");
+				throw new BusinessLogicException(ApplicationConstants.CATEGORY_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -100,12 +103,13 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductDto getProductById(Long id) {
+		logger.trace("Entering getProductById method");
 		try {
 			Product product = productDao.getProductById(id);
 			if (product != null) {
 				return ProductUtil.toDto(product);
 			} else {
-				throw new BusinessLogicException(PROD_NOT_FOUND);
+				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -114,6 +118,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductDto> getAllProduct() {
+		logger.trace("Entering getAllProduct method");
 		try {
 			List<Product> productEntity = productDao.getAllProduct();
 			if (productEntity != null) {
@@ -121,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
 				productEntity.stream().forEach(entity -> productDto.add(ProductUtil.toDto(entity)));
 				return productDto;
 			} else {
-				throw new BusinessLogicException(PROD_NOT_FOUND);
+				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -130,6 +135,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductDto> getProductByTypeAndCategory(Long categoryId, String type) {
+		logger.trace("Entering getProductByTypeAndCategory method");
 		try {
 			List<Product> productEntity = productDao.getProductByTypeAndCategory(categoryId, type);
 			if (productEntity != null) {
@@ -137,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
 				productEntity.stream().forEach(entity -> productDto.add(ProductUtil.toDto(entity)));
 				return productDto;
 			} else {
-				throw new BusinessLogicException(PROD_NOT_FOUND);
+				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());

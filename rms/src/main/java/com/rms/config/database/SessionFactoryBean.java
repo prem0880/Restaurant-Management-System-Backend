@@ -18,7 +18,7 @@ import java.util.Properties;
 */
 
 @Configuration
-@ComponentScan("com.rms")
+@ComponentScan("com.rms.entity")
 @EnableTransactionManagement
 public class SessionFactoryBean {
 

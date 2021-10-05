@@ -4,12 +4,15 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.MealDao;
 import com.rms.entity.Meal;
 import com.rms.exception.DataBaseException;
@@ -19,15 +22,15 @@ import com.rms.util.TimeStampUtil;
 @Transactional
 public class MealDaoImpl implements MealDao {
 
-	static final String ID_NOT_FOUND = "Meal not found with id ";
-	static final String COULDNT_UPDATE = "Couldn't update Meal...";
-	static final String DB_FETCH_ERROR = "Error in Fetching Data from Database";
-
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	private static final Logger logger = LogManager.getLogger(MealDaoImpl.class);
+
 
 	@Override
 	public String deleteMeal(Long id) {
+		logger.trace("Entering deleteMeal method");
 		try {
 			String result = null;
 			Meal meal = null;
@@ -35,15 +38,16 @@ public class MealDaoImpl implements MealDao {
 			meal = session.load(Meal.class, id);
 			session.delete(meal);
 			session.flush();
-			result = "Deletion is successful with id: " + id;
+			result = ApplicationConstants.MEAL_DELETE_SUCCESS + id;
 			return result;
 		} catch (Exception e) {
-			throw new DataBaseException("Error in Deletion" + ID_NOT_FOUND);
+			throw new DataBaseException(ApplicationConstants.MEAL_NOT_FOUND+ApplicationConstants.MEAL_DELETE_ERROR);
 		}
 	}
 
 	@Override
 	public boolean updateMeal(Long id, Meal meal) {
+		logger.trace("Entering updateMeal method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -59,12 +63,13 @@ public class MealDaoImpl implements MealDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
-			throw new DataBaseException(ID_NOT_FOUND + COULDNT_UPDATE);
+			throw new DataBaseException(ApplicationConstants.MEAL_NOT_FOUND+ ApplicationConstants.MEAL_UPDATE_ERROR);
 		}
 	}
 
 	@Override
 	public boolean addMeal(Meal meal) {
+		logger.trace("Entering addMeal method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -76,32 +81,33 @@ public class MealDaoImpl implements MealDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
-			throw new DataBaseException("Error in Creation");
+			throw new DataBaseException(ApplicationConstants.MEAL_SAVE_ERROR);
 		}
 	}
 
 	@Override
 	public Meal getMealById(Long id) {
+		logger.trace("Entering getMealById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Meal meal = null;
-
 			meal = session.get(Meal.class, id);
 			return meal;
 		} catch (Exception e) {
-			throw new DataBaseException(DB_FETCH_ERROR + ID_NOT_FOUND + id);
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR + e.getMessage());
 		}
 
 	}
 
 	@Override
 	public List<Meal> getAllMeal() {
+		logger.trace("Entering getAllMeal method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Meal> query = session.createQuery("from Meal", Meal.class);
 			return query.list();
 		} catch (Exception e) {
-			throw new DataBaseException(DB_FETCH_ERROR);
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
 

@@ -4,12 +4,15 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.CustomerDao;
 import com.rms.entity.Customer;
 import com.rms.exception.DataBaseException;
@@ -19,15 +22,15 @@ import com.rms.util.TimeStampUtil;
 @Transactional
 public class CustomerDaoImpl implements CustomerDao {
 
-	static final String ID_NOT_FOUND = "Customer not found with id ";
-	static final String COULDNT_UPDATE = "Couldn't update Customer...";
-	static final String DB_FETCH_ERROR = "Error in Fetching Data from Database";
-
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	private static final Logger logger = LogManager.getLogger(CustomerDaoImpl.class);
+
 
 	@Override
 	public Long addCustomer(Customer customer) {
+		logger.trace("Entering addCustomer method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			customer.setCreatedOn(TimeStampUtil.getTimeStamp());
@@ -35,36 +38,39 @@ public class CustomerDaoImpl implements CustomerDao {
 			session.flush();
 			return value;
 		} catch (Exception e) {
-			throw new DataBaseException("Error in Creation of Customer");
+			throw new DataBaseException(ApplicationConstants.COUNTRY_SAVE_ERROR);
 		}
 	}
 
 	@Override
 	public List<Customer> getAllCustomer() {
+		logger.trace("Entering getAllCustomer method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Customer> query = session.createQuery("from Customer", Customer.class);
 			return query.list();
 		} catch (Exception e) {
-			throw new DataBaseException(DB_FETCH_ERROR);
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
 
 	@Override
 	public Customer getCustomerById(Long id) {
+		logger.trace("Entering getCustomerById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Customer customer = null;
 			customer = session.get(Customer.class, id);
 			return customer;
 		} catch (Exception e) {
-			throw new DataBaseException(DB_FETCH_ERROR + ID_NOT_FOUND + id);
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR + e.getMessage());
 		}
 
 	}
 
 	@Override
 	public boolean updateCustomer(Long id, Customer customer) {
+		logger.trace("Entering updateCustomer method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -80,13 +86,14 @@ public class CustomerDaoImpl implements CustomerDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
-			throw new DataBaseException(ID_NOT_FOUND + COULDNT_UPDATE);
+			throw new DataBaseException(ApplicationConstants.CUSTOMER_UPDATE_ERROR);
 		}
 
 	}
 
 	@Override
 	public Customer getCustomerByEmail(Customer customer) {
+		logger.trace("Entering getCustomerByEmail method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Customer> query = session.createQuery("FROM Customer c where c.email=:email", Customer.class);
@@ -95,7 +102,7 @@ public class CustomerDaoImpl implements CustomerDao {
 			customerObj = query.getSingleResult();
 			return customerObj;
 		} catch (Exception e) {
-			throw new DataBaseException(DB_FETCH_ERROR);
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
 

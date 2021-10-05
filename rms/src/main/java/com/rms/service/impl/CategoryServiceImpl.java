@@ -3,9 +3,12 @@ package com.rms.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.CategoryDao;
 import com.rms.dto.CategoryDto;
 import com.rms.entity.Category;
@@ -19,9 +22,13 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryDao categoryDao;
+	
+	private static final Logger logger = LogManager.getLogger(CategoryServiceImpl.class);
+
 
 	@Override
 	public String deleteCategory(Long id) {
+		logger.debug("Entering deleteCategory method");
 		try {
 			return categoryDao.deleteCategory(id);
 		} catch (DataBaseException e) {
@@ -31,12 +38,13 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public String updateCategory(Long id, CategoryDto categoryDto) {
+		logger.debug("Entering updateCategory method");
 		try {
 			String result = null;
 			Category category = CategoryUtil.toEntity(categoryDto);
 			boolean flag = categoryDao.updateCategory(id, category);
 			if (flag) {
-				result = "Category Updation is Successful";
+				result = ApplicationConstants.CATEGORY_UPDATE_SUCCESS;
 			}
 			return result;
 		} catch (DataBaseException e) {
@@ -46,12 +54,13 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public String addCategory(CategoryDto categoryDto) {
+		logger.debug("Entering addCategory method");
 		try {
 			String result = null;
 			Category category = CategoryUtil.toEntity(categoryDto);
 			boolean flag = categoryDao.addCategory(category);
 			if (flag) {
-				result = "Category Creation is Successful";
+				result = ApplicationConstants.CATEGORY_SAVE_SUCCESS;
 			}
 			return result;
 		} catch (DataBaseException e) {
@@ -61,12 +70,13 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public CategoryDto getCategoryById(Long id) {
+		logger.debug("Entering getCategoryById method");
 		try {
 			Category category = categoryDao.getCategoryById(id);
 			if (category != null) {
 				return CategoryUtil.toDto(category);
 			} else {
-				throw new BusinessLogicException("No records Found for Category");
+				throw new BusinessLogicException(ApplicationConstants.CATEGORY_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -75,6 +85,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<CategoryDto> getAllCategory() {
+		logger.debug("Entering getAllCategory method");
 		try {
 			List<Category> categoryEntity = categoryDao.getAllCategory();
 			if (categoryEntity != null) {
@@ -82,7 +93,7 @@ public class CategoryServiceImpl implements CategoryService {
 				categoryEntity.stream().forEach(entity -> categoryDto.add(CategoryUtil.toDto(entity)));
 				return categoryDto;
 			} else {
-				throw new BusinessLogicException("No records Found for Category");
+				throw new BusinessLogicException(ApplicationConstants.CATEGORY_NOT_FOUND);
 			}
 
 		} catch (DataBaseException e) {

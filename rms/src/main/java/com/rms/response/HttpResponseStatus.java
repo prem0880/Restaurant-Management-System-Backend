@@ -7,19 +7,19 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class HttpResponse {
+public class HttpResponseStatus {
 
 	private int statusCode;
 	private String message;
 	private Object data;
 
-	public HttpResponse(int statusCode, String message, Object data) {
+	public HttpResponseStatus(int statusCode, String message, Object data) {
 		this.statusCode = statusCode;
 		this.message = message;
 		this.data = data;
 	}
 
-	public HttpResponse(int statusCode, String message) {
+	public HttpResponseStatus(int statusCode, String message) {
 		this.statusCode = statusCode;
 		this.message = message;
 	}

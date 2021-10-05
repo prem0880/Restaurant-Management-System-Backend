@@ -4,11 +4,15 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.ProductDao;
 import com.rms.entity.Product;
 import com.rms.exception.DataBaseException;
@@ -18,30 +22,31 @@ import com.rms.util.TimeStampUtil;
 @Transactional
 public class ProductDaoImpl implements ProductDao {
 
-	static final String ID_NOT_FOUND = "Product not found with id ";
-	static final String COULDNT_UPDATE = "Couldn't update Product...";
-	static final String DB_FETCH_ERROR = "Error in Fetching Data from Database";
-
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	private static final Logger logger = LogManager.getLogger(ProductDaoImpl.class);
+
 
 	@Override
 	public String deleteProduct(Product product) {
+		logger.trace("Entering deleteProduct method");
 		try {
 			String result = null;
 			Session session = sessionFactory.getCurrentSession();
 			session.delete(product);
 			session.flush();
-			result = "Product Deletion is Successfully!";
+			result = ApplicationConstants.PRODUCT_DELETE_SUCCESS;
 			return result;
 		} catch (Exception e) {
-			throw new DataBaseException("Error in Deletion" + ID_NOT_FOUND);
+			throw new DataBaseException(ApplicationConstants.PRODUCT_DELETE_ERROR);
 		}
 
 	}
 
 	@Override
 	public boolean updateProduct(Long id, Product product) {
+		logger.trace("Entering updateProduct method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -57,12 +62,13 @@ public class ProductDaoImpl implements ProductDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
-			throw new DataBaseException(ID_NOT_FOUND + COULDNT_UPDATE);
+			throw new DataBaseException(ApplicationConstants.PRODUCT_NOT_FOUND+ApplicationConstants.PRODUCT_UPDATE_ERROR);
 		}
 	}
 
 	@Override
 	public boolean addProduct(Product product) {
+		logger.trace("Entering addProduct method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -74,36 +80,39 @@ public class ProductDaoImpl implements ProductDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
-			throw new DataBaseException("Error in Creation");
+			throw new DataBaseException(ApplicationConstants.PRODUCT_SAVE_ERROR);
 		}
 	}
 
 	@Override
 	public Product getProductById(Long id) {
+		logger.trace("Entering getProductById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Product product = null;
 			product = session.get(Product.class, id);
 			return product;
 		} catch (Exception e) {
-			throw new DataBaseException(DB_FETCH_ERROR + ID_NOT_FOUND + id);
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+ApplicationConstants.PRODUCT_NOT_FOUND);
 		}
 
 	}
 
 	@Override
 	public List<Product> getAllProduct() {
+		logger.trace("Entering getAllProduct method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Product> query = session.createQuery("from Product", Product.class);
 			return query.list();
 		} catch (Exception e) {
-			throw new DataBaseException(DB_FETCH_ERROR);
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
 
 	@Override
 	public List<Product> getProductByTypeAndCategory(Long categoryId, String type) {
+		logger.trace("Entering getProductByTypeAndCategory method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Product> query = session
@@ -112,7 +121,7 @@ public class ProductDaoImpl implements ProductDao {
 			query.setParameter("type", type);
 			return query.list();
 		} catch (Exception e) {
-			throw new DataBaseException(DB_FETCH_ERROR);
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 
 	}

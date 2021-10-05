@@ -3,9 +3,12 @@ package com.rms.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.OrderDao;
 import com.rms.dao.OrderItemDao;
 import com.rms.dao.ProductDao;
@@ -32,9 +35,13 @@ public class OrderItemServiceImpl implements OrderItemService {
 
 	@Autowired
 	private OrderServiceImpl orderServiceImpl;
+	
+	private static final Logger logger = LogManager.getLogger(OrderItemServiceImpl.class);
+
 
 	@Override
 	public String addItems(OrderItemDto orderItemDto) {
+		logger.trace("Entering addItems method");
 		try {
 			String result = null;
 			OrderItem orderItem = OrderItemUtil.toEntity(orderItemDto);
@@ -49,14 +56,14 @@ public class OrderItemServiceImpl implements OrderItemService {
 					Double sum = null;
 					sum = orderItemDao.getSumByOrderId(order.getId());
 					if (orderServiceImpl.updateTotalPrice(sum, order.getId()) != null) {
-						result = "Items added successfully!";
+						result =ApplicationConstants.ORDERITEM_SAVE_SUCCESS;
 					}
 					return result;
 				} else {
-					throw new BusinessLogicException("No records Found for Order");
+					throw new BusinessLogicException(ApplicationConstants.ORDER_NOT_FOUND);
 				}
 			} else {
-				throw new BusinessLogicException("No records Found for Product");
+				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -65,6 +72,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
 	@Override
 	public List<OrderItemDto> getOrderedItems(Long orderId) {
+		logger.trace("Entering getOrderedItems method");
 		try {
 			List<OrderItem> orderItemList = orderItemDao.getOrderedItems(orderId);
 			if (orderItemList != null) {
@@ -72,7 +80,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 				orderItemList.stream().forEach(entity -> orderItemDto.add(OrderItemUtil.toDto(entity)));
 				return orderItemDto;
 			} else {
-				throw new BusinessLogicException("No records Found for Product");
+				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());

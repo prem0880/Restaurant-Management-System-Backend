@@ -3,9 +3,12 @@ package com.rms.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.StateDao;
 import com.rms.dto.StateDto;
 import com.rms.entity.State;
@@ -19,15 +22,19 @@ public class StateServiceImpl implements StateService {
 
 	@Autowired
 	private StateDao stateDao;
+	
+	private static final Logger logger = LogManager.getLogger(StateServiceImpl.class);
+
 
 	@Override
 	public String addState(StateDto stateDto) {
+		logger.trace("Entering addState method");
 		try {
 			String result = null;
 			State state = StateUtil.toEntity(stateDto);
 			boolean flag = stateDao.addState(state);
 			if (flag) {
-				result = "State Creation is Successful";
+				result = ApplicationConstants.STATE_SAVE_SUCCESS;
 			}
 			return result;
 		} catch (DataBaseException e) {
@@ -37,6 +44,7 @@ public class StateServiceImpl implements StateService {
 
 	@Override
 	public List<StateDto> getStatesByCountry(Long id) {
+		logger.trace("Entering getStatesByCountry method");
 		try {
 			List<State> stateEntity = stateDao.getStatesByCountry(id);
 			if (stateEntity != null) {
@@ -44,7 +52,7 @@ public class StateServiceImpl implements StateService {
 				stateEntity.stream().forEach(entity -> stateDto.add(StateUtil.toDto(entity)));
 				return stateDto;
 			} else {
-				throw new BusinessLogicException("No records Found for State");
+				throw new BusinessLogicException(ApplicationConstants.STATE_FETCH_SUCCESS);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());

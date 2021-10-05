@@ -3,9 +3,12 @@ package com.rms.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.AddressDao;
 import com.rms.dao.CustomerDao;
 import com.rms.dao.OrderDao;
@@ -29,9 +32,12 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private AddressDao addressDao;
+	
+	private static final Logger logger = LogManager.getLogger(OrderServiceImpl.class);
 
 	@Override
 	public String addOrder(OrderDto orderDto) {
+		logger.trace("Entering addOrder method");
 
 		try {
 			String result = null;
@@ -46,14 +52,14 @@ public class OrderServiceImpl implements OrderService {
 					order.setTotalPrice(0.0);
 					boolean flag = orderDao.addOrder(order);
 					if (flag) {
-						result = "Order Creation is Successful";
+						result =ApplicationConstants.ORDER_SAVE_SUCCESS;
 					}
 					return result;
 				} else {
-					throw new BusinessLogicException("No records Found for Address");
+					throw new BusinessLogicException(ApplicationConstants.ADDRESS_NOT_FOUND);
 				}
 			} else {
-				throw new BusinessLogicException("No records Found for Customer");
+				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -63,6 +69,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Long getOrderId(Long customerId) {
+		logger.trace("Entering getOrderId method");
+
 		try {
 			Order order = orderDao.getOrderId(customerId);
 			OrderDto orderDto = OrderUtil.toDto(order);
@@ -70,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
 			if (orderDto != null) {
 				return orderDto.getId();
 			} else {
-				throw new BusinessLogicException("No records Found for Product");
+				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -80,11 +88,13 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public String updateTotalPrice(Double price, Long orderId) {
+		logger.trace("Entering updateTotalPrice method");
+
 		try {
 			String result = null;
 			boolean flag = orderDao.updateTotalPrice(price, orderId);
 			if (flag) {
-				result = "Order Updation is Successful";
+				result = ApplicationConstants.ORDER_UPDATE_SUCCESS;
 			}
 			return result;
 		} catch (DataBaseException e) {
@@ -94,13 +104,13 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public OrderDto getOrderById(Long id) {
-
+		logger.trace("Entering getOrderById method");
 		try {
 			Order order = orderDao.getOrderById(id);
 			if (order != null) {
 				return OrderUtil.toDto(order);
 			} else {
-				throw new BusinessLogicException("No records Found for Orders");
+				throw new BusinessLogicException(ApplicationConstants.ORDER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -110,12 +120,14 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public String updateOrder(Long orderId, OrderDto orderDto) {
+		logger.trace("Entering updateOrder method");
+
 		try {
 			String result = null;
 			Order order = OrderUtil.toEntity(orderDto);
 			boolean flag = orderDao.updateOrder(orderId, order);
 			if (flag) {
-				result = "Order Updation is Successful";
+				result = ApplicationConstants.ORDER_UPDATE_SUCCESS;
 			}
 			return result;
 		} catch (DataBaseException e) {
@@ -125,6 +137,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<OrderDto> getOrderByCustomerId(Long customerId) {
+		logger.trace("Entering getOrderByCustomerId method");
+
 		try {
 			List<Order> orderEntity = orderDao.getOrderByCustomerId(customerId);
 			if (orderEntity != null) {
@@ -132,7 +146,7 @@ public class OrderServiceImpl implements OrderService {
 				orderEntity.stream().forEach(entity -> orderDto.add(OrderUtil.toDto(entity)));
 				return orderDto;
 			} else {
-				throw new BusinessLogicException("Customer Not Found");
+				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
@@ -141,6 +155,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<OrderDto> getAllOrder() {
+		logger.trace("Entering getAllOrder method");
 		try {
 			List<Order> orderEntity = orderDao.getAllOrder();
 			if (orderEntity != null) {
@@ -148,7 +163,7 @@ public class OrderServiceImpl implements OrderService {
 				orderEntity.stream().forEach(entity -> orderDto.add(OrderUtil.toDto(entity)));
 				return orderDto;
 			} else {
-				throw new BusinessLogicException("Order Not Found");
+				throw new BusinessLogicException(ApplicationConstants.ORDER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
