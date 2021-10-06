@@ -36,10 +36,10 @@ public class LoginController {
 	}
 	
 	@PostMapping("/credential")
-	public ResponseEntity<HttpResponseStatus> checkCredential(@RequestBody String emailId) {
+	public ResponseEntity<HttpResponseStatus> checkCredential(@RequestBody LoginDto loginDto) {
 		
 		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMER_LOGIN_SUCCESS,loginService.getByEmail(emailId)),  HttpStatus.OK);
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMER_LOGIN_SUCCESS,loginService.getByEmail(loginDto.getEmail())),  HttpStatus.OK);
 		} catch(BusinessLogicException e) {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
 		}
@@ -49,7 +49,7 @@ public class LoginController {
 	public ResponseEntity<HttpResponseStatus> updatePassword(@RequestBody LoginDto login) { 
 		
 		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),loginService.updateLogin(login.getEmailId(), login.getPassword())),  HttpStatus.OK);
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),loginService.updateLogin(login.getEmail(), login.getPassword())),  HttpStatus.OK);
 		} catch(BusinessLogicException e) {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
 		}
@@ -59,7 +59,7 @@ public class LoginController {
 	public ResponseEntity<HttpResponseStatus> forgotPassword(@RequestBody LoginDto login) { 
 		
 		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),loginService.forgotPassword(login.getEmailId(), login.getPassword())),  HttpStatus.OK);
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),loginService.forgotPassword(login.getEmail(), login.getPassword())),  HttpStatus.OK);
 		} catch(BusinessLogicException e) {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
 		}

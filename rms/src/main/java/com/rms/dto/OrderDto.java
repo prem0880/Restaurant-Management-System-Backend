@@ -2,7 +2,6 @@ package com.rms.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.List;
 
 import com.rms.entity.Address;
@@ -23,7 +22,7 @@ public class OrderDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	private LocalDate date = LocalDate.now();
+	private Timestamp date;
 	private Double totalPrice;
 	private String modeOfPayment;
 	private String status;

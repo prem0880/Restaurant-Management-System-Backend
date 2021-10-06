@@ -28,7 +28,7 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public String addCountry(CountryDto countryDto) {
-		logger.trace("Entering addCountry method");
+		logger.debug("Entering addCountry method");
 		try {
 			String result = null;
 			Country country = CountryUtil.toEntity(countryDto);
@@ -44,7 +44,7 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public List<CountryDto> getAllCountry() {
-		logger.trace("Entering getAllCountry method");
+		logger.debug("Entering getAllCountry method");
 
 		try {
 			List<Country> countryEntity = countryDao.getAllCountry();
@@ -62,7 +62,7 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public String deleteCountry(Long id) {
-		logger.trace("Entering deleteCountry method");
+		logger.debug("Entering deleteCountry method");
 
 		try {
 			return countryDao.deleteCountry(id);
@@ -73,7 +73,7 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public String updateCountry(Long id, CountryDto countryDto) {
-		logger.trace("Entering updateCountry method");
+		logger.debug("Entering updateCountry method");
 
 		try {
 			String result = null;
@@ -90,7 +90,7 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public CountryDto getCountryById(Long id) {
-		logger.trace("Entering getCountryById method");
+		logger.debug("Entering getCountryById method");
 
 		try {
 			Country country = countryDao.getCountryById(id);

@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Long addCustomer(CustomerDto customerDto) {
-		logger.trace("Entering addCustomer method");
+		logger.debug("Entering addCustomer method");
 		try {
 			Customer customer = CustomerUtil.toEntity(customerDto);
 			customer.setPassword(String.valueOf(customer.getPhoneNumber()));
@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<CustomerDto> getAllCustomer() {
-		logger.trace("Entering getAllCustomer method");
+		logger.debug("Entering getAllCustomer method");
 		try {
 			List<Customer> customerEntity = customerDao.getAllCustomer();
 			if (customerEntity != null) {
@@ -57,7 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerDto getCustomerById(Long id) {
-		logger.trace("Entering getCustomerById method");
+		logger.debug("Entering getCustomerById method");
 		try {
 			Customer customer = customerDao.getCustomerById(id);
 			if (customer != null) {
@@ -72,7 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public String updateCustomer(Long id, CustomerDto customerDto) {
-		logger.trace("Entering updateCustomer method");
+		logger.debug("Entering updateCustomer method");
 		try {
 			String result = null;
 			Customer customer = CustomerUtil.toEntity(customerDto);
@@ -89,7 +89,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Long customerLogin(CustomerDto customerDto) {
-		logger.trace("Entering customerLogin method");
+		logger.debug("Entering customerLogin method");
 		try {
 			Long result = null;
 			Customer customer = CustomerUtil.toEntity(customerDto);

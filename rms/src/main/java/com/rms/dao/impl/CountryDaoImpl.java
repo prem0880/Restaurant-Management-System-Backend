@@ -30,7 +30,7 @@ public class CountryDaoImpl implements CountryDao {
 
 	@Override
 	public boolean addCountry(Country country) {
-		logger.trace("Entering addCountry method");
+		logger.debug("Entering addCountry method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -48,7 +48,7 @@ public class CountryDaoImpl implements CountryDao {
 
 	@Override
 	public List<Country> getAllCountry() {
-		logger.trace("Entering getAllCountry method");
+		logger.debug("Entering getAllCountry method");
 		List<Country> list = null;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -62,7 +62,7 @@ public class CountryDaoImpl implements CountryDao {
 
 	@Override
 	public String deleteCountry(Long id) {
-		logger.trace("Entering deleteCountry method");
+		logger.debug("Entering deleteCountry method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			String result = null;
@@ -79,7 +79,7 @@ public class CountryDaoImpl implements CountryDao {
 
 	@Override
 	public boolean updateCountry(Long id, Country country) {
-		logger.trace("Entering updateCountry method");
+		logger.debug("Entering updateCountry method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -101,7 +101,7 @@ public class CountryDaoImpl implements CountryDao {
 
 	@Override
 	public Country getCountryById(Long id) {
-		logger.trace("Entering getCountryById method");
+		logger.debug("Entering getCountryById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Country country = null;

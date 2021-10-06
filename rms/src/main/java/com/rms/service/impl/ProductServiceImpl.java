@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public String deleteProduct(Long id) {
-		logger.trace("Entering deleteProduct method");
+		logger.debug("Entering deleteProduct method");
 		try {
 			Product product = productDao.getProductById(id);
 			return productDao.deleteProduct(product);
@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public String updateProduct(Long id, ProductDto productDto) {
-		logger.trace("Entering updateProduct method");
+		logger.debug("Entering updateProduct method");
 		try {
 			String result = null;
 			Product product = ProductUtil.toEntity(productDto);
@@ -74,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public String addProduct(ProductDto productDto) {
-		logger.trace("Entering addProduct method");
+		logger.debug("Entering addProduct method");
 		try {
 			String result = null;
 			Product product = ProductUtil.toEntity(productDto);
@@ -103,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductDto getProductById(Long id) {
-		logger.trace("Entering getProductById method");
+		logger.debug("Entering getProductById method");
 		try {
 			Product product = productDao.getProductById(id);
 			if (product != null) {
@@ -135,7 +135,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductDto> getProductByTypeAndCategory(Long categoryId, String type) {
-		logger.trace("Entering getProductByTypeAndCategory method");
+		logger.debug("Entering getProductByTypeAndCategory method");
 		try {
 			List<Product> productEntity = productDao.getProductByTypeAndCategory(categoryId, type);
 			if (productEntity != null) {

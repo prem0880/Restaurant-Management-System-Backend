@@ -31,7 +31,7 @@ public class AddressDaoImpl implements AddressDao {
 
 	@Override
 	public boolean addAddress(Address address) {
-		logger.trace("Entering addAddress method");
+		logger.debug("Entering addAddress method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -48,7 +48,7 @@ public class AddressDaoImpl implements AddressDao {
 
 	@Override
 	public List<Address> getAddressByPhoneNumber(Long phoneNumber) {
-		logger.trace("Entering getAddressByPhoneNumber method");
+		logger.debug("Entering getAddressByPhoneNumber method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Address> query = session.createQuery("FROM Address a WHERE a.customer.phoneNumber=:phoneNumber",
@@ -63,7 +63,7 @@ public class AddressDaoImpl implements AddressDao {
 
 	@Override
 	public Address getAddressByCustomerId(Long customerId) {
-		logger.trace("Entering getAddressByCustomerId method");
+		logger.debug("Entering getAddressByCustomerId method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Address> query = session.createQuery("FROM Address a WHERE a.customer.id=:customerId", Address.class);
@@ -76,7 +76,7 @@ public class AddressDaoImpl implements AddressDao {
 
 	@Override
 	public Address getAddressById(Long id) {
-		logger.trace("Entering getAddressById method");
+		logger.debug("Entering getAddressById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Address address = null;

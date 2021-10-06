@@ -41,7 +41,7 @@ public class StateController {
 		}
 	}
 
-	@PostMapping("")
+	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addState(@RequestBody StateDto stateDto) {
 		logger.info("Entering addState method");
 		try {

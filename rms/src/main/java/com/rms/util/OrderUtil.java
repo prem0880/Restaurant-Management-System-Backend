@@ -19,6 +19,7 @@ public class OrderUtil {
 		OrderDto orderDto = new OrderDto();
 		orderDto.setId(order.getId());
 		orderDto.setAddress(order.getAddress());
+		orderDto.setDate(order.getDate());
 		orderDto.setCustomer(order.getCustomer());
 		orderDto.setModeOfPayment(order.getModeOfPayment());
 		orderDto.setOrderItem(order.getOrderItem());

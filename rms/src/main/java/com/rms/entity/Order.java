@@ -2,7 +2,6 @@ package com.rms.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -39,7 +38,7 @@ public class Order implements Serializable {
 	private Long id;
 
 	@Column(name = "date")
-	private LocalDate date = LocalDate.now();
+	private Timestamp date;
 
 	@Column(name = "total_price")
 	private Double totalPrice;

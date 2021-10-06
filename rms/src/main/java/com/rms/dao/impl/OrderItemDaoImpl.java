@@ -30,7 +30,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
 	@Override
 	public Double getSumByOrderId(Long orderId) {
-		logger.trace("Entering getSumByOrderId method");
+		logger.debug("Entering getSumByOrderId method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			return (Double) session.createQuery("SELECT SUM(o.price) FROM OrderItem o WHERE o.order.id=:orderId")
@@ -42,7 +42,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
 	@Override
 	public List<OrderItem> getOrderedItems(Long orderId) {
-		logger.trace("Entering getOrderedItems method");
+		logger.debug("Entering getOrderedItems method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<OrderItem> query = session.createQuery("FROM OrderItem o WHERE o.order.id=:orderId", OrderItem.class);
@@ -55,7 +55,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
 	@Override
 	public Long saveOrderItem(OrderItem orderItem) {
-		logger.trace("Entering saveOrderItem method");
+		logger.debug("Entering saveOrderItem method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			orderItem.setCreatedOn(TimeStampUtil.getTimeStamp());

@@ -30,7 +30,7 @@ public class OrderController {
 	
 	private static final Logger logger = LogManager.getLogger(OrderController.class);
 
-	@PostMapping("")
+	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addOrder(@RequestBody OrderDto orderDto) {
 		logger.info("Entering addOrder method");
 		try {
@@ -66,7 +66,7 @@ public class OrderController {
 		}
 	}
 
-	@GetMapping("")
+	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllOrder() {
 		logger.info("Entering getAllOrder method");
 		try {

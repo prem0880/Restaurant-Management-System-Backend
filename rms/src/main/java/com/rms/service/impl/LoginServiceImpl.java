@@ -25,21 +25,22 @@ public class LoginServiceImpl implements LoginService{
 		try {
 			Login entity = LoginUtil.toEntity(loginDto);
 			Login loginCheck = null;
-			loginCheck = loginDao.getByEmail(loginDto.getEmailId());
+			System.out.println(loginDao.getByEmail(entity.getEmail()));
+			loginCheck = loginDao.getByEmail(entity.getEmail());
 			if(loginCheck == null) {
 				boolean result = loginDao.saveLogin(entity);	
-				if(result) {
-					String msg = "Your Temporary Password for login is your registered phone number /n Please change your password after login by Change your password option in your profile";
-					MailSenderUtil.sendMail(loginDto.getEmailId(), "Temporary Password For Login", msg);
-					return ApplicationConstants.LOGIN_SAVE_SUCCESS;
-				}
+//				if(result) {
+//					String msg = "Your Temporary Password for login is your registered phone number /n";
+//					MailSenderUtil.sendMail(loginDto.getEmailId(), "Temporary Password For Login", msg);
+//					return ApplicationConstants.LOGIN_SAVE_SUCCESS;
+//				}
 			} else {
 				throw new BusinessLogicException("Email Id already Found");
 			}
 		} catch(DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}
-		return "";
+		return ApplicationConstants.LOGIN_SAVE_SUCCESS;
 	}
 
 	@Override
@@ -64,13 +65,13 @@ public class LoginServiceImpl implements LoginService{
 	public LoginDto getByEmail(String email) {
 
 		try {
-			Login login = null;
-			login = loginDao.getByEmail(email);
-			if(login != null) {
+			Login login = loginDao.getByEmail(email);
+			if(login!=null) {
 				return LoginUtil.toDto(login);
 			} else {
 				throw new BusinessLogicException(ApplicationConstants.LOGIN_NOT_FOUND);
 			}
+			
 		} catch(DataBaseException e) {
 			throw new BusinessLogicException(e.getMessage());
 		}

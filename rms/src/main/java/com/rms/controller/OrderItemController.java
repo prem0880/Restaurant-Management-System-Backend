@@ -29,7 +29,7 @@ public class OrderItemController {
 	
 	private static final Logger logger = LogManager.getLogger(OrderItemController.class);
 
-	@PostMapping("")
+	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addItems(@RequestBody OrderItemDto orderItemDto) {
 		logger.info("Entering addItems method");
 		try {

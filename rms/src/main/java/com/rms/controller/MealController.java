@@ -31,7 +31,7 @@ public class MealController {
 	
 	private static final Logger logger = LogManager.getLogger(MealController.class);
 
-	@GetMapping("")
+	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllMeal() {
 		logger.info("Entering getAllMeal method");
 		try {
@@ -55,7 +55,7 @@ public class MealController {
 		}
 	}
 
-	@PostMapping("")
+	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addMeal(@RequestBody MealDto mealDto) {
 		logger.info("Entering addMeal method");
 		try {

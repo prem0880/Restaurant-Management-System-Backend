@@ -1,6 +1,9 @@
 package com.rms.dao.impl;
 
 
+import java.util.List;
+
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +18,7 @@ import com.rms.constants.ApplicationConstants;
 import com.rms.dao.LoginDao;
 import com.rms.entity.Login;
 import com.rms.exception.DataBaseException;
+import com.rms.util.PasswordEncryptionUtil;
 import com.rms.util.TimeStampUtil;
 
 @Repository
@@ -29,11 +33,12 @@ public class LoginDaoImpl implements LoginDao {
 	
 	@Override
 	public boolean saveLogin(Login login) {
-		logger.trace("Entering save method");
+		logger.debug("Entering save method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			login.setCreatedOn(TimeStampUtil.getTimeStamp());
+			login.setPassword(PasswordEncryptionUtil.getPassword(login.getPassword()));
 			Long id = (Long) session.save(login);
 			if (id != 0)
 				flag = true;
@@ -47,14 +52,14 @@ public class LoginDaoImpl implements LoginDao {
 
 	@Override
 	public boolean updateLogin(String email, String password) {
-		logger.trace("Entering updateLogin method");
+		logger.debug("Entering updateLogin method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Login loginObj = null;
 			loginObj = session.load(Login.class, email);
 			loginObj.setUpdatedOn(TimeStampUtil.getTimeStamp());
-			loginObj.setEmailId(email);
+			loginObj.setEmail(email);
 			loginObj.setPassword(password);
 			Object obj = session.merge(loginObj);
 			if (obj != null) {
@@ -70,16 +75,20 @@ public class LoginDaoImpl implements LoginDao {
 	@Override
 	public Login getByEmail(String email) {
 
-		logger.trace("Entering getByEmail method");
+		logger.debug("Entering getByEmail method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
-			Query<Login> query = session.createQuery("from Login l where l.emailId=:email", Login.class);
+			Query<Login> query=session.createQuery("FROM Login l where l.email=:email",Login.class);
 			query.setParameter("email",email);
-			return query.getSingleResult();
-		} catch (Exception e) {
+			Login obj=query.getSingleResult();
+			System.out.println(obj.toString());
+			return obj;
+		}catch(NoResultException e) {
+			return null;
+		}
+		catch (Exception e) {
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
-		
 	}
 
 }

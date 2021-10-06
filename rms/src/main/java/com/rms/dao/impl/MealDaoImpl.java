@@ -30,7 +30,7 @@ public class MealDaoImpl implements MealDao {
 
 	@Override
 	public String deleteMeal(Long id) {
-		logger.trace("Entering deleteMeal method");
+		logger.debug("Entering deleteMeal method");
 		try {
 			String result = null;
 			Meal meal = null;
@@ -47,7 +47,7 @@ public class MealDaoImpl implements MealDao {
 
 	@Override
 	public boolean updateMeal(Long id, Meal meal) {
-		logger.trace("Entering updateMeal method");
+		logger.debug("Entering updateMeal method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -69,7 +69,7 @@ public class MealDaoImpl implements MealDao {
 
 	@Override
 	public boolean addMeal(Meal meal) {
-		logger.trace("Entering addMeal method");
+		logger.debug("Entering addMeal method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -87,7 +87,7 @@ public class MealDaoImpl implements MealDao {
 
 	@Override
 	public Meal getMealById(Long id) {
-		logger.trace("Entering getMealById method");
+		logger.debug("Entering getMealById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Meal meal = null;
@@ -101,7 +101,7 @@ public class MealDaoImpl implements MealDao {
 
 	@Override
 	public List<Meal> getAllMeal() {
-		logger.trace("Entering getAllMeal method");
+		logger.debug("Entering getAllMeal method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Meal> query = session.createQuery("from Meal", Meal.class);

@@ -33,7 +33,7 @@ public class ProductController {
 	
 	private static final Logger logger = LogManager.getLogger(ProductController.class);
 
-	@GetMapping("")
+	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllProduct() {
 		logger.info("Entering getAllProduct method");
 		try {
@@ -71,7 +71,7 @@ public class ProductController {
 		}
 	}
 
-	@PostMapping("")
+	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addProduct(@Valid @RequestBody ProductDto productDto) {
 		logger.info("Entering addProduct method");
 		try {

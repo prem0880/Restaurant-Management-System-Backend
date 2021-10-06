@@ -11,7 +11,7 @@ import lombok.NonNull;
 @Data
 public class LoginDto {
 	private Long id;
-	private String emailId;
+	private String email;
 	private String password;
 	private String role;
 	private Timestamp createdOn;

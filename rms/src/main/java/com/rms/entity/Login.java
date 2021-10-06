@@ -11,15 +11,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
-
+@NonNull
 @Entity
 @Table(name="Login")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class Login {
 
@@ -28,9 +29,9 @@ public class Login {
 	@Column(name="id")
 	private Long id;
 	
-	@Pattern(regexp="^[A-Za-z0-9+_.-]+@(.+)$",message="length must be 3")  
-	@Column(name = "email_id", nullable = false)
-	private String emailId;
+  
+	@Column(name = "email", unique=true)
+	private String email;
 	
 	@Column(nullable = false)
 	private String password;

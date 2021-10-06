@@ -37,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public String addOrder(OrderDto orderDto) {
-		logger.trace("Entering addOrder method");
+		logger.debug("Entering addOrder method");
 
 		try {
 			String result = null;
@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Long getOrderId(Long customerId) {
-		logger.trace("Entering getOrderId method");
+		logger.debug("Entering getOrderId method");
 
 		try {
 			Order order = orderDao.getOrderId(customerId);
@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public String updateTotalPrice(Double price, Long orderId) {
-		logger.trace("Entering updateTotalPrice method");
+		logger.debug("Entering updateTotalPrice method");
 
 		try {
 			String result = null;
@@ -104,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public OrderDto getOrderById(Long id) {
-		logger.trace("Entering getOrderById method");
+		logger.debug("Entering getOrderById method");
 		try {
 			Order order = orderDao.getOrderById(id);
 			if (order != null) {
@@ -120,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public String updateOrder(Long orderId, OrderDto orderDto) {
-		logger.trace("Entering updateOrder method");
+		logger.debug("Entering updateOrder method");
 
 		try {
 			String result = null;
@@ -137,7 +137,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<OrderDto> getOrderByCustomerId(Long customerId) {
-		logger.trace("Entering getOrderByCustomerId method");
+		logger.debug("Entering getOrderByCustomerId method");
 
 		try {
 			List<Order> orderEntity = orderDao.getOrderByCustomerId(customerId);
@@ -155,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<OrderDto> getAllOrder() {
-		logger.trace("Entering getAllOrder method");
+		logger.debug("Entering getAllOrder method");
 		try {
 			List<Order> orderEntity = orderDao.getAllOrder();
 			if (orderEntity != null) {

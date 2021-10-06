@@ -29,7 +29,7 @@ public class StateDaoImpl implements StateDao {
 
 	@Override
 	public boolean addState(State state) {
-		logger.trace("Entering addState method");
+		logger.debug("Entering addState method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -47,7 +47,7 @@ public class StateDaoImpl implements StateDao {
 
 	@Override
 	public List<State> getStatesByCountry(Long countryId) {
-		logger.trace("Entering getStatesByCountry method");
+		logger.debug("Entering getStatesByCountry method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<State> query = session.createQuery("FROM State s WHERE s.country.id=:countryId", State.class);

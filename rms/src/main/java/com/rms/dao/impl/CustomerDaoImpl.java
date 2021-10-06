@@ -30,7 +30,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public Long addCustomer(Customer customer) {
-		logger.trace("Entering addCustomer method");
+		logger.debug("Entering addCustomer method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			customer.setCreatedOn(TimeStampUtil.getTimeStamp());
@@ -44,7 +44,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public List<Customer> getAllCustomer() {
-		logger.trace("Entering getAllCustomer method");
+		logger.debug("Entering getAllCustomer method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Customer> query = session.createQuery("from Customer", Customer.class);
@@ -56,7 +56,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public Customer getCustomerById(Long id) {
-		logger.trace("Entering getCustomerById method");
+		logger.debug("Entering getCustomerById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Customer customer = null;
@@ -70,7 +70,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public boolean updateCustomer(Long id, Customer customer) {
-		logger.trace("Entering updateCustomer method");
+		logger.debug("Entering updateCustomer method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -93,7 +93,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public Customer getCustomerByEmail(Customer customer) {
-		logger.trace("Entering getCustomerByEmail method");
+		logger.debug("Entering getCustomerByEmail method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Customer> query = session.createQuery("FROM Customer c where c.email=:email", Customer.class);

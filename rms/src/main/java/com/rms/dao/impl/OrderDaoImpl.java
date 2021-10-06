@@ -30,7 +30,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public boolean addOrder(Order order) {
-		logger.trace("Entering addOrder method");
+		logger.debug("Entering addOrder method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -49,7 +49,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public Order getOrderId(Long customerId) {
-		logger.trace("Entering getOrderId method");
+		logger.debug("Entering getOrderId method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Order> query = session
@@ -64,7 +64,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public boolean updateTotalPrice(Double price, Long orderId) {
-		logger.trace("Entering updateTotalPrice method");
+		logger.debug("Entering updateTotalPrice method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -87,7 +87,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public Order getOrderById(Long id) {
-		logger.trace("Entering getOrderById method");
+		logger.debug("Entering getOrderById method");
 
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -102,7 +102,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public boolean updateOrder(Long orderId, Order order) {
-		logger.trace("Entering updateOrder method");
+		logger.debug("Entering updateOrder method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -111,6 +111,7 @@ public class OrderDaoImpl implements OrderDao {
 			order.setUpdatedOn(TimeStampUtil.getTimeStamp());
 			order.setId(orderId);
 			order.setCreatedOn(orderUpdated.getCreatedOn());
+			order.setDate(TimeStampUtil.getTimeStamp());
 			Object value = session.merge(order);
 			if (value != null) {
 				flag = true;
@@ -125,7 +126,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public List<Order> getOrderByCustomerId(Long customerId) {
-		logger.trace("Entering getOrderByCustomerId method");
+		logger.debug("Entering getOrderByCustomerId method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Order> query = session
@@ -139,7 +140,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public List<Order> getAllOrder() {
-		logger.trace("Entering getAllOrder method");
+		logger.debug("Entering getAllOrder method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Order> query = session.createQuery("FROM Order ", Order.class);

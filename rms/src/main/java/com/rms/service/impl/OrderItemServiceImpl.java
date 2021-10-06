@@ -41,7 +41,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
 	@Override
 	public String addItems(OrderItemDto orderItemDto) {
-		logger.trace("Entering addItems method");
+		logger.debug("Entering addItems method");
 		try {
 			String result = null;
 			OrderItem orderItem = OrderItemUtil.toEntity(orderItemDto);
@@ -72,7 +72,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
 	@Override
 	public List<OrderItemDto> getOrderedItems(Long orderId) {
-		logger.trace("Entering getOrderedItems method");
+		logger.debug("Entering getOrderedItems method");
 		try {
 			List<OrderItem> orderItemList = orderItemDao.getOrderedItems(orderId);
 			if (orderItemList != null) {
