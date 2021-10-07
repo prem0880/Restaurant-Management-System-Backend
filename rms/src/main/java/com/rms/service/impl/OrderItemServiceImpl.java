@@ -66,6 +66,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -83,6 +84,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}

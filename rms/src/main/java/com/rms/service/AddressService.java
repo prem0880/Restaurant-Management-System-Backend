@@ -11,4 +11,6 @@ public interface AddressService {
 	Long getAddressByCustomerId(Long customerId);
 
 	AddressDto getAddressById(Long id);
+	
+	String updateAddress(Long id,AddressDto addressDto);
 }

@@ -13,7 +13,6 @@ public class LoginUtil {
 			loginDto.setEmail(login.getEmail());
 			loginDto.setPassword(login.getPassword());
 			loginDto.setRole(login.getRole());
-			System.out.println("util1"+loginDto.getEmail());
 			return loginDto;
 		}
 		
@@ -24,7 +23,6 @@ public class LoginUtil {
 			login.setEmail(loginDto.getEmail());
 			login.setPassword(loginDto.getPassword());
 			login.setRole(loginDto.getRole());
-			System.out.println("util2"+login.getEmail());
 			return login;
 		}
 		

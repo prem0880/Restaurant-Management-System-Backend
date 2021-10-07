@@ -50,23 +50,6 @@ public class CustomerController {
 	}
 
 	/**
-	 * 
-	 * @param This method takes customer object as input,checks credential if found matches in database
-	 * @return success message or exception
-	 */
-	@PostMapping("/login")
-	public ResponseEntity<HttpResponseStatus> customerLogin(@RequestBody CustomerDto customerDto) {
-		logger.info("Entering customerLogin method");
-		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMER_LOGIN_SUCCESS,
-					customerService.customerLogin(customerDto)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	/**
 	 *@param returns list of customer currently in the database if data exists
 	 *@return If no data present,it return empty list
 	 */
@@ -114,6 +97,24 @@ public class CustomerController {
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), customerService.updateCustomer(id, customerDto)),
+					HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	/**
+	 *@param This method takes string as input and returns customer object identifier currently in the database
+	 *@return If no data present,it return empty list
+	 */
+	
+	@GetMapping("/mail/{email}")
+	public ResponseEntity<HttpResponseStatus> getCustomerByMail(@PathVariable("email") String mail) {
+		logger.info("Entering getCustomerByMail method");
+		try {
+			return new ResponseEntity<>(
+					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMER_FETCH_SUCCESS, customerService.getCustomerByMail(mail)),
 					HttpStatus.OK);
 		} catch (BusinessLogicException e) {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),

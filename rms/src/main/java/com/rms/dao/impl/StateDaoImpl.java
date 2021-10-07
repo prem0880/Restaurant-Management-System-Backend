@@ -41,6 +41,7 @@ public class StateDaoImpl implements StateDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.STATE_SAVE_ERROR);
 		}
 	}
@@ -54,6 +55,7 @@ public class StateDaoImpl implements StateDao {
 			query.setParameter("countryId", countryId);
 			return query.list();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.STATE_NOT_FOUND +countryId);
 		}
 

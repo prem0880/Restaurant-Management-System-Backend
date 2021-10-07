@@ -39,9 +39,10 @@ public class CategoryDaoImpl implements CategoryDao {
 			category = session.load(Category.class, id);
 			session.delete(category);
 			session.flush();
-			result = ApplicationConstants.CATEGORY_DELETE_SUCCESS + id;
+			result = ApplicationConstants.CATEGORY_DELETE_SUCCESS;
 			return result;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.COULDNT_DELETE+e.getMessage());
 		}
 
@@ -65,6 +66,7 @@ public class CategoryDaoImpl implements CategoryDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.CATEGORY_NOT_FOUND + ApplicationConstants.COULDNT_UPDATE);
 		}
 
@@ -84,7 +86,7 @@ public class CategoryDaoImpl implements CategoryDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
-
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.CATEGORY_SAVE_ERROR);
 		}
 
@@ -99,6 +101,7 @@ public class CategoryDaoImpl implements CategoryDao {
 			category = session.get(Category.class, id);
 			return category;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+ ApplicationConstants.CATEGORY_NOT_FOUND + e.getMessage());
 		}
 	}
@@ -113,6 +116,7 @@ public class CategoryDaoImpl implements CategoryDao {
 			list = query.list();
 			return list;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}

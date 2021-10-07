@@ -108,6 +108,19 @@ public class ProductController {
 					HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/meal/{id}")
+	public ResponseEntity<HttpResponseStatus> getProductByMeal(@PathVariable("id") Long id) {
+		logger.info("Entering getProductByMeal method");
+		try {
+			return new ResponseEntity<>(
+					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.PRODUCT_FETCH_SUCCESS,productService.getProductByMeal(id)),
+					HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
 
 
 }

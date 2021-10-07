@@ -90,5 +90,17 @@ public class MealController {
 					HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/name/{meal}")
+	public ResponseEntity<HttpResponseStatus> getMealByName(@PathVariable String meal) {
+		logger.info("Entering getMealById method");
+		try {
+			return new ResponseEntity<>(
+					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.MEAL_FETCH_SUCCESS, mealService.getMealByName(meal)), HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
 
 }

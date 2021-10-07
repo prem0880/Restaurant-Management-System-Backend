@@ -103,4 +103,17 @@ public class OrderController {
 					HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PutMapping("/{orderId}/{status}")
+	public ResponseEntity<HttpResponseStatus> updateOrderStatus(@PathVariable("orderId") Long orderId,@PathVariable("status") String status) {
+		logger.info("Entering updateOrder method");
+		try {
+			return new ResponseEntity<>(
+					new HttpResponseStatus(HttpStatus.OK.value(), orderService.updateOrderStatus(orderId, status)),
+					HttpStatus.OK);
+		} catch (BusinessLogicException e) {
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
 }

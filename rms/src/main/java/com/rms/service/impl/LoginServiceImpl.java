@@ -1,5 +1,8 @@
 package com.rms.service.impl;
 
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +14,7 @@ import com.rms.exception.BusinessLogicException;
 import com.rms.exception.DataBaseException;
 import com.rms.service.LoginService;
 import com.rms.util.LoginUtil;
-import com.rms.util.MailSenderUtil;
+import com.rms.util.PasswordEncryptionUtil;
 
 
 @Service
@@ -19,43 +22,50 @@ public class LoginServiceImpl implements LoginService{
 
 	@Autowired
 	private LoginDao loginDao;
-	
+		
+	private static final Logger logger = LogManager.getLogger(LoginServiceImpl.class);
+
+
 	@Override
 	public String saveLogin(LoginDto loginDto) {
+		logger.debug("Entering saveLogin method");
 		try {
 			Login entity = LoginUtil.toEntity(loginDto);
 			Login loginCheck = null;
-			System.out.println(loginDao.getByEmail(entity.getEmail()));
 			loginCheck = loginDao.getByEmail(entity.getEmail());
 			if(loginCheck == null) {
 				boolean result = loginDao.saveLogin(entity);	
-//				if(result) {
-//					String msg = "Your Temporary Password for login is your registered phone number /n";
-//					MailSenderUtil.sendMail(loginDto.getEmailId(), "Temporary Password For Login", msg);
-//					return ApplicationConstants.LOGIN_SAVE_SUCCESS;
-//				}
+				if(result) {
+					return ApplicationConstants.LOGIN_SAVE_SUCCESS;
+				}
 			} else {
 				throw new BusinessLogicException("Email Id already Found");
 			}
 		} catch(DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
-		return ApplicationConstants.LOGIN_SAVE_SUCCESS;
+		return "";
 	}
 
 	@Override
 	public String updateLogin(String email, String password) {
+		logger.debug("Entering updateLogin method");
 		try {
 			Login loginCheck = null;
 			loginCheck = loginDao.getByEmail(email);
 			if(loginCheck != null) {
+				
 				boolean result = loginDao.updateLogin(email, password);
 				if(result)
 					return "Password Updated Successfully";
+				
+				
 			} else {
-				throw new BusinessLogicException("Customer Id Not Found");
+				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			} 
 		} catch(DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 		return "";
@@ -63,7 +73,7 @@ public class LoginServiceImpl implements LoginService{
 
 	@Override
 	public LoginDto getByEmail(String email) {
-
+		logger.debug("Entering getByEmail method");
 		try {
 			Login login = loginDao.getByEmail(email);
 			if(login!=null) {
@@ -73,24 +83,44 @@ public class LoginServiceImpl implements LoginService{
 			}
 			
 		} catch(DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
 
 	@Override
-	public String forgotPassword(String email, String password) {
-
+	public String checkCredential(LoginDto loginDto) {
+		logger.debug("Entering checkCredential method");
 		try {
-			String message = updateLogin(email, password);
-			if(!message.equals("")) {
-				String msg = "As requested for forgot password, Your Password for login is your registered phone number. Please change your password after login by Change your password option in your profile";
-				MailSenderUtil.sendMail(email, "Temporary Password For Login", msg);
-				return "Password sent to your mail Successfully";
+			String result = null;
+			Login login=LoginUtil.toEntity(loginDto);
+			Login loginEntity=loginDao.getLoginByMail(login.getEmail());
+			if (loginEntity != null && loginEntity.getPassword().equals(PasswordEncryptionUtil.getPassword(login.getPassword()))) {
+				result=loginEntity.getRole();		
 			}
-		} catch(BusinessLogicException e) {
+			return result;
+		}catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
-		return "";
+
+	}
+
+	@Override
+	public String getRoleById(Long id) {
+		logger.debug("Entering getByEmail method");
+		try {
+			String role= loginDao.getRoleById(id);
+			if(role!=null) {
+				return role;
+			} else {
+				throw new BusinessLogicException(ApplicationConstants.LOGIN_NOT_FOUND);
+			}
+			
+		} catch(DataBaseException e) {
+			logger.error(e.getMessage());
+			throw new BusinessLogicException(e.getMessage());
+		}
 	}
 	
 	

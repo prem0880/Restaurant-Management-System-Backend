@@ -42,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
 			Product product = productDao.getProductById(id);
 			return productDao.deleteProduct(product);
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -68,6 +69,7 @@ public class ProductServiceImpl implements ProductService {
 				throw new BusinessLogicException(ApplicationConstants.CATEGORY_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -96,6 +98,7 @@ public class ProductServiceImpl implements ProductService {
 				throw new BusinessLogicException(ApplicationConstants.CATEGORY_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 
@@ -112,6 +115,7 @@ public class ProductServiceImpl implements ProductService {
 				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -129,6 +133,7 @@ public class ProductServiceImpl implements ProductService {
 				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -146,6 +151,25 @@ public class ProductServiceImpl implements ProductService {
 				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
+			throw new BusinessLogicException(e.getMessage());
+		}
+	}
+
+	@Override
+	public List<ProductDto> getProductByMeal(Long mealId) {
+		logger.debug("Entering getProductByTypeAndCategory method");
+		try {
+			List<Product> productEntity = productDao.getProductByMeal(mealId);
+			if (productEntity != null) {
+				List<ProductDto> productDto = new ArrayList<>();
+				productEntity.stream().forEach(entity -> productDto.add(ProductUtil.toDto(entity)));
+				return productDto;
+			} else {
+				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
+			}
+		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}

@@ -32,6 +32,7 @@ public class MealServiceImpl implements MealService {
 		try {
 			return mealDao.deleteMeal(id);
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -48,6 +49,7 @@ public class MealServiceImpl implements MealService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 
@@ -65,6 +67,7 @@ public class MealServiceImpl implements MealService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -80,6 +83,7 @@ public class MealServiceImpl implements MealService {
 				throw new BusinessLogicException(ApplicationConstants.MEAL_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -97,6 +101,23 @@ public class MealServiceImpl implements MealService {
 				throw new BusinessLogicException(ApplicationConstants.MEAL_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
+			throw new BusinessLogicException(e.getMessage());
+		}
+	}
+
+	@Override
+	public Long getMealByName(String meal) {
+		logger.debug("Entering getMealByName method");
+		try {
+			Meal mealObj = mealDao.getMealByName(meal);
+			if (mealObj != null) {
+				return mealObj.getId();
+			} else {
+				throw new BusinessLogicException(ApplicationConstants.MEAL_NOT_FOUND);
+			}
+		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}

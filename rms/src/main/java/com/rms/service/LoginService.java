@@ -6,5 +6,6 @@ public interface LoginService {
 	String saveLogin(LoginDto loginDto);
 	String updateLogin(String email, String password);
 	LoginDto getByEmail(String email);
-	String forgotPassword(String email, String password);
+	String checkCredential(LoginDto loginDto);
+	String getRoleById(Long id);
 }

@@ -32,6 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
 		try {
 			return categoryDao.deleteCategory(id);
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -48,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -64,6 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -79,6 +82,7 @@ public class CategoryServiceImpl implements CategoryService {
 				throw new BusinessLogicException(ApplicationConstants.CATEGORY_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -97,6 +101,7 @@ public class CategoryServiceImpl implements CategoryService {
 			}
 
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}

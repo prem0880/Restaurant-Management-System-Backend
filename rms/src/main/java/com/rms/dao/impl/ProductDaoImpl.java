@@ -39,6 +39,7 @@ public class ProductDaoImpl implements ProductDao {
 			result = ApplicationConstants.PRODUCT_DELETE_SUCCESS;
 			return result;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.PRODUCT_DELETE_ERROR);
 		}
 
@@ -62,6 +63,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.PRODUCT_NOT_FOUND+ApplicationConstants.PRODUCT_UPDATE_ERROR);
 		}
 	}
@@ -80,6 +82,7 @@ public class ProductDaoImpl implements ProductDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.PRODUCT_SAVE_ERROR);
 		}
 	}
@@ -93,6 +96,7 @@ public class ProductDaoImpl implements ProductDao {
 			product = session.get(Product.class, id);
 			return product;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+ApplicationConstants.PRODUCT_NOT_FOUND);
 		}
 
@@ -106,6 +110,7 @@ public class ProductDaoImpl implements ProductDao {
 			Query<Product> query = session.createQuery("from Product", Product.class);
 			return query.list();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
@@ -121,6 +126,23 @@ public class ProductDaoImpl implements ProductDao {
 			query.setParameter("type", type);
 			return query.list();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+
+	}
+
+	@Override
+	public List<Product> getProductByMeal(Long mealId) {
+		logger.debug("Entering getProductByMeal method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Product> query = session
+					.createQuery("from Product p where p.meal.id=:mealId", Product.class);
+			query.setParameter("mealId", mealId);
+			return query.list();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 

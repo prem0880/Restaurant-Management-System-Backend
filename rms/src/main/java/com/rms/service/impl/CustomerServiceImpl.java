@@ -34,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
 			customer.setPassword(String.valueOf(customer.getPhoneNumber()));
 			return customerDao.addCustomer(customer);
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -51,6 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
 				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -66,6 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
 				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -82,25 +85,29 @@ public class CustomerServiceImpl implements CustomerService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 
 	}
 
 	@Override
-	public Long customerLogin(CustomerDto customerDto) {
-		logger.debug("Entering customerLogin method");
+	public Long getCustomerByMail(String email) {
+		logger.debug("Entering getCustomerByMail method");
 		try {
-			Long result = null;
-			Customer customer = CustomerUtil.toEntity(customerDto);
-			Customer customerEntity = customerDao.getCustomerByEmail(customer);
-			if (customerEntity != null && customerEntity.getPassword().equals(customer.getPassword())) {
-				result = customerEntity.getId();
+			Long id=customerDao.getCustomerByMail(email);
+			if (id != null) {
+				System.out.println(id);
+				return id;
+			} else {
+				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
-			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
+
+
 
 }

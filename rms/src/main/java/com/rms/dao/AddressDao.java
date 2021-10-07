@@ -12,4 +12,6 @@ public interface AddressDao {
 	Address getAddressByCustomerId(Long customerId);
 
 	Address getAddressById(Long id);
+	
+	boolean updateAddress(Long id,Address address);
 }

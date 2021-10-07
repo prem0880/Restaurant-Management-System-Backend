@@ -1,8 +1,5 @@
 package com.rms.dao.impl;
 
-
-import java.util.List;
-
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
@@ -44,6 +41,7 @@ public class LoginDaoImpl implements LoginDao {
 				flag = true;
 			session.flush();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.LOGIN_SAVE_ERROR);
 		}
 		return flag;
@@ -68,6 +66,7 @@ public class LoginDaoImpl implements LoginDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.LOGIN_NOT_FOUND+ ApplicationConstants.LOGIN_UPDATE_ERROR);
 		}
 	}
@@ -87,6 +86,38 @@ public class LoginDaoImpl implements LoginDao {
 			return null;
 		}
 		catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+	}
+
+	@Override
+	public String getRoleById(Long id) {
+		logger.debug("Entering getRoleById method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			return (String) session.createQuery("SELECT l.role FROM Login l where l.id=:id").setParameter("id", id).getSingleResult();
+		}catch(NoResultException e) {
+			return null;
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+	}
+
+	@Override
+	public Login getLoginByMail(String email) {
+		logger.debug("Entering getByEmail method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Login> query=session.createQuery("FROM Login l where l.email=:email",Login.class);
+			query.setParameter("email",email);
+			Login obj=query.getSingleResult();
+			return obj;
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}

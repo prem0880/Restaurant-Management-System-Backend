@@ -14,4 +14,6 @@ public interface CustomerDao {
 	boolean updateCustomer(Long id, Customer customer);
 
 	Customer getCustomerByEmail(Customer customer);
+	
+	Long getCustomerByMail(String email);
 }

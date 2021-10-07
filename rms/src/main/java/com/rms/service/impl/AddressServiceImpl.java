@@ -37,6 +37,7 @@ public class AddressServiceImpl implements AddressService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -54,6 +55,7 @@ public class AddressServiceImpl implements AddressService {
 				throw new BusinessLogicException(ApplicationConstants.ADDRESS_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -67,12 +69,12 @@ public class AddressServiceImpl implements AddressService {
 			Address addressEntity = addressDao.getAddressByCustomerId(customerId);
 			if (addressEntity != null) {
 				result = addressEntity.getId();
-
 				return result;
 			} else {
 				throw new BusinessLogicException(ApplicationConstants.ADDRESS_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 
@@ -89,9 +91,29 @@ public class AddressServiceImpl implements AddressService {
 				throw new BusinessLogicException(ApplicationConstants.ADDRESS_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 
 	}
+
+	@Override
+	public String updateAddress(Long id, AddressDto addressDto) {
+		logger.debug("Entering updateAddress method");
+		try {
+			String result = null;
+			Address address=AddressUtil.toEntity(addressDto);
+			boolean flag = addressDao.updateAddress(id, address);
+			if (flag) {
+				result = ApplicationConstants.CATEGORY_UPDATE_SUCCESS;
+			}
+			return result;
+		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
+			throw new BusinessLogicException(e.getMessage());
+		}
+	}
+
+	
 
 }

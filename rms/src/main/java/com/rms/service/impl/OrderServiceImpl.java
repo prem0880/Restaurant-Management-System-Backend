@@ -62,6 +62,7 @@ public class OrderServiceImpl implements OrderService {
 				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 
@@ -81,6 +82,7 @@ public class OrderServiceImpl implements OrderService {
 				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 
 		}
@@ -98,6 +100,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -113,6 +116,7 @@ public class OrderServiceImpl implements OrderService {
 				throw new BusinessLogicException(ApplicationConstants.ORDER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 
@@ -131,6 +135,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -149,6 +154,7 @@ public class OrderServiceImpl implements OrderService {
 				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -166,6 +172,23 @@ public class OrderServiceImpl implements OrderService {
 				throw new BusinessLogicException(ApplicationConstants.ORDER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
+			throw new BusinessLogicException(e.getMessage());
+		}
+	}
+
+	@Override
+	public String updateOrderStatus(Long orderId, String status) {
+		logger.debug("Entering updateOrderStatus method");
+		try {
+			String result = null;
+			boolean flag = orderDao.updateOrderStatus(orderId, status);
+			if (flag) {
+				result = ApplicationConstants.ORDER_UPDATE_STATUS+" "+status;
+			}
+			return result;
+		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}

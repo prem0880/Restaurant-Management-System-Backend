@@ -41,6 +41,7 @@ public class AddressDaoImpl implements AddressDao {
 				flag = true;
 			session.flush();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.ADDRESS_SAVE_ERROR+e.getMessage());
 		}
 		return flag;
@@ -56,6 +57,7 @@ public class AddressDaoImpl implements AddressDao {
 			query.setParameter("phoneNumber", phoneNumber);
 			return query.list();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 
@@ -70,6 +72,7 @@ public class AddressDaoImpl implements AddressDao {
 			query.setParameter("customerId", customerId);
 			return query.getSingleResult();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
@@ -83,8 +86,37 @@ public class AddressDaoImpl implements AddressDao {
 			address = session.get(Address.class, id);
 			return address;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+e.getMessage());
 		}
 	}
 
+	@Override
+	public boolean updateAddress(Long id, Address address) {
+		logger.debug("Entering updateAddress method");
+		boolean flag = false;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Address addressObj = null;
+			addressObj = session.load(Address.class, id);
+			System.out.println(addressObj.toString());
+			address.setCreatedOn(addressObj.getCreatedOn());
+			address.setId(id);
+			address.setUpdatedOn(TimeStampUtil.getTimeStamp());
+			System.out.println(address.toString());
+			Object obj = session.merge(address);
+			if (obj != null) {
+				flag = true;
+			}
+			session.flush();
+			return flag;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.CATEGORY_NOT_FOUND + ApplicationConstants.COULDNT_UPDATE);
+		}
+	}
+
+
+
+	
 }

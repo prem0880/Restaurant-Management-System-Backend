@@ -38,6 +38,7 @@ public class CountryServiceImpl implements CountryService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -56,6 +57,7 @@ public class CountryServiceImpl implements CountryService {
 				throw new BusinessLogicException(ApplicationConstants.COUNTRY_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -67,6 +69,7 @@ public class CountryServiceImpl implements CountryService {
 		try {
 			return countryDao.deleteCountry(id);
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -84,6 +87,7 @@ public class CountryServiceImpl implements CountryService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -100,6 +104,7 @@ public class CountryServiceImpl implements CountryService {
 				throw new BusinessLogicException(ApplicationConstants.COUNTRY_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}

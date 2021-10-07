@@ -16,4 +16,5 @@ public interface MealDao {
 
 	List<Meal> getAllMeal();
 
+	Meal getMealByName(String meal);
 }

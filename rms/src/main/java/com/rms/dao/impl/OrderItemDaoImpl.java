@@ -36,6 +36,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 			return (Double) session.createQuery("SELECT SUM(o.price) FROM OrderItem o WHERE o.order.id=:orderId")
 					.setParameter("orderId", orderId).getSingleResult();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
@@ -49,6 +50,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 			query.setParameter("orderId", orderId);
 			return query.list();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
@@ -63,6 +65,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 			session.flush();
 			return value;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.ORDERITEM_SAVE_ERROR);
 		}
 	}

@@ -2,6 +2,7 @@ package com.rms.dao.impl;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +30,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 
 	@Override
-	public Long addCustomer(Customer customer) {
+	public Long addCustomer(Customer customer){
 		logger.debug("Entering addCustomer method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -38,6 +39,7 @@ public class CustomerDaoImpl implements CustomerDao {
 			session.flush();
 			return value;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.COUNTRY_SAVE_ERROR);
 		}
 	}
@@ -50,6 +52,7 @@ public class CustomerDaoImpl implements CustomerDao {
 			Query<Customer> query = session.createQuery("from Customer", Customer.class);
 			return query.list();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
@@ -63,6 +66,7 @@ public class CustomerDaoImpl implements CustomerDao {
 			customer = session.get(Customer.class, id);
 			return customer;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR + e.getMessage());
 		}
 
@@ -86,6 +90,7 @@ public class CustomerDaoImpl implements CustomerDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.CUSTOMER_UPDATE_ERROR);
 		}
 
@@ -102,6 +107,25 @@ public class CustomerDaoImpl implements CustomerDao {
 			customerObj = query.getSingleResult();
 			return customerObj;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+	}
+
+	@Override
+	public Long getCustomerByMail(String email) {
+		logger.debug("Entering getCustomerByEmail method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Customer> query = session.createQuery("FROM Customer c where c.email=:email", Customer.class);
+			query.setParameter("email", email);
+			Customer customerObj = null;
+			customerObj = query.getSingleResult();
+			return customerObj.getId();
+		}catch(NoResultException e) {
+			return null;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}

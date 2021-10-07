@@ -33,6 +33,7 @@ build/
 .vscode/
 /.gitignore
 /.mvn/
+/LogFile/
 /mvnw
 /mvnw.cmd
 /pom.xml

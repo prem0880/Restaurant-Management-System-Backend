@@ -11,7 +11,8 @@ public interface CustomerService {
 
 	CustomerDto getCustomerById(Long id);
 
-	String updateCustomer(Long id, CustomerDto customerDto);
-
-	Long customerLogin(CustomerDto customerDto);
+	String updateCustomer(Long id, CustomerDto customerDto);	
+	
+	Long getCustomerByMail(String email);
+	
 }

@@ -38,6 +38,7 @@ public class StateServiceImpl implements StateService {
 			}
 			return result;
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
@@ -55,6 +56,7 @@ public class StateServiceImpl implements StateService {
 				throw new BusinessLogicException(ApplicationConstants.STATE_FETCH_SUCCESS);
 			}
 		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}

@@ -8,6 +8,7 @@ public class ApplicationConstants {
 	public static final String ADDRESS_SAVE_SUCCESS = "Address Creation is Success";	
 	public static final String DB_FETCH_ERROR = "Error in Fetching Data from Database";
 	public static final String ADDRESS_SAVE_ERROR = "Error in Creation of Address";
+	public static final String ADDRESS_UPDATE_SUCCESS = "Address Updation is Success";
 	public static final String CATEGORY_FETCH_SUCCESS = "Category Data Retrieval is Success";
 	public static final String CATEGORY_NOT_FOUND = "Category not found";
 	public static final String CATEGORY_UPDATE_SUCCESS="Category Updation is Successful";
@@ -55,6 +56,7 @@ public class ApplicationConstants {
 	public static final String ORDER_DELETE_SUCCESS="Order Deletion is successful ";
 	public static final String ORDER_UPDATE_ERROR="Error in Updation Of Order";
 	public static final String ORDER_UPDATE_SUCCESS="Order Updation is Successful";
+	public static final String ORDER_UPDATE_STATUS="The Order has been ";
 	public static final String PRODUCT_NOT_FOUND="No records Found for Product";
 	public static final String PRODUCT_FETCH_SUCCESS = "Product Data Retrieval is Success!";
 	public static final String PRODUCT_SAVE_ERROR="Error in Creation Of Product";

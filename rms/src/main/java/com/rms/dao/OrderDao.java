@@ -19,4 +19,6 @@ public interface OrderDao {
 	List<Order> getOrderByCustomerId(Long customerId);
 
 	List<Order> getAllOrder();
+	
+	boolean updateOrderStatus(Long orderId,String status);
 }

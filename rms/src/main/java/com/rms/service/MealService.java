@@ -14,4 +14,6 @@ public interface MealService {
 	MealDto getMealById(Long id);
 
 	List<MealDto> getAllMeal();
+	
+	Long getMealByName(String meal);
 }

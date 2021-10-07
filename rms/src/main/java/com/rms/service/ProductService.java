@@ -16,5 +16,8 @@ public interface ProductService {
 	List<ProductDto> getAllProduct();
 
 	List<ProductDto> getProductByTypeAndCategory(Long categoryId, String type);
+	
+	List<ProductDto> getProductByMeal(Long mealId);
+		
 
 }

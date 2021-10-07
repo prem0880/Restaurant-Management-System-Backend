@@ -18,4 +18,6 @@ public interface OrderService {
 	List<OrderDto> getOrderByCustomerId(Long customerId);
 
 	List<OrderDto> getAllOrder();
+	
+	String updateOrderStatus(Long orderId,String status);
 }

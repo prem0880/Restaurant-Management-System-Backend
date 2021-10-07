@@ -38,9 +38,10 @@ public class MealDaoImpl implements MealDao {
 			meal = session.load(Meal.class, id);
 			session.delete(meal);
 			session.flush();
-			result = ApplicationConstants.MEAL_DELETE_SUCCESS + id;
+			result = ApplicationConstants.MEAL_DELETE_SUCCESS;
 			return result;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.MEAL_NOT_FOUND+ApplicationConstants.MEAL_DELETE_ERROR);
 		}
 	}
@@ -63,6 +64,7 @@ public class MealDaoImpl implements MealDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.MEAL_NOT_FOUND+ ApplicationConstants.MEAL_UPDATE_ERROR);
 		}
 	}
@@ -81,6 +83,7 @@ public class MealDaoImpl implements MealDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.MEAL_SAVE_ERROR);
 		}
 	}
@@ -94,6 +97,7 @@ public class MealDaoImpl implements MealDao {
 			meal = session.get(Meal.class, id);
 			return meal;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR + e.getMessage());
 		}
 
@@ -107,6 +111,21 @@ public class MealDaoImpl implements MealDao {
 			Query<Meal> query = session.createQuery("from Meal", Meal.class);
 			return query.list();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+	}
+
+	@Override
+	public Meal getMealByName(String meal) {
+		logger.debug("Entering getAllMeal method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Meal> query = session.createQuery("from Meal m where m.name=:meal", Meal.class);
+			query.setParameter("meal", meal);
+			return query.getSingleResult();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}

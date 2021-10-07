@@ -42,6 +42,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.ORDER_SAVE_ERROR);
 		}
 
@@ -57,6 +58,7 @@ public class OrderDaoImpl implements OrderDao {
 			query.setParameter("customerId", customerId);
 			return query.getSingleResult();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 
@@ -80,6 +82,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.ORDER_NOT_FOUND+ApplicationConstants.ORDER_UPDATE_ERROR);
 		}
 
@@ -95,6 +98,7 @@ public class OrderDaoImpl implements OrderDao {
 			order = session.get(Order.class, id);
 			return order;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+e.getMessage());
 		}
 
@@ -119,6 +123,7 @@ public class OrderDaoImpl implements OrderDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+ApplicationConstants.ORDER_UPDATE_ERROR);
 		}
 
@@ -130,10 +135,11 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Order> query = session
-					.createQuery("FROM Order o WHERE o.customer.id=:customerId AND o.status='SUCCESS'", Order.class);
+					.createQuery("FROM Order o WHERE o.customer.id=:customerId AND o.status!='pending'", Order.class);
 			query.setParameter("customerId", customerId);
 			return query.list();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
@@ -146,7 +152,31 @@ public class OrderDaoImpl implements OrderDao {
 			Query<Order> query = session.createQuery("FROM Order ", Order.class);
 			return query.list();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+	}
+
+	@Override
+	public boolean updateOrderStatus(Long orderId, String status) {
+		logger.debug("Entering updateOrder method");
+		boolean flag = false;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Order orderUpdated = null;
+			orderUpdated = session.load(Order.class, orderId);
+			orderUpdated.setUpdatedOn(TimeStampUtil.getTimeStamp());
+			orderUpdated.setId(orderId);
+			orderUpdated.setStatus(status);
+			Object value = session.merge(orderUpdated);
+			if (value != null) {
+				flag = true;
+			}
+			session.flush();
+			return flag;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+ApplicationConstants.ORDER_UPDATE_ERROR);
 		}
 	}
 

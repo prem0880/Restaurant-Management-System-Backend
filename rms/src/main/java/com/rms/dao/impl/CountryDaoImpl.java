@@ -42,6 +42,7 @@ public class CountryDaoImpl implements CountryDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.COUNTRY_SAVE_ERROR);
 		}
 	}
@@ -56,6 +57,7 @@ public class CountryDaoImpl implements CountryDao {
 			list = query.list();
 			return list;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
@@ -73,6 +75,7 @@ public class CountryDaoImpl implements CountryDao {
 			result = ApplicationConstants.COUNTRY_DELETE_SUCCESS + id;
 			return result;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.COUNTRY_DELETE_ERROR + e.getMessage());
 		}
 	}
@@ -95,6 +98,7 @@ public class CountryDaoImpl implements CountryDao {
 			session.flush();
 			return flag;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.COUNTRY_UPDATE_ERROR + e.getMessage());
 		}
 	}
@@ -108,6 +112,7 @@ public class CountryDaoImpl implements CountryDao {
 			country = session.get(Country.class, id);
 			return country;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR + e.getMessage());
 		}
 	}
