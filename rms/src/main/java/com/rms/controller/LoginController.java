@@ -30,10 +30,13 @@ public class LoginController {
 	
 	private static final Logger logger = LogManager.getLogger(LoginController.class);
 
-	
+	/**
+	 *@param This method takes login DTO object as input
+     *@return This method returns success message if login is created successfully
+	 */
 	@PostMapping
-	public ResponseEntity<HttpResponseStatus> save(@RequestBody LoginDto loginDto) {
-		logger.info("Entering save method");
+	public ResponseEntity<HttpResponseStatus> saveLogin(@RequestBody LoginDto loginDto) {
+		logger.debug("Entering saveLogin method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), loginService.saveLogin(loginDto)),  HttpStatus.OK);
 		} catch(BusinessLogicException e) {
@@ -41,9 +44,13 @@ public class LoginController {
 		}
 	}
 	
+	/**
+	*@param This method takes login DTO object as input
+	*@return This method returns role of logged in user along with success message 
+	*/
 	@PostMapping("/credential")
 	public ResponseEntity<HttpResponseStatus> checkCredential(@RequestBody LoginDto loginDto) {
-		logger.info("Entering checkCredential method");
+		logger.debug("Entering checkCredential method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMER_LOGIN_SUCCESS,loginService.checkCredential(loginDto)),  HttpStatus.OK);
 		} catch(BusinessLogicException e) {
@@ -51,9 +58,13 @@ public class LoginController {
 		}
 	}
 	
+	/**
+	*@param This method takes login DTO object as input
+	*@return This method returns success message if login is updated successfully
+	*/
 	@PutMapping("/updatepassword")
 	public ResponseEntity<HttpResponseStatus> updatePassword(@RequestBody LoginDto login) { 
-		logger.info("Entering updatedPassword method");
+		logger.debug("Entering updatedPassword method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),loginService.updateLogin(login.getEmail(), login.getPassword())),  HttpStatus.OK);
 		} catch(BusinessLogicException e) {
@@ -61,6 +72,10 @@ public class LoginController {
 		}
 	}
 	
+	/**
+	 *@param This method takes customer/admin id as input  
+     *@return This method returns role of user along with success message if fetched successfully
+	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getRoleById(@PathVariable Long id) {
 		logger.info("Entering save method");

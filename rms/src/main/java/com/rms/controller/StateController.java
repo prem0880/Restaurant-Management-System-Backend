@@ -29,9 +29,13 @@ public class StateController {
 	
 	private static final Logger logger = LogManager.getLogger(StateController.class);
 
+	/**
+	 *@param This method takes country id as input
+	 *@return This method returns List of State DTO objects for given country id currently in the database 
+	 */
 	@GetMapping("/{countryId}")
 	public ResponseEntity<HttpResponseStatus> getStatesByCountry(@PathVariable("countryId") Long countryId) {
-		logger.info("Entering getStatesByCountry method");
+		logger.debug("Entering getStatesByCountry method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.STATE_FETCH_SUCCESS,
 					stateService.getStatesByCountry(countryId)), HttpStatus.OK);
@@ -41,9 +45,13 @@ public class StateController {
 		}
 	}
 
+	/**
+	 *@param This method takes state DTO object as input
+	 *@return This method returns success message if state is created successfully
+     */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addState(@RequestBody StateDto stateDto) {
-		logger.info("Entering addState method");
+		logger.debug("Entering addState method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), stateService.addState(stateDto)),
 					HttpStatus.OK);

@@ -28,7 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public String deleteCategory(Long id) {
-		logger.debug("Entering deleteCategory method");
+		logger.info("Entering deleteCategory method");
 		try {
 			return categoryDao.deleteCategory(id);
 		} catch (DataBaseException e) {
@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public String updateCategory(Long id, CategoryDto categoryDto) {
-		logger.debug("Entering updateCategory method");
+		logger.info("Entering updateCategory method");
 		try {
 			String result = null;
 			Category category = CategoryUtil.toEntity(categoryDto);
@@ -56,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public String addCategory(CategoryDto categoryDto) {
-		logger.debug("Entering addCategory method");
+		logger.info("Entering addCategory method");
 		try {
 			String result = null;
 			Category category = CategoryUtil.toEntity(categoryDto);
@@ -73,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public CategoryDto getCategoryById(Long id) {
-		logger.debug("Entering getCategoryById method");
+		logger.info("Entering getCategoryById method");
 		try {
 			Category category = categoryDao.getCategoryById(id);
 			if (category != null) {
@@ -89,7 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<CategoryDto> getAllCategory() {
-		logger.debug("Entering getAllCategory method");
+		logger.info("Entering getAllCategory method");
 		try {
 			List<Category> categoryEntity = categoryDao.getAllCategory();
 			if (categoryEntity != null) {

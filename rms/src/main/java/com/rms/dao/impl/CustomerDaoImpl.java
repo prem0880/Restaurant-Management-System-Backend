@@ -31,7 +31,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public Long addCustomer(Customer customer){
-		logger.debug("Entering addCustomer method");
+		logger.info("Entering addCustomer method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			customer.setCreatedOn(TimeStampUtil.getTimeStamp());
@@ -46,7 +46,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public List<Customer> getAllCustomer() {
-		logger.debug("Entering getAllCustomer method");
+		logger.info("Entering getAllCustomer method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Customer> query = session.createQuery("from Customer", Customer.class);
@@ -59,7 +59,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public Customer getCustomerById(Long id) {
-		logger.debug("Entering getCustomerById method");
+		logger.info("Entering getCustomerById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Customer customer = null;
@@ -74,7 +74,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public boolean updateCustomer(Long id, Customer customer) {
-		logger.debug("Entering updateCustomer method");
+		logger.info("Entering updateCustomer method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -98,7 +98,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public Customer getCustomerByEmail(Customer customer) {
-		logger.debug("Entering getCustomerByEmail method");
+		logger.info("Entering getCustomerByEmail method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Customer> query = session.createQuery("FROM Customer c where c.email=:email", Customer.class);
@@ -114,7 +114,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public Long getCustomerByMail(String email) {
-		logger.debug("Entering getCustomerByEmail method");
+		logger.info("Entering getCustomerByMail method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Customer> query = session.createQuery("FROM Customer c where c.email=:email", Customer.class);

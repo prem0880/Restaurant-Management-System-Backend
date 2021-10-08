@@ -29,9 +29,13 @@ public class OrderItemController {
 	
 	private static final Logger logger = LogManager.getLogger(OrderItemController.class);
 
+	/**
+	 *@param This method takes order Item DTO object as input
+	 *@return This method returns success message if order items area added successfully
+     */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addItems(@RequestBody OrderItemDto orderItemDto) {
-		logger.info("Entering addItems method");
+		logger.debug("Entering addItems method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), orderItemService.addItems(orderItemDto)), HttpStatus.OK);
@@ -41,9 +45,13 @@ public class OrderItemController {
 		}
 	}
 
+	/**
+	 *@param This method takes order id as input
+	 *@return This method returns order Item objects for given id currently in the database with the corresponding id
+	 */
 	@GetMapping("/{orderId}")
 	public ResponseEntity<HttpResponseStatus> getOrderedItems(@PathVariable("orderId") Long orderId) {
-		logger.info("Entering getOrderedItems method");
+		logger.debug("Entering getOrderedItems method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ORDERITEM_FETCH_SUCCESS,
 					orderItemService.getOrderedItems(orderId)), HttpStatus.OK);

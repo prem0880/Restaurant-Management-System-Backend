@@ -32,13 +32,13 @@ public class AddressController {
 
 
 	/**
-	 *@param This method takes Dto Object as input
-	 *@return returns message if address is added successfully.
+	 *@param This method takes Address DTO Object as input from request body
+	 *@return This method returns success message if address is added successfully as HttpResponseStatus
 	 */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addAddress(@RequestBody AddressDto addressDto) {
 		
-		logger.info("Entering addAddress method");
+		logger.debug("Entering addAddress method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), addressService.addAddress(addressDto)),
 					HttpStatus.OK);
@@ -50,11 +50,11 @@ public class AddressController {
 	
 	/**
 	 *@param This method takes phone number as input and returns list of addresses currently in the database with the corresponding number
-	 *@return If no data present,it return empty list
+	 *@return This method returns address data along with success message as HttpResponseStatus 
 	 */
 	@GetMapping("/phoneNumber/{phoneNumber}")
 	public ResponseEntity<HttpResponseStatus> getAddressByPhoneNumber(@PathVariable("phoneNumber") Long phoneNumber) {
-		logger.info("Entering getAddressByPhoneNumber method");
+		logger.debug("Entering getAddressByPhoneNumber method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ADDRESS_FETCH_SUCCESS,
 					addressService.getAddressByPhoneNumber(phoneNumber)), HttpStatus.OK);
@@ -66,11 +66,11 @@ public class AddressController {
 
 	/**
 	 *@param This method takes customer id as input and returns list of addresses currently in the database with the corresponding number
-	 *@return If no data present,it return empty list
+	 *@return This method returns address data of given id along with success message as HttpResponseStatus 
 	 */
 	@GetMapping("/customer/{customerId}")
 	public ResponseEntity<HttpResponseStatus> getAddressByCustomerId(@PathVariable("customerId") Long customerId) {
-		logger.info("Entering getAddressByCustomerId method");
+		logger.debug("Entering getAddressByCustomerId method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.ADDRESS_FETCH_SUCCESS,
 					addressService.getAddressByCustomerId(customerId)), HttpStatus.OK);
@@ -82,11 +82,11 @@ public class AddressController {
 
 	/**
 	 *@param This method takes address id as input and returns list of addresses currently in the database with the corresponding number
-	 *@return If no data present,it return empty list
+	 *@return This method returns address data for given id along with success message as HttpResponseStatus 
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getAddressById(@PathVariable("id") Long id) {
-		logger.info("Entering getAddressById method");
+		logger.debug("Entering getAddressById method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.ADDRESS_FETCH_SUCCESS, addressService.getAddressById(id)),
@@ -97,10 +97,14 @@ public class AddressController {
 		}
 	}
 	
+	/**
+	 *@param This method takes address id and address DTO object as input 
+	 *@return This method returns success message for given id as HttpResponseStatus 
+	 */
 	@PutMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> updateAddress(@PathVariable Long id,@RequestBody AddressDto addressDto) {
 		
-		logger.info("Entering updateAddress method");
+		logger.debug("Entering updateAddress method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.ADDRESS_UPDATE_SUCCESS, addressService.updateAddress(id, addressDto)),
 					HttpStatus.OK);

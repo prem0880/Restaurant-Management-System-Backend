@@ -30,7 +30,7 @@ public class LoginDaoImpl implements LoginDao {
 	
 	@Override
 	public boolean saveLogin(Login login) {
-		logger.debug("Entering save method");
+		logger.info("Entering saveLogin method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -50,7 +50,7 @@ public class LoginDaoImpl implements LoginDao {
 
 	@Override
 	public boolean updateLogin(String email, String password) {
-		logger.debug("Entering updateLogin method");
+		logger.info("Entering updateLogin method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -74,14 +74,12 @@ public class LoginDaoImpl implements LoginDao {
 	@Override
 	public Login getByEmail(String email) {
 
-		logger.debug("Entering getByEmail method");
+		logger.info("Entering getByEmail method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Login> query=session.createQuery("FROM Login l where l.email=:email",Login.class);
 			query.setParameter("email",email);
-			Login obj=query.getSingleResult();
-			System.out.println(obj.toString());
-			return obj;
+			return query.getSingleResult();
 		}catch(NoResultException e) {
 			return null;
 		}
@@ -93,7 +91,7 @@ public class LoginDaoImpl implements LoginDao {
 
 	@Override
 	public String getRoleById(Long id) {
-		logger.debug("Entering getRoleById method");
+		logger.info("Entering getRoleById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			return (String) session.createQuery("SELECT l.role FROM Login l where l.id=:id").setParameter("id", id).getSingleResult();
@@ -108,13 +106,12 @@ public class LoginDaoImpl implements LoginDao {
 
 	@Override
 	public Login getLoginByMail(String email) {
-		logger.debug("Entering getByEmail method");
+		logger.info("Entering getBymail method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Login> query=session.createQuery("FROM Login l where l.email=:email",Login.class);
 			query.setParameter("email",email);
-			Login obj=query.getSingleResult();
-			return obj;
+			return query.getSingleResult();
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage());

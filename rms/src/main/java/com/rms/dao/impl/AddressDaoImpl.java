@@ -31,7 +31,7 @@ public class AddressDaoImpl implements AddressDao {
 
 	@Override
 	public boolean addAddress(Address address) {
-		logger.debug("Entering addAddress method");
+		logger.info("Entering addAddress method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -65,7 +65,7 @@ public class AddressDaoImpl implements AddressDao {
 
 	@Override
 	public Address getAddressByCustomerId(Long customerId) {
-		logger.debug("Entering getAddressByCustomerId method");
+		logger.info("Entering getAddressByCustomerId method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Address> query = session.createQuery("FROM Address a WHERE a.customer.id=:customerId", Address.class);
@@ -79,7 +79,7 @@ public class AddressDaoImpl implements AddressDao {
 
 	@Override
 	public Address getAddressById(Long id) {
-		logger.debug("Entering getAddressById method");
+		logger.info("Entering getAddressById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Address address = null;
@@ -93,17 +93,15 @@ public class AddressDaoImpl implements AddressDao {
 
 	@Override
 	public boolean updateAddress(Long id, Address address) {
-		logger.debug("Entering updateAddress method");
+		logger.info("Entering updateAddress method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Address addressObj = null;
 			addressObj = session.load(Address.class, id);
-			System.out.println(addressObj.toString());
 			address.setCreatedOn(addressObj.getCreatedOn());
 			address.setId(id);
 			address.setUpdatedOn(TimeStampUtil.getTimeStamp());
-			System.out.println(address.toString());
 			Object obj = session.merge(address);
 			if (obj != null) {
 				flag = true;

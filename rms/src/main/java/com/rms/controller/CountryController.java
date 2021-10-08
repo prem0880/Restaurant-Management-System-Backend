@@ -32,12 +32,12 @@ public class CountryController {
 	private static final Logger logger = LogManager.getLogger(CountryController.class);
 
 	/**
-	 *@param returns list of country currently in the database if data exists
-	 *@return If no data present,it return empty list
+	 *@param  This method takes no input 
+	 *@return This method returns list of country currently in the database if data exists.If no data present,it return empty list
 	 */
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllCountry() {
-		logger.info("Entering getAllCountry method");
+		logger.debug("Entering getAllCountry method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.COUNTRY_FETCH_SUCCESS, countryService.getAllCountry()),
@@ -49,12 +49,12 @@ public class CountryController {
 	}
 
 	/**
-	 *@param This method takes country object as input and returns message if created successfully
-     *@return throws exception if error occurs
+	 *@param This method takes country DTO object as input
+     *@return This method returns success message if country is created successfully
 	 */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addCountry(@RequestBody CountryDto countryDto) {
-		logger.info("Entering addCountry method");
+		logger.debug("Entering addCountry method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), countryService.addCountry(countryDto)),
 					HttpStatus.OK);
@@ -65,12 +65,12 @@ public class CountryController {
 	}
 
 	/**
-	 *@param This method takes id as input and returns country object currently in the database
-	 *@return If no data present,it return empty list
+	 *@param This method takes country id as input
+	 *@return This method returns country object for given id currently in the database.
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getCountryById(@PathVariable Long id) {
-		logger.info("Entering getCountryById method");
+		logger.debug("Entering getCountryById method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.COUNTRY_FETCH_SUCCESS, countryService.getCountryById(id)),
@@ -82,13 +82,12 @@ public class CountryController {
 	}
 
 	/**
-	 *@param This method takes country object and id as input and
-	 *@return returns message if updated successfully with id
-     *@exception throws exception if error occurs
-	 */
+	 *@param This method takes country DTO object and id as input
+	 *@return This method returns success message if country is updated successfully with id
+     */
 	@PutMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> updateCountry(@PathVariable Long id, @RequestBody CountryDto countryDto) {
-		logger.info("Entering updateCountry method");
+		logger.debug("Entering updateCountry method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), countryService.updateCountry(id, countryDto)),
@@ -101,12 +100,11 @@ public class CountryController {
 
 	/**
 	 *@param This method takes country id as input
-	 *@return returns message if deleted successfully with id
-	 *@exception throws exception if error occurs
+	 *@return This method returns success message if country is deleted successfully with id
 	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> deleteCountry(@PathVariable Long id) {
-		logger.info("Entering deleteCountry method");
+		logger.debug("Entering deleteCountry method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), countryService.deleteCountry(id)),
 					HttpStatus.OK);

@@ -28,7 +28,7 @@ public class LoginServiceImpl implements LoginService{
 
 	@Override
 	public String saveLogin(LoginDto loginDto) {
-		logger.debug("Entering saveLogin method");
+		logger.info("Entering saveLogin method");
 		try {
 			Login entity = LoginUtil.toEntity(loginDto);
 			Login loginCheck = null;
@@ -50,7 +50,7 @@ public class LoginServiceImpl implements LoginService{
 
 	@Override
 	public String updateLogin(String email, String password) {
-		logger.debug("Entering updateLogin method");
+		logger.info("Entering updateLogin method");
 		try {
 			Login loginCheck = null;
 			loginCheck = loginDao.getByEmail(email);
@@ -73,7 +73,7 @@ public class LoginServiceImpl implements LoginService{
 
 	@Override
 	public LoginDto getByEmail(String email) {
-		logger.debug("Entering getByEmail method");
+		logger.info("Entering getByEmail method");
 		try {
 			Login login = loginDao.getByEmail(email);
 			if(login!=null) {
@@ -90,7 +90,7 @@ public class LoginServiceImpl implements LoginService{
 
 	@Override
 	public String checkCredential(LoginDto loginDto) {
-		logger.debug("Entering checkCredential method");
+		logger.info("Entering checkCredential method");
 		try {
 			String result = null;
 			Login login=LoginUtil.toEntity(loginDto);
@@ -108,7 +108,7 @@ public class LoginServiceImpl implements LoginService{
 
 	@Override
 	public String getRoleById(Long id) {
-		logger.debug("Entering getByEmail method");
+		logger.info("Entering getByEmail method");
 		try {
 			String role= loginDao.getRoleById(id);
 			if(role!=null) {

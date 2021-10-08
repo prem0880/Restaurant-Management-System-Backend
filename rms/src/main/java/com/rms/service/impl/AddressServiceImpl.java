@@ -27,7 +27,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public String addAddress(AddressDto addressDto) {
-		logger.debug("Entering addAddress method");
+		logger.info("Entering addAddress method");
 		String result = null;
 		try {
 			Address address = AddressUtil.toEntity(addressDto);
@@ -44,7 +44,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public List<AddressDto> getAddressByPhoneNumber(Long phoneNumber) {
-		logger.debug("Entering getAddressByPhoneNumber method");
+		logger.info("Entering getAddressByPhoneNumber method");
 		try {
 			List<Address> addressEntity = addressDao.getAddressByPhoneNumber(phoneNumber);
 			if (addressEntity != null) {
@@ -62,7 +62,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public Long getAddressByCustomerId(Long customerId) {
-		logger.debug("Entering getAddressByCustomerId method");
+		logger.info("Entering getAddressByCustomerId method");
 
 		try {
 			Long result = null;
@@ -82,7 +82,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public AddressDto getAddressById(Long id) {
-		logger.debug("Entering getAddressById method");
+		logger.info("Entering getAddressById method");
 		try {
 			Address address = addressDao.getAddressById(id);
 			if (address != null) {
@@ -99,7 +99,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public String updateAddress(Long id, AddressDto addressDto) {
-		logger.debug("Entering updateAddress method");
+		logger.info("Entering updateAddress method");
 		try {
 			String result = null;
 			Address address=AddressUtil.toEntity(addressDto);

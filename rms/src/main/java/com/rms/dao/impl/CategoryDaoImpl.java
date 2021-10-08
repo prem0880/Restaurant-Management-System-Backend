@@ -31,7 +31,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public String deleteCategory(Long id) {
-		logger.debug("Entering deleteCategory method");
+		logger.info("Entering deleteCategory method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Category category = null;
@@ -50,7 +50,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public boolean updateCategory(Long id, Category category) {
-		logger.debug("Entering updateCategory method");
+		logger.info("Entering updateCategory method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -74,7 +74,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public boolean addCategory(Category category) {
-		logger.debug("Entering addCategory method");
+		logger.info("Entering addCategory method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -94,7 +94,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public Category getCategoryById(Long id) {
-		logger.debug("Entering getCategoryById method");
+		logger.info("Entering getCategoryById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Category category = null;
@@ -108,7 +108,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public List<Category> getAllCategory() {
-		logger.debug("Entering getAllCategory method");
+		logger.info("Entering getAllCategory method");
 		List<Category> list = null;
 		try {
 			Session session = sessionFactory.getCurrentSession();

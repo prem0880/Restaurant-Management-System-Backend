@@ -41,12 +41,12 @@ public class OrderItemServiceImpl implements OrderItemService {
 
 	@Override
 	public String addItems(OrderItemDto orderItemDto) {
-		logger.debug("Entering addItems method");
+		logger.info("Entering addItems method");
 		try {
 			String result = null;
 			OrderItem orderItem = OrderItemUtil.toEntity(orderItemDto);
 			Product product = productDao.getProductById(orderItem.getProduct().getId());
-			if (product != null) {
+			if (product != null) {//write these if as product==null separately
 				orderItem.setProduct(product);
 				Order order = orderDao.getOrderById(orderItem.getOrder().getId());
 				if (order != null) {
@@ -73,7 +73,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
 	@Override
 	public List<OrderItemDto> getOrderedItems(Long orderId) {
-		logger.debug("Entering getOrderedItems method");
+		logger.info("Entering getOrderedItems method");
 		try {
 			List<OrderItem> orderItemList = orderItemDao.getOrderedItems(orderId);
 			if (orderItemList != null) {

@@ -37,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public String addOrder(OrderDto orderDto) {
-		logger.debug("Entering addOrder method");
+		logger.info("Entering addOrder method");
 
 		try {
 			String result = null;
@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Long getOrderId(Long customerId) {
-		logger.debug("Entering getOrderId method");
+		logger.info("Entering getOrderId method");
 
 		try {
 			Order order = orderDao.getOrderId(customerId);
@@ -90,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public String updateTotalPrice(Double price, Long orderId) {
-		logger.debug("Entering updateTotalPrice method");
+		logger.info("Entering updateTotalPrice method");
 
 		try {
 			String result = null;
@@ -107,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public OrderDto getOrderById(Long id) {
-		logger.debug("Entering getOrderById method");
+		logger.info("Entering getOrderById method");
 		try {
 			Order order = orderDao.getOrderById(id);
 			if (order != null) {
@@ -124,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public String updateOrder(Long orderId, OrderDto orderDto) {
-		logger.debug("Entering updateOrder method");
+		logger.info("Entering updateOrder method");
 
 		try {
 			String result = null;
@@ -142,7 +142,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<OrderDto> getOrderByCustomerId(Long customerId) {
-		logger.debug("Entering getOrderByCustomerId method");
+		logger.info("Entering getOrderByCustomerId method");
 
 		try {
 			List<Order> orderEntity = orderDao.getOrderByCustomerId(customerId);
@@ -161,7 +161,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<OrderDto> getAllOrder() {
-		logger.debug("Entering getAllOrder method");
+		logger.info("Entering getAllOrder method");
 		try {
 			List<Order> orderEntity = orderDao.getAllOrder();
 			if (orderEntity != null) {
@@ -179,7 +179,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public String updateOrderStatus(Long orderId, String status) {
-		logger.debug("Entering updateOrderStatus method");
+		logger.info("Entering updateOrderStatus method");
 		try {
 			String result = null;
 			boolean flag = orderDao.updateOrderStatus(orderId, status);

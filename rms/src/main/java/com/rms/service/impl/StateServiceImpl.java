@@ -28,7 +28,7 @@ public class StateServiceImpl implements StateService {
 
 	@Override
 	public String addState(StateDto stateDto) {
-		logger.debug("Entering addState method");
+		logger.info("Entering addState method");
 		try {
 			String result = null;
 			State state = StateUtil.toEntity(stateDto);
@@ -45,7 +45,7 @@ public class StateServiceImpl implements StateService {
 
 	@Override
 	public List<StateDto> getStatesByCountry(Long id) {
-		logger.debug("Entering getStatesByCountry method");
+		logger.info("Entering getStatesByCountry method");
 		try {
 			List<State> stateEntity = stateDao.getStatesByCountry(id);
 			if (stateEntity != null) {

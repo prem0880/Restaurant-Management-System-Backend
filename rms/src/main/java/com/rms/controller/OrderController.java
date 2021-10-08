@@ -22,7 +22,7 @@ import com.rms.service.OrderService;
 
 @RestController
 @RequestMapping("/order")
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("*")
 public class OrderController {
 
 	@Autowired
@@ -30,9 +30,13 @@ public class OrderController {
 	
 	private static final Logger logger = LogManager.getLogger(OrderController.class);
 
+	/**
+	 *@param This method takes order DTO object as input
+	 *@return This method returns success message if order is created successfully
+     */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addOrder(@RequestBody OrderDto orderDto) {
-		logger.info("Entering addOrder method");
+		logger.debug("Entering addOrder method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), orderService.addOrder(orderDto)),
 					HttpStatus.OK);
@@ -42,9 +46,13 @@ public class OrderController {
 		}
 	}
 
+	/**
+	 *@param This method takes customer id as input
+	 *@return This method returns order id for given customer id currently in the database with the corresponding id
+	 */
 	@GetMapping("/order/{customerId}")
 	public ResponseEntity<HttpResponseStatus> getOrderId(@PathVariable Long customerId) {
-		logger.info("Entering getOrderId method");
+		logger.debug("Entering getOrderId method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMERID_FETCH_SUCCESS,
 					orderService.getOrderId(customerId)), HttpStatus.OK);
@@ -54,9 +62,13 @@ public class OrderController {
 		}
 	}
 
+	/**
+	 *@param This method takes customer id as input
+	 *@return This method returns order object for given customer id currently in the database with the corresponding id
+	 */
 	@GetMapping("/customer/{customerId}")
 	public ResponseEntity<HttpResponseStatus> getOrderByCustomerId(@PathVariable Long customerId) {
-		logger.info("Entering getOrderByCustomerId method");
+		logger.debug("Entering getOrderByCustomerId method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMERID_FETCH_SUCCESS,
 					orderService.getOrderByCustomerId(customerId)), HttpStatus.OK);
@@ -66,9 +78,13 @@ public class OrderController {
 		}
 	}
 
+	/**
+	 *@param This method takes no input
+	 *@return This method returns List of order objects along with success message as HttpResponseStatus 
+	 */
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllOrder() {
-		logger.info("Entering getAllOrder method");
+		logger.debug("Entering getAllOrder method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMERID_FETCH_SUCCESS,
 					orderService.getAllOrder()), HttpStatus.OK);
@@ -78,9 +94,13 @@ public class OrderController {
 		}
 	}
 
+	/**
+	 *@param This method takes order id as input
+	 *@return This method returns order object for given id currently in the database with the corresponding id
+	 */
 	@GetMapping("/{orderId}")
 	public ResponseEntity<HttpResponseStatus> getOrderById(@PathVariable("orderId") Long orderId) {
-		logger.info("Entering getOrderById method");
+		logger.debug("Entering getOrderById method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ORDERID_FETCH_SUCCESS,
 					orderService.getOrderById(orderId)), HttpStatus.OK);
@@ -90,10 +110,14 @@ public class OrderController {
 		}
 	}
 
+	/**
+	 *@param This method takes order object and id as input 
+	 *@return This method returns message if order is updated successfully with id
+     */
 	@PutMapping("/{orderId}")
 	public ResponseEntity<HttpResponseStatus> updateOrder(@PathVariable("orderId") Long orderId,
 			@RequestBody OrderDto orderDto) {
-		logger.info("Entering updateOrder method");
+		logger.debug("Entering updateOrder method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), orderService.updateOrder(orderId, orderDto)),
@@ -104,9 +128,13 @@ public class OrderController {
 		}
 	}
 	
+	/**
+	 *@param This method takes order status and id as input 
+	 *@return This method returns message if meal is updated successfully with id
+     */
 	@PutMapping("/{orderId}/{status}")
 	public ResponseEntity<HttpResponseStatus> updateOrderStatus(@PathVariable("orderId") Long orderId,@PathVariable("status") String status) {
-		logger.info("Entering updateOrder method");
+		logger.debug("Entering updateOrderStatus method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), orderService.updateOrderStatus(orderId, status)),

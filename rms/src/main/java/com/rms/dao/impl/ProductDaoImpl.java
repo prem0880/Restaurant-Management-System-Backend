@@ -30,7 +30,7 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public String deleteProduct(Product product) {
-		logger.debug("Entering deleteProduct method");
+		logger.info("Entering deleteProduct method");
 		try {
 			String result = null;
 			Session session = sessionFactory.getCurrentSession();
@@ -47,7 +47,7 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public boolean updateProduct(Long id, Product product) {
-		logger.debug("Entering updateProduct method");
+		logger.info("Entering updateProduct method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -70,7 +70,7 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public boolean addProduct(Product product) {
-		logger.debug("Entering addProduct method");
+		logger.info("Entering addProduct method");
 		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -89,7 +89,7 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public Product getProductById(Long id) {
-		logger.debug("Entering getProductById method");
+		logger.info("Entering getProductById method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Product product = null;
@@ -104,7 +104,7 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public List<Product> getAllProduct() {
-		logger.debug("Entering getAllProduct method");
+		logger.info("Entering getAllProduct method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Product> query = session.createQuery("from Product", Product.class);
@@ -117,7 +117,7 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public List<Product> getProductByTypeAndCategory(Long categoryId, String type) {
-		logger.debug("Entering getProductByTypeAndCategory method");
+		logger.info("Entering getProductByTypeAndCategory method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Product> query = session
@@ -134,7 +134,7 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public List<Product> getProductByMeal(Long mealId) {
-		logger.debug("Entering getProductByMeal method");
+		logger.info("Entering getProductByMeal method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Product> query = session

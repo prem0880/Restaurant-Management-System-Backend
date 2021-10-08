@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Long addCustomer(CustomerDto customerDto) {
-		logger.debug("Entering addCustomer method");
+		logger.info("Entering addCustomer method");
 		try {
 			Customer customer = CustomerUtil.toEntity(customerDto);
 			customer.setPassword(String.valueOf(customer.getPhoneNumber()));
@@ -41,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<CustomerDto> getAllCustomer() {
-		logger.debug("Entering getAllCustomer method");
+		logger.info("Entering getAllCustomer method");
 		try {
 			List<Customer> customerEntity = customerDao.getAllCustomer();
 			if (customerEntity != null) {
@@ -59,7 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerDto getCustomerById(Long id) {
-		logger.debug("Entering getCustomerById method");
+		logger.info("Entering getCustomerById method");
 		try {
 			Customer customer = customerDao.getCustomerById(id);
 			if (customer != null) {
@@ -75,7 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public String updateCustomer(Long id, CustomerDto customerDto) {
-		logger.debug("Entering updateCustomer method");
+		logger.info("Entering updateCustomer method");
 		try {
 			String result = null;
 			Customer customer = CustomerUtil.toEntity(customerDto);
@@ -93,11 +93,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Long getCustomerByMail(String email) {
-		logger.debug("Entering getCustomerByMail method");
+		logger.info("Entering getCustomerByMail method");
 		try {
 			Long id=customerDao.getCustomerByMail(email);
 			if (id != null) {
-				System.out.println(id);
 				return id;
 			} else {
 				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);

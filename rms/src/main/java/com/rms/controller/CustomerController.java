@@ -33,12 +33,12 @@ public class CustomerController {
 	private static final Logger logger = LogManager.getLogger(CustomerController.class);
 	
 	/**
-	 *@param This method takes customer object as input and returns message if created successfully
-     *@return throws exception if error occurs
+	 *@param This method takes customer DTO object as input  
+     *@return This method returns success message if customer is created successfully
 	 */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addCustomer(@Valid @RequestBody CustomerDto customerDto) {
-		logger.info("Entering addCustomer method");
+		logger.debug("Entering addCustomer method");
 		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMER_SAVE_SUCCESS,
 					customerService.addCustomer(customerDto)), HttpStatus.OK);
@@ -50,12 +50,12 @@ public class CustomerController {
 	}
 
 	/**
-	 *@param returns list of customer currently in the database if data exists
-	 *@return If no data present,it return empty list
+	 *@param This method takes no input
+	 *@return This method returns list of customer currently in the database if data exists.If no data present,it return empty list
 	 */
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllCustomer() {
-		logger.info("Entering getAllCustomer method");
+		logger.debug("Entering getAllCustomer method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMER_FETCH_SUCCESS, customerService.getAllCustomer()),
@@ -68,13 +68,13 @@ public class CustomerController {
 
 	
 	/**
-	 *@param This method takes id as input and returns customer object currently in the database
-	 *@return If no data present,it return empty list
+	 *@param This method takes customer id as input  
+	 *@return This method returns customer object for given id currently in the database.If no data present,it return empty list
 	 */
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getCustomerById(@PathVariable("id") Long id) {
-		logger.info("Entering getCustomerById method");
+		logger.debug("Entering getCustomerById method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMER_FETCH_SUCCESS, customerService.getCustomerById(id)),
@@ -87,13 +87,13 @@ public class CustomerController {
 
 	
 	/**
-	 *@param This method takes customer object and id as input and returns message if updated successfully with id
-     *@return throws exception if error occurs
+	 *@param This method takes customer DTO object and id as input 
+     *@return This method  returns message if customer is updated successfully with id
 	 */
 	@PutMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> updateCustomer(@PathVariable("id") Long id,
 			@Valid @RequestBody CustomerDto customerDto) {
-		logger.info("Entering updateCustomer method");
+		logger.debug("Entering updateCustomer method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), customerService.updateCustomer(id, customerDto)),
@@ -105,13 +105,13 @@ public class CustomerController {
 	}
 	
 	/**
-	 *@param This method takes string as input and returns customer object identifier currently in the database
-	 *@return If no data present,it return empty list
+	 *@param This method takes customer email as input 
+	 *@return This method returns customer object identifier currently in the database. If no data present,it return empty list
 	 */
 	
 	@GetMapping("/mail/{email}")
 	public ResponseEntity<HttpResponseStatus> getCustomerByMail(@PathVariable("email") String mail) {
-		logger.info("Entering getCustomerByMail method");
+		logger.debug("Entering getCustomerByMail method");
 		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMER_FETCH_SUCCESS, customerService.getCustomerByMail(mail)),

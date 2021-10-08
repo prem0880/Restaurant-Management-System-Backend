@@ -28,7 +28,7 @@ public class MealServiceImpl implements MealService {
 
 	@Override
 	public String deleteMeal(Long id) {
-		logger.debug("Entering deleteMeal method");
+		logger.info("Entering deleteMeal method");
 		try {
 			return mealDao.deleteMeal(id);
 		} catch (DataBaseException e) {
@@ -39,7 +39,7 @@ public class MealServiceImpl implements MealService {
 
 	@Override
 	public String updateMeal(Long id, MealDto mealDto) {
-		logger.debug("Entering updateMeal method");
+		logger.info("Entering updateMeal method");
 		try {
 			String result = null;
 			Meal meal = MealUtil.toEntity(mealDto);
@@ -57,7 +57,7 @@ public class MealServiceImpl implements MealService {
 
 	@Override
 	public String addMeal(MealDto mealDto) {
-		logger.debug("Entering addMeal method");
+		logger.info("Entering addMeal method");
 		try {
 			String result = null;
 			Meal meal = MealUtil.toEntity(mealDto);
@@ -74,7 +74,7 @@ public class MealServiceImpl implements MealService {
 
 	@Override
 	public MealDto getMealById(Long id) {
-		logger.debug("Entering getMealById method");
+		logger.info("Entering getMealById method");
 		try {
 			Meal meal = mealDao.getMealById(id);
 			if (meal != null) {
@@ -90,7 +90,7 @@ public class MealServiceImpl implements MealService {
 
 	@Override
 	public List<MealDto> getAllMeal() {
-		logger.debug("Entering getAllMeal method");
+		logger.info("Entering getAllMeal method");
 		try {
 			List<Meal> mealEntity = mealDao.getAllMeal();
 			if (mealEntity != null) {
@@ -108,7 +108,7 @@ public class MealServiceImpl implements MealService {
 
 	@Override
 	public Long getMealByName(String meal) {
-		logger.debug("Entering getMealByName method");
+		logger.info("Entering getMealByName method");
 		try {
 			Meal mealObj = mealDao.getMealByName(meal);
 			if (mealObj != null) {
