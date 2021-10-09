@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dao.AddressDao;
@@ -18,6 +19,8 @@ import com.rms.entity.Customer;
 import com.rms.entity.Order;
 import com.rms.exception.BusinessLogicException;
 import com.rms.exception.DataBaseException;
+import com.rms.exception.IdNotFoundException;
+import com.rms.exception.NoRecordFoundException;
 import com.rms.service.OrderService;
 import com.rms.util.OrderUtil;
 
@@ -73,13 +76,13 @@ public class OrderServiceImpl implements OrderService {
 		logger.info("Entering getOrderId method");
 
 		try {
+			if(customerDao.getCustomerById(customerId)!=null) {
 			Order order = orderDao.getOrderId(customerId);
 			OrderDto orderDto = OrderUtil.toDto(order);
-
-			if (orderDto != null) {
-				return orderDto.getId();
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
+			return orderDto.getId();
+			}
+			else {
+				throw new IdNotFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
@@ -93,12 +96,18 @@ public class OrderServiceImpl implements OrderService {
 		logger.info("Entering updateTotalPrice method");
 
 		try {
+			if(orderDao.getOrderById(orderId)!=null) {
 			String result = null;
 			boolean flag = orderDao.updateTotalPrice(price, orderId);
 			if (flag) {
 				result = ApplicationConstants.ORDER_UPDATE_SUCCESS;
 			}
 			return result;
+			}
+			else {
+					throw new IdNotFoundException(ApplicationConstants.ORDER_NOT_FOUND);
+				
+			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
@@ -113,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
 			if (order != null) {
 				return OrderUtil.toDto(order);
 			} else {
-				throw new BusinessLogicException(ApplicationConstants.ORDER_NOT_FOUND);
+				throw new IdNotFoundException(ApplicationConstants.ORDER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
@@ -127,6 +136,7 @@ public class OrderServiceImpl implements OrderService {
 		logger.info("Entering updateOrder method");
 
 		try {
+			if(orderDao.getOrderById(orderId)!=null) {
 			String result = null;
 			Order order = OrderUtil.toEntity(orderDto);
 			boolean flag = orderDao.updateOrder(orderId, order);
@@ -134,6 +144,10 @@ public class OrderServiceImpl implements OrderService {
 				result = ApplicationConstants.ORDER_UPDATE_SUCCESS;
 			}
 			return result;
+			}else {
+				throw new IdNotFoundException(ApplicationConstants.ORDER_NOT_FOUND);
+			}
+			
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
@@ -145,13 +159,14 @@ public class OrderServiceImpl implements OrderService {
 		logger.info("Entering getOrderByCustomerId method");
 
 		try {
+			if(customerDao.getCustomerById(customerId)!=null) {
 			List<Order> orderEntity = orderDao.getOrderByCustomerId(customerId);
-			if (orderEntity != null) {
-				List<OrderDto> orderDto = new ArrayList<>();
-				orderEntity.stream().forEach(entity -> orderDto.add(OrderUtil.toDto(entity)));
-				return orderDto;
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
+			List<OrderDto> orderDto = new ArrayList<>();
+			orderEntity.stream().forEach(entity -> orderDto.add(OrderUtil.toDto(entity)));
+			return orderDto;
+			}
+			 else {
+				throw new IdNotFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
@@ -164,12 +179,13 @@ public class OrderServiceImpl implements OrderService {
 		logger.info("Entering getAllOrder method");
 		try {
 			List<Order> orderEntity = orderDao.getAllOrder();
-			if (orderEntity != null) {
+			if (CollectionUtils.isEmpty(orderEntity)) {
+				throw new NoRecordFoundException(ApplicationConstants.ORDER_NOT_FOUND);
+			}
+			else {
 				List<OrderDto> orderDto = new ArrayList<>();
 				orderEntity.stream().forEach(entity -> orderDto.add(OrderUtil.toDto(entity)));
 				return orderDto;
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.ORDER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
@@ -181,12 +197,17 @@ public class OrderServiceImpl implements OrderService {
 	public String updateOrderStatus(Long orderId, String status) {
 		logger.info("Entering updateOrderStatus method");
 		try {
+			if(orderDao.getOrderById(orderId)!=null) {
 			String result = null;
 			boolean flag = orderDao.updateOrderStatus(orderId, status);
 			if (flag) {
 				result = ApplicationConstants.ORDER_UPDATE_STATUS+" "+status;
 			}
 			return result;
+			}
+			else {
+				throw new IdNotFoundException(ApplicationConstants.ORDER_NOT_FOUND);
+			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());

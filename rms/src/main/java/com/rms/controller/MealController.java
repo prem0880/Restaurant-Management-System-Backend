@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dto.MealDto;
-import com.rms.exception.BusinessLogicException;
 import com.rms.response.HttpResponseStatus;
 import com.rms.service.MealService;
 
@@ -38,13 +37,9 @@ public class MealController {
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllMeal() {
 		logger.debug("Entering getAllMeal method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.MEAL_FETCH_SUCCESS, mealService.getAllMeal()),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -54,13 +49,9 @@ public class MealController {
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getMealById(@PathVariable Long id) {
 		logger.debug("Entering getMealById method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.MEAL_FETCH_SUCCESS, mealService.getMealById(id)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -70,13 +61,9 @@ public class MealController {
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addMeal(@RequestBody MealDto mealDto) {
 		logger.debug("Entering addMeal method");
-		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), mealService.addMeal(mealDto)),
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), mealService.addMeal(mealDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -86,13 +73,9 @@ public class MealController {
 	@PutMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> updateMeal(@PathVariable Long id, @RequestBody MealDto mealDto) {
 		logger.debug("Entering updateMeal method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), mealService.updateMeal(id, mealDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -102,13 +85,9 @@ public class MealController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> deleteMeal(@PathVariable Long id) {
 		logger.debug("Entering deleteMeal method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), mealService.deleteMeal(id)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 	
 	/**
@@ -118,13 +97,9 @@ public class MealController {
 	@GetMapping("/name/{meal}")
 	public ResponseEntity<HttpResponseStatus> getMealByName(@PathVariable String meal) {
 		logger.debug("Entering getMealById method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.MEAL_FETCH_SUCCESS, mealService.getMealByName(meal)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 }

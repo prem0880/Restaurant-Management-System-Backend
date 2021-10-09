@@ -1,5 +1,6 @@
 package com.rms.dao;
 
+
 import com.rms.entity.Login;
 
 public interface LoginDao {
@@ -10,6 +11,7 @@ public interface LoginDao {
 	 * @return  boolean value
 	 */
 	boolean saveLogin(Login login);
+	
 	
 	/**
 	 * 
@@ -39,4 +41,7 @@ public interface LoginDao {
 	 * @return  role of logged in user
 	 */
 	String getRoleById(Long id);
+	
+
+	
 }

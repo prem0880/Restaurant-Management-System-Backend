@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dao.CustomerDao;
@@ -14,6 +15,8 @@ import com.rms.dto.CustomerDto;
 import com.rms.entity.Customer;
 import com.rms.exception.BusinessLogicException;
 import com.rms.exception.DataBaseException;
+import com.rms.exception.IdNotFoundException;
+import com.rms.exception.NoRecordFoundException;
 import com.rms.service.CustomerService;
 import com.rms.util.CustomerUtil;
 
@@ -44,12 +47,13 @@ public class CustomerServiceImpl implements CustomerService {
 		logger.info("Entering getAllCustomer method");
 		try {
 			List<Customer> customerEntity = customerDao.getAllCustomer();
-			if (customerEntity != null) {
+			if (CollectionUtils.isEmpty(customerEntity)) {
+				throw new NoRecordFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
+			}
+			else {
 				List<CustomerDto> customerDto = new ArrayList<>();
 				customerEntity.stream().forEach(entity -> customerDto.add(CustomerUtil.toDto(entity)));
 				return customerDto;
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
@@ -64,9 +68,10 @@ public class CustomerServiceImpl implements CustomerService {
 			Customer customer = customerDao.getCustomerById(id);
 			if (customer != null) {
 				return CustomerUtil.toDto(customer);
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
+			}else {
+				throw new NoRecordFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
+			
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
@@ -77,6 +82,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public String updateCustomer(Long id, CustomerDto customerDto) {
 		logger.info("Entering updateCustomer method");
 		try {
+			if(customerDao.getCustomerById(id)!=null) {
 			String result = null;
 			Customer customer = CustomerUtil.toEntity(customerDto);
 			boolean flag = customerDao.updateCustomer(id, customer);
@@ -84,6 +90,10 @@ public class CustomerServiceImpl implements CustomerService {
 				result = ApplicationConstants.CUSTOMER_UPDATE_SUCCESS;
 			}
 			return result;
+			}
+			else {
+				throw new IdNotFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
+			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
@@ -96,10 +106,10 @@ public class CustomerServiceImpl implements CustomerService {
 		logger.info("Entering getCustomerByMail method");
 		try {
 			Long id=customerDao.getCustomerByMail(email);
-			if (id != null) {
+			if (customerDao.getCustomerById(id)!=null) {
 				return id;
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
+			}else {
+				throw new IdNotFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dto.OrderDto;
-import com.rms.exception.BusinessLogicException;
 import com.rms.response.HttpResponseStatus;
 import com.rms.service.OrderService;
 
@@ -37,13 +36,9 @@ public class OrderController {
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addOrder(@RequestBody OrderDto orderDto) {
 		logger.debug("Entering addOrder method");
-		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), orderService.addOrder(orderDto)),
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), orderService.addOrder(orderDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -53,13 +48,9 @@ public class OrderController {
 	@GetMapping("/order/{customerId}")
 	public ResponseEntity<HttpResponseStatus> getOrderId(@PathVariable Long customerId) {
 		logger.debug("Entering getOrderId method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMERID_FETCH_SUCCESS,
 					orderService.getOrderId(customerId)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -69,13 +60,9 @@ public class OrderController {
 	@GetMapping("/customer/{customerId}")
 	public ResponseEntity<HttpResponseStatus> getOrderByCustomerId(@PathVariable Long customerId) {
 		logger.debug("Entering getOrderByCustomerId method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMERID_FETCH_SUCCESS,
 					orderService.getOrderByCustomerId(customerId)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -85,13 +72,9 @@ public class OrderController {
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllOrder() {
 		logger.debug("Entering getAllOrder method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMERID_FETCH_SUCCESS,
 					orderService.getAllOrder()), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -101,13 +84,9 @@ public class OrderController {
 	@GetMapping("/{orderId}")
 	public ResponseEntity<HttpResponseStatus> getOrderById(@PathVariable("orderId") Long orderId) {
 		logger.debug("Entering getOrderById method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ORDERID_FETCH_SUCCESS,
 					orderService.getOrderById(orderId)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -118,14 +97,10 @@ public class OrderController {
 	public ResponseEntity<HttpResponseStatus> updateOrder(@PathVariable("orderId") Long orderId,
 			@RequestBody OrderDto orderDto) {
 		logger.debug("Entering updateOrder method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), orderService.updateOrder(orderId, orderDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 	
 	/**
@@ -135,13 +110,9 @@ public class OrderController {
 	@PutMapping("/{orderId}/{status}")
 	public ResponseEntity<HttpResponseStatus> updateOrderStatus(@PathVariable("orderId") Long orderId,@PathVariable("status") String status) {
 		logger.debug("Entering updateOrderStatus method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), orderService.updateOrderStatus(orderId, status)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 }

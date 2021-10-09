@@ -1,6 +1,7 @@
 package com.rms.service.impl;
 
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import com.rms.dto.LoginDto;
 import com.rms.entity.Login;
 import com.rms.exception.BusinessLogicException;
 import com.rms.exception.DataBaseException;
+import com.rms.exception.DuplicateIdException;
+import com.rms.exception.NoRecordFoundException;
 import com.rms.service.LoginService;
 import com.rms.util.LoginUtil;
 import com.rms.util.PasswordEncryptionUtil;
@@ -39,7 +42,7 @@ public class LoginServiceImpl implements LoginService{
 					return ApplicationConstants.LOGIN_SAVE_SUCCESS;
 				}
 			} else {
-				throw new BusinessLogicException("Email Id already Found");
+				throw new DuplicateIdException("Email Id already Found");
 			}
 		} catch(DataBaseException e) {
 			logger.error(e.getMessage());
@@ -52,6 +55,7 @@ public class LoginServiceImpl implements LoginService{
 	public String updateLogin(String email, String password) {
 		logger.info("Entering updateLogin method");
 		try {
+			if(loginDao.getByEmail(email)!=null) {
 			Login loginCheck = null;
 			loginCheck = loginDao.getByEmail(email);
 			if(loginCheck != null) {
@@ -61,8 +65,9 @@ public class LoginServiceImpl implements LoginService{
 					return "Password Updated Successfully";
 				
 				
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.CUSTOMER_NOT_FOUND);
+			}
+			}else {
+				throw new NoRecordFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			} 
 		} catch(DataBaseException e) {
 			logger.error(e.getMessage());
@@ -79,7 +84,7 @@ public class LoginServiceImpl implements LoginService{
 			if(login!=null) {
 				return LoginUtil.toDto(login);
 			} else {
-				throw new BusinessLogicException(ApplicationConstants.LOGIN_NOT_FOUND);
+				throw new NoRecordFoundException(ApplicationConstants.LOGIN_NOT_FOUND);
 			}
 			
 		} catch(DataBaseException e) {
@@ -92,13 +97,19 @@ public class LoginServiceImpl implements LoginService{
 	public String checkCredential(LoginDto loginDto) {
 		logger.info("Entering checkCredential method");
 		try {
+			if(loginDao.getByEmail(loginDto.getEmail())!=null) {
 			String result = null;
 			Login login=LoginUtil.toEntity(loginDto);
 			Login loginEntity=loginDao.getLoginByMail(login.getEmail());
 			if (loginEntity != null && loginEntity.getPassword().equals(PasswordEncryptionUtil.getPassword(login.getPassword()))) {
-				result=loginEntity.getRole();		
+				result=loginEntity.getRole();	
 			}
 			return result;
+			}
+			else {
+				throw new NoRecordFoundException(ApplicationConstants.LOGIN_NOT_FOUND);
+			}
+					
 		}catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
@@ -114,7 +125,7 @@ public class LoginServiceImpl implements LoginService{
 			if(role!=null) {
 				return role;
 			} else {
-				throw new BusinessLogicException(ApplicationConstants.LOGIN_NOT_FOUND);
+				throw new NoRecordFoundException(ApplicationConstants.LOGIN_NOT_FOUND);
 			}
 			
 		} catch(DataBaseException e) {

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dto.OrderItemDto;
-import com.rms.exception.BusinessLogicException;
 import com.rms.response.HttpResponseStatus;
 import com.rms.service.OrderItemService;
 
@@ -36,13 +35,9 @@ public class OrderItemController {
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addItems(@RequestBody OrderItemDto orderItemDto) {
 		logger.debug("Entering addItems method");
-		try {
 			return new ResponseEntity<>(
-					new HttpResponseStatus(HttpStatus.OK.value(), orderItemService.addItems(orderItemDto)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+					new HttpResponseStatus(HttpStatus.CREATED.value(), orderItemService.addItems(orderItemDto)), HttpStatus.OK);
+		
 	}
 
 	/**
@@ -52,13 +47,9 @@ public class OrderItemController {
 	@GetMapping("/{orderId}")
 	public ResponseEntity<HttpResponseStatus> getOrderedItems(@PathVariable("orderId") Long orderId) {
 		logger.debug("Entering getOrderedItems method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ORDERITEM_FETCH_SUCCESS,
 					orderItemService.getOrderedItems(orderId)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dto.CountryDto;
-import com.rms.exception.BusinessLogicException;
 import com.rms.response.HttpResponseStatus;
 import com.rms.service.CountryService;
 
@@ -38,14 +37,10 @@ public class CountryController {
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllCountry() {
 		logger.debug("Entering getAllCountry method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.COUNTRY_FETCH_SUCCESS, countryService.getAllCountry()),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -55,13 +50,9 @@ public class CountryController {
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addCountry(@RequestBody CountryDto countryDto) {
 		logger.debug("Entering addCountry method");
-		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), countryService.addCountry(countryDto)),
+		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), countryService.addCountry(countryDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -71,14 +62,10 @@ public class CountryController {
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getCountryById(@PathVariable Long id) {
 		logger.debug("Entering getCountryById method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.COUNTRY_FETCH_SUCCESS, countryService.getCountryById(id)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -88,14 +75,10 @@ public class CountryController {
 	@PutMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> updateCountry(@PathVariable Long id, @RequestBody CountryDto countryDto) {
 		logger.debug("Entering updateCountry method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), countryService.updateCountry(id, countryDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -105,13 +88,9 @@ public class CountryController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> deleteCountry(@PathVariable Long id) {
 		logger.debug("Entering deleteCountry method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), countryService.deleteCountry(id)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 

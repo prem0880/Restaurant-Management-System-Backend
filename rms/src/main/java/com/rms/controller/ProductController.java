@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dto.ProductDto;
-import com.rms.exception.BusinessLogicException;
 import com.rms.response.HttpResponseStatus;
 import com.rms.service.ProductService;
 
@@ -40,14 +39,23 @@ public class ProductController {
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllProduct() {
 		logger.debug("Entering getAllProduct method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.PRODUCT_FETCH_SUCCESS, productService.getAllProduct()),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
+	}
+	
+	/**
+	 *@param This method takes no input
+	 *@return This method returns List of product DTO objects along with success message as HttpResponseStatus 
+	 */
+	@GetMapping("/meal")
+	public ResponseEntity<HttpResponseStatus> getAllProductByMeal() {
+		logger.debug("Entering getAllProductByMeal method");
+			return new ResponseEntity<>(
+					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.PRODUCT_FETCH_SUCCESS, productService.getAllProductByMeal()),
+					HttpStatus.OK);
+		
 	}
 
 	/**
@@ -57,14 +65,10 @@ public class ProductController {
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getProductById(@PathVariable Long id) {
 		logger.debug("Entering getProductById method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.PRODUCT_FETCH_SUCCESS, productService.getProductById(id)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -74,13 +78,9 @@ public class ProductController {
 	@GetMapping("/category/{id}/type/{type}")
 	public ResponseEntity<HttpResponseStatus> getProductByTypeAndCategory(@PathVariable Long id, @PathVariable String type) {
 		logger.debug("Entering getProductByTypeAndCategory method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.PRODUCT_FETCH_SUCCESS,
 					productService.getProductByTypeAndCategory(id, type)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -90,13 +90,9 @@ public class ProductController {
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addProduct(@Valid @RequestBody ProductDto productDto) {
 		logger.debug("Entering addProduct method");
-		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), productService.addProduct(productDto)),
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), productService.addProduct(productDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -107,14 +103,10 @@ public class ProductController {
 	public ResponseEntity<HttpResponseStatus> updateProduct(@PathVariable("id") Long id,
 			@Valid @RequestBody ProductDto productDto) {
 		logger.debug("Entering updateProduct method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), productService.updateProduct(id, productDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -124,13 +116,9 @@ public class ProductController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> deleteProduct(@PathVariable("id") Long id) {
 		logger.debug("Entering deleteProduct method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), productService.deleteProduct(id)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 	
 	/**
@@ -140,14 +128,10 @@ public class ProductController {
 	@GetMapping("/meal/{id}")
 	public ResponseEntity<HttpResponseStatus> getProductByMeal(@PathVariable("id") Long id) {
 		logger.debug("Entering getProductByMeal method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.PRODUCT_FETCH_SUCCESS,productService.getProductByMeal(id)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 

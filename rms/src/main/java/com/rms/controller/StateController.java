@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dto.StateDto;
-import com.rms.exception.BusinessLogicException;
 import com.rms.response.HttpResponseStatus;
 import com.rms.service.StateService;
 
@@ -36,13 +35,9 @@ public class StateController {
 	@GetMapping("/{countryId}")
 	public ResponseEntity<HttpResponseStatus> getStatesByCountry(@PathVariable("countryId") Long countryId) {
 		logger.debug("Entering getStatesByCountry method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.STATE_FETCH_SUCCESS,
 					stateService.getStatesByCountry(countryId)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -52,13 +47,9 @@ public class StateController {
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addState(@RequestBody StateDto stateDto) {
 		logger.debug("Entering addState method");
-		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), stateService.addState(stateDto)),
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), stateService.addState(stateDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.rms.dao.impl;
 
+
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
@@ -118,5 +119,6 @@ public class LoginDaoImpl implements LoginDao {
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
+
 
 }

@@ -40,6 +40,12 @@ public interface ProductService {
 	 * @return  List of product DTO objects
 	 */
 	List<ProductDto> getAllProduct();
+	
+	/**
+	 * 
+	 * @return  List of product DTO objects
+	 */
+	List<ProductDto> getAllProductByMeal();
 
 	/**
 	 * 

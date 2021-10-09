@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dto.LoginDto;
-import com.rms.exception.BusinessLogicException;
 import com.rms.response.HttpResponseStatus;
 import com.rms.service.LoginService;
 
@@ -37,11 +36,8 @@ public class LoginController {
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> saveLogin(@RequestBody LoginDto loginDto) {
 		logger.debug("Entering saveLogin method");
-		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), loginService.saveLogin(loginDto)),  HttpStatus.OK);
-		} catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
-		}
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), loginService.saveLogin(loginDto)),  HttpStatus.OK);
+		
 	}
 	
 	/**
@@ -51,11 +47,8 @@ public class LoginController {
 	@PostMapping("/credential")
 	public ResponseEntity<HttpResponseStatus> checkCredential(@RequestBody LoginDto loginDto) {
 		logger.debug("Entering checkCredential method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMER_LOGIN_SUCCESS,loginService.checkCredential(loginDto)),  HttpStatus.OK);
-		} catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
-		}
+		
 	}
 	
 	/**
@@ -65,11 +58,8 @@ public class LoginController {
 	@PutMapping("/updatepassword")
 	public ResponseEntity<HttpResponseStatus> updatePassword(@RequestBody LoginDto login) { 
 		logger.debug("Entering updatedPassword method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),loginService.updateLogin(login.getEmail(), login.getPassword())),  HttpStatus.OK);
-		} catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
-		}
+		
 	}
 	
 	/**
@@ -79,11 +69,8 @@ public class LoginController {
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getRoleById(@PathVariable Long id) {
 		logger.info("Entering save method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), loginService.getRoleById(id)),  HttpStatus.OK);
-		} catch(BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
-		}
+		
 	}
 	
 }

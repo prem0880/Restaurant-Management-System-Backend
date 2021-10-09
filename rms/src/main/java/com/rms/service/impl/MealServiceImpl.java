@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dao.MealDao;
@@ -14,6 +15,8 @@ import com.rms.dto.MealDto;
 import com.rms.entity.Meal;
 import com.rms.exception.BusinessLogicException;
 import com.rms.exception.DataBaseException;
+import com.rms.exception.IdNotFoundException;
+import com.rms.exception.NoRecordFoundException;
 import com.rms.service.MealService;
 import com.rms.util.MealUtil;
 
@@ -30,7 +33,11 @@ public class MealServiceImpl implements MealService {
 	public String deleteMeal(Long id) {
 		logger.info("Entering deleteMeal method");
 		try {
-			return mealDao.deleteMeal(id);
+			if(mealDao.getMealById(id)!=null) {
+			return mealDao.deleteMeal(id);}
+			else {
+				throw new IdNotFoundException(ApplicationConstants.MEAL_NOT_FOUND);
+			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
@@ -41,6 +48,8 @@ public class MealServiceImpl implements MealService {
 	public String updateMeal(Long id, MealDto mealDto) {
 		logger.info("Entering updateMeal method");
 		try {
+			if(mealDao.getMealById(id)!=null) {
+				
 			String result = null;
 			Meal meal = MealUtil.toEntity(mealDto);
 			boolean flag = mealDao.updateMeal(id, meal);
@@ -48,6 +57,9 @@ public class MealServiceImpl implements MealService {
 				result = ApplicationConstants.MEAL_UPDATE_SUCCESS;
 			}
 			return result;
+			}else {
+				throw new IdNotFoundException(ApplicationConstants.MEAL_NOT_FOUND);
+			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
@@ -79,8 +91,8 @@ public class MealServiceImpl implements MealService {
 			Meal meal = mealDao.getMealById(id);
 			if (meal != null) {
 				return MealUtil.toDto(meal);
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.MEAL_NOT_FOUND);
+			}else {
+				throw new NoRecordFoundException(ApplicationConstants.MEAL_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
@@ -93,12 +105,12 @@ public class MealServiceImpl implements MealService {
 		logger.info("Entering getAllMeal method");
 		try {
 			List<Meal> mealEntity = mealDao.getAllMeal();
-			if (mealEntity != null) {
-				List<MealDto> mealDto = new ArrayList<>();
+			if (CollectionUtils.isEmpty(mealEntity)) {
+				throw new NoRecordFoundException(ApplicationConstants.MEAL_NOT_FOUND);
+			}
+			else {	List<MealDto> mealDto = new ArrayList<>();
 				mealEntity.stream().forEach(entity -> mealDto.add(MealUtil.toDto(entity)));
 				return mealDto;
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.MEAL_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
@@ -114,7 +126,7 @@ public class MealServiceImpl implements MealService {
 			if (mealObj != null) {
 				return mealObj.getId();
 			} else {
-				throw new BusinessLogicException(ApplicationConstants.MEAL_NOT_FOUND);
+				throw new NoRecordFoundException(ApplicationConstants.MEAL_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());

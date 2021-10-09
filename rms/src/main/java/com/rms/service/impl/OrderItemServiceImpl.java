@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dao.OrderDao;
@@ -18,6 +19,8 @@ import com.rms.entity.OrderItem;
 import com.rms.entity.Product;
 import com.rms.exception.BusinessLogicException;
 import com.rms.exception.DataBaseException;
+import com.rms.exception.IdNotFoundException;
+import com.rms.exception.NoRecordFoundException;
 import com.rms.service.OrderItemService;
 import com.rms.util.OrderItemUtil;
 
@@ -75,13 +78,17 @@ public class OrderItemServiceImpl implements OrderItemService {
 	public List<OrderItemDto> getOrderedItems(Long orderId) {
 		logger.info("Entering getOrderedItems method");
 		try {
+			 if(orderDao.getOrderById(orderId)==null) {
+					throw new IdNotFoundException(ApplicationConstants.ORDER_NOT_FOUND);
+			}
 			List<OrderItem> orderItemList = orderItemDao.getOrderedItems(orderId);
-			if (orderItemList != null) {
+			if (CollectionUtils.isEmpty(orderItemList)) {
+				throw new NoRecordFoundException("Order Item Id Not Found");
+			}
+			else {	
 				List<OrderItemDto> orderItemDto = new ArrayList<>();
 				orderItemList.stream().forEach(entity -> orderItemDto.add(OrderItemUtil.toDto(entity)));
 				return orderItemDto;
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.PRODUCT_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dto.CategoryDto;
-import com.rms.exception.BusinessLogicException;
 import com.rms.response.HttpResponseStatus;
 import com.rms.service.CategoryService;
 
@@ -39,14 +38,10 @@ public class CategoryController {
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllCategory() {
 		logger.debug("Entering getAllCategory method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CATEGORY_FETCH_SUCCESS, categoryService.getAllCategory()),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 
 	}
 
@@ -57,14 +52,10 @@ public class CategoryController {
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getCategoryById(@PathVariable Long id) {
 		logger.debug("Entering getCategoryById method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CATEGORY_FETCH_SUCCESS, categoryService.getCategoryById(id)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -74,12 +65,8 @@ public class CategoryController {
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addCategory(@RequestBody CategoryDto categoryDto) {
 		logger.debug("Entering addCategory method");
-		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), categoryService.addCategory(categoryDto)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), categoryService.addCategory(categoryDto)), HttpStatus.OK);
+		
 	}
 
 	/**
@@ -89,12 +76,8 @@ public class CategoryController {
 	@PutMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
 		logger.debug("Entering updateCategory method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), categoryService.updateCategory(id, categoryDto)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -104,13 +87,9 @@ public class CategoryController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> deleteCategory(@PathVariable Long id) {
 		logger.debug("Entering deleteCategory method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), categoryService.deleteCategory(id)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dao.CountryDao;
@@ -14,6 +15,8 @@ import com.rms.dto.CountryDto;
 import com.rms.entity.Country;
 import com.rms.exception.BusinessLogicException;
 import com.rms.exception.DataBaseException;
+import com.rms.exception.IdNotFoundException;
+import com.rms.exception.NoRecordFoundException;
 import com.rms.service.CountryService;
 import com.rms.util.CountryUtil;
 
@@ -49,12 +52,13 @@ public class CountryServiceImpl implements CountryService {
 
 		try {
 			List<Country> countryEntity = countryDao.getAllCountry();
-			if (countryEntity != null) {
+			if (CollectionUtils.isEmpty(countryEntity)) {
+				throw new NoRecordFoundException(ApplicationConstants.COUNTRY_NOT_FOUND);
+			}
+			else {
 				List<CountryDto> countryDto = new ArrayList<>();
 				countryEntity.stream().forEach(entity -> countryDto.add(CountryUtil.toDto(entity)));
 				return countryDto;
-			} else {
-				throw new BusinessLogicException(ApplicationConstants.COUNTRY_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
@@ -67,7 +71,12 @@ public class CountryServiceImpl implements CountryService {
 		logger.info("Entering deleteCountry method");
 
 		try {
-			return countryDao.deleteCountry(id);
+			if(countryDao.getCountryById(id)!=null) {
+				return countryDao.deleteCountry(id);
+				}
+			else {
+				throw new IdNotFoundException(ApplicationConstants.COUNTRY_NOT_FOUND);
+			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
@@ -79,13 +88,19 @@ public class CountryServiceImpl implements CountryService {
 		logger.info("Entering updateCountry method");
 
 		try {
-			String result = null;
-			Country country = CountryUtil.toEntity(countryDto);
-			boolean flag = countryDao.updateCountry(id, country);
-			if (flag) {
-				result = ApplicationConstants.COUNTRY_UPDATE_SUCCESS;
+			if(countryDao.getCountryById(id)!=null) {
+				String result = null;
+				Country country = CountryUtil.toEntity(countryDto);
+				boolean flag = countryDao.updateCountry(id, country);
+				if (flag) {
+					result = ApplicationConstants.COUNTRY_UPDATE_SUCCESS;
+				}
+				return result;
+				
+				}
+			else {
+				throw new IdNotFoundException(ApplicationConstants.COUNTRY_NOT_FOUND);
 			}
-			return result;
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
@@ -101,7 +116,7 @@ public class CountryServiceImpl implements CountryService {
 			if (country != null) {
 				return CountryUtil.toDto(country);
 			} else {
-				throw new BusinessLogicException(ApplicationConstants.COUNTRY_NOT_FOUND);
+				throw new NoRecordFoundException(ApplicationConstants.COUNTRY_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());

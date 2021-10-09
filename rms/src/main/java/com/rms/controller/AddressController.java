@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dto.AddressDto;
-import com.rms.exception.BusinessLogicException;
 import com.rms.response.HttpResponseStatus;
 import com.rms.service.AddressService;
 
@@ -39,13 +38,9 @@ public class AddressController {
 	public ResponseEntity<HttpResponseStatus> addAddress(@RequestBody AddressDto addressDto) {
 		
 		logger.debug("Entering addAddress method");
-		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), addressService.addAddress(addressDto)),
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), addressService.addAddress(addressDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 	
 	/**
@@ -55,13 +50,9 @@ public class AddressController {
 	@GetMapping("/phoneNumber/{phoneNumber}")
 	public ResponseEntity<HttpResponseStatus> getAddressByPhoneNumber(@PathVariable("phoneNumber") Long phoneNumber) {
 		logger.debug("Entering getAddressByPhoneNumber method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ADDRESS_FETCH_SUCCESS,
 					addressService.getAddressByPhoneNumber(phoneNumber)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -71,13 +62,9 @@ public class AddressController {
 	@GetMapping("/customer/{customerId}")
 	public ResponseEntity<HttpResponseStatus> getAddressByCustomerId(@PathVariable("customerId") Long customerId) {
 		logger.debug("Entering getAddressByCustomerId method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.ADDRESS_FETCH_SUCCESS,
 					addressService.getAddressByCustomerId(customerId)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	/**
@@ -87,14 +74,10 @@ public class AddressController {
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getAddressById(@PathVariable("id") Long id) {
 		logger.debug("Entering getAddressById method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.ADDRESS_FETCH_SUCCESS, addressService.getAddressById(id)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 	
 	/**
@@ -105,13 +88,9 @@ public class AddressController {
 	public ResponseEntity<HttpResponseStatus> updateAddress(@PathVariable Long id,@RequestBody AddressDto addressDto) {
 		
 		logger.debug("Entering updateAddress method");
-		try {
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.ADDRESS_UPDATE_SUCCESS, addressService.updateAddress(id, addressDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dto.CustomerDto;
-import com.rms.exception.BusinessLogicException;
 import com.rms.response.HttpResponseStatus;
 import com.rms.service.CustomerService;
 
@@ -39,13 +38,9 @@ public class CustomerController {
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addCustomer(@Valid @RequestBody CustomerDto customerDto) {
 		logger.debug("Entering addCustomer method");
-		try {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMER_SAVE_SUCCESS,
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), ApplicationConstants.CUSTOMER_SAVE_SUCCESS,
 					customerService.addCustomer(customerDto)), HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 
 	}
 
@@ -56,14 +51,10 @@ public class CustomerController {
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllCustomer() {
 		logger.debug("Entering getAllCustomer method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMER_FETCH_SUCCESS, customerService.getAllCustomer()),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	
@@ -75,14 +66,10 @@ public class CustomerController {
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getCustomerById(@PathVariable("id") Long id) {
 		logger.debug("Entering getCustomerById method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMER_FETCH_SUCCESS, customerService.getCustomerById(id)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 
 	
@@ -94,14 +81,10 @@ public class CustomerController {
 	public ResponseEntity<HttpResponseStatus> updateCustomer(@PathVariable("id") Long id,
 			@Valid @RequestBody CustomerDto customerDto) {
 		logger.debug("Entering updateCustomer method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), customerService.updateCustomer(id, customerDto)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 	
 	/**
@@ -112,13 +95,9 @@ public class CustomerController {
 	@GetMapping("/mail/{email}")
 	public ResponseEntity<HttpResponseStatus> getCustomerByMail(@PathVariable("email") String mail) {
 		logger.debug("Entering getCustomerByMail method");
-		try {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMER_FETCH_SUCCESS, customerService.getCustomerByMail(mail)),
 					HttpStatus.OK);
-		} catch (BusinessLogicException e) {
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage()),
-					HttpStatus.BAD_REQUEST);
-		}
+		
 	}
 }
