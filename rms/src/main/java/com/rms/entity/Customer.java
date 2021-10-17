@@ -31,18 +31,15 @@ public class Customer implements Serializable {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "name")
+	@Column(name = "name",nullable=false)
 	private String name;
 
-	@Email
 	@Column(name = "email", unique = true)
 	private String email;
 
-	@Min(value = 10, message = "Password should not be less than 10")
 	@Column(name = "password")
 	private String password;
 
-	@Max(value = 10, message = "Phone Number should not be greater than 10")
 	@Column(name = "phone_number", unique = true)
 	private Long phoneNumber;
 

@@ -1,11 +1,15 @@
 package com.rms.controller;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +38,7 @@ public class OrderController {
 	 *@return This method returns success message if order is created successfully
      */
 	@PostMapping
-	public ResponseEntity<HttpResponseStatus> addOrder(@RequestBody OrderDto orderDto) {
+	public ResponseEntity<HttpResponseStatus> addOrder( @RequestBody OrderDto orderDto) {
 		logger.debug("Entering addOrder method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), orderService.addOrder(orderDto)),
 					HttpStatus.OK);
@@ -72,8 +76,20 @@ public class OrderController {
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllOrder() {
 		logger.debug("Entering getAllOrder method");
-			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMERID_FETCH_SUCCESS,
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ORDER_FETCH_SUCCESS,
 					orderService.getAllOrder()), HttpStatus.OK);
+		
+	}
+	
+	/**
+	 *@param This method takes no input
+	 *@return This method returns List of order objects along with success message as HttpResponseStatus 
+	 */
+	@GetMapping("/success")
+	public ResponseEntity<HttpResponseStatus> getAllSuccessOrder() {
+		logger.debug("Entering getAllSuccessOrder method");
+			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ORDER_FETCH_SUCCESS,
+					orderService.getAllSuccessOrder()), HttpStatus.OK);
 		
 	}
 
@@ -115,4 +131,12 @@ public class OrderController {
 					HttpStatus.OK);
 		
 	}
+	
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
+		logger.error(e.getMessage());
+		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
+				HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+	
 }

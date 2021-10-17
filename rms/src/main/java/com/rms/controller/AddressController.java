@@ -1,11 +1,16 @@
-package com.rms.controller;
+	package com.rms.controller;
+
+import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +40,7 @@ public class AddressController {
 	 *@return This method returns success message if address is added successfully as HttpResponseStatus
 	 */
 	@PostMapping
-	public ResponseEntity<HttpResponseStatus> addAddress(@RequestBody AddressDto addressDto) {
+	public ResponseEntity<HttpResponseStatus> addAddress(@Valid @RequestBody AddressDto addressDto) {
 		
 		logger.debug("Entering addAddress method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), addressService.addAddress(addressDto)),
@@ -85,13 +90,28 @@ public class AddressController {
 	 *@return This method returns success message for given id as HttpResponseStatus 
 	 */
 	@PutMapping("/{id}")
-	public ResponseEntity<HttpResponseStatus> updateAddress(@PathVariable Long id,@RequestBody AddressDto addressDto) {
+	public ResponseEntity<HttpResponseStatus> updateAddress(@PathVariable Long id,@Valid @RequestBody AddressDto addressDto) {
 		
 		logger.debug("Entering updateAddress method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.ADDRESS_UPDATE_SUCCESS, addressService.updateAddress(id, addressDto)),
 					HttpStatus.OK);
 		
 	}
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<HttpResponseStatus> validationFailed(MethodArgumentNotValidException e) {
+	logger.error("Validation fails, Check your input!");
+	ResponseEntity<HttpResponseStatus> responseEntity = null;
+	responseEntity = new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validation Failed!"),
+			HttpStatus.UNPROCESSABLE_ENTITY);
+	return responseEntity;
+	}
 
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
+		logger.error(e.getMessage());
+		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
+				HttpStatus.UNPROCESSABLE_ENTITY);
+	}
 
 }

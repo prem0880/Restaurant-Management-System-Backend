@@ -1,12 +1,17 @@
 package com.rms.controller;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +64,7 @@ public class MealController {
 	 *@return This method returns success message if meal is created successfully
      */
 	@PostMapping
-	public ResponseEntity<HttpResponseStatus> addMeal(@RequestBody MealDto mealDto) {
+	public ResponseEntity<HttpResponseStatus> addMeal(@Valid @RequestBody MealDto mealDto) {
 		logger.debug("Entering addMeal method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), mealService.addMeal(mealDto)),
 					HttpStatus.OK);
@@ -71,7 +76,7 @@ public class MealController {
 	 *@return This method returns message if meal is updated successfully with id
      */
 	@PutMapping("/{id}")
-	public ResponseEntity<HttpResponseStatus> updateMeal(@PathVariable Long id, @RequestBody MealDto mealDto) {
+	public ResponseEntity<HttpResponseStatus> updateMeal(@PathVariable Long id,@Valid @RequestBody MealDto mealDto) {
 		logger.debug("Entering updateMeal method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), mealService.updateMeal(id, mealDto)),
 					HttpStatus.OK);
@@ -100,6 +105,22 @@ public class MealController {
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.MEAL_FETCH_SUCCESS, mealService.getMealByName(meal)), HttpStatus.OK);
 		
+	}
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<HttpResponseStatus> validationFailed(MethodArgumentNotValidException e) {
+	logger.error("Validation fails, Check your input!");
+	ResponseEntity<HttpResponseStatus> responseEntity = null;
+	responseEntity = new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validation Failed!"),
+			HttpStatus.UNPROCESSABLE_ENTITY);
+	return responseEntity;
+	}
+	
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
+		logger.error(e.getMessage());
+		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
+				HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
 }

@@ -58,9 +58,15 @@ public interface OrderDao {
 	
 	/**
 	 * 
+	 * @return  List of order Entity objects 
+	 */
+	List<Order> getAllSuccessOrder();
+	
+	/**
+	 * 
 	 * @param order id as input
 	 * @param order status string
 	 * @return boolean value
 	 */
-	boolean updateOrderStatus(Long orderId,String status);
+	Order updateOrderStatus(Long orderId,String status);
 }

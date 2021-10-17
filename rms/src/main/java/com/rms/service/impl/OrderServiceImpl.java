@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -22,6 +23,7 @@ import com.rms.exception.DataBaseException;
 import com.rms.exception.IdNotFoundException;
 import com.rms.exception.NoRecordFoundException;
 import com.rms.service.OrderService;
+import com.rms.util.OrderApprovedMail;
 import com.rms.util.OrderUtil;
 
 @Service
@@ -35,6 +37,9 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private AddressDao addressDao;
+	
+	@Autowired
+	private JavaMailSender javaMailSender;
 	
 	private static final Logger logger = LogManager.getLogger(OrderServiceImpl.class);
 
@@ -96,7 +101,8 @@ public class OrderServiceImpl implements OrderService {
 		logger.info("Entering updateTotalPrice method");
 
 		try {
-			if(orderDao.getOrderById(orderId)!=null) {
+			Order order=orderDao.getOrderById(orderId);
+			if(order!=null) {
 			String result = null;
 			boolean flag = orderDao.updateTotalPrice(price, orderId);
 			if (flag) {
@@ -192,6 +198,25 @@ public class OrderServiceImpl implements OrderService {
 			throw new BusinessLogicException(e.getMessage());
 		}
 	}
+	
+	@Override
+	public List<OrderDto> getAllSuccessOrder() {
+		logger.info("Entering getAllSuccessOrder method");
+		try {
+			List<Order> orderEntity = orderDao.getAllSuccessOrder();
+			if (CollectionUtils.isEmpty(orderEntity)) {
+				throw new NoRecordFoundException(ApplicationConstants.ORDER_NOT_FOUND);
+			}
+			else {
+				List<OrderDto> orderDto = new ArrayList<>();
+				orderEntity.stream().forEach(entity -> orderDto.add(OrderUtil.toDto(entity)));
+				return orderDto;
+			}
+		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
+			throw new BusinessLogicException(e.getMessage());
+		}
+	}
 
 	@Override
 	public String updateOrderStatus(Long orderId, String status) {
@@ -199,9 +224,10 @@ public class OrderServiceImpl implements OrderService {
 		try {
 			if(orderDao.getOrderById(orderId)!=null) {
 			String result = null;
-			boolean flag = orderDao.updateOrderStatus(orderId, status);
-			if (flag) {
+			Order order= orderDao.updateOrderStatus(orderId, status);
+			if (order!=null) {
 				result = ApplicationConstants.ORDER_UPDATE_STATUS+" "+status;
+				OrderApprovedMail.orderConfirmation(javaMailSender, order);
 			}
 			return result;
 			}

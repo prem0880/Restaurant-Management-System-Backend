@@ -112,7 +112,7 @@ public class OrderDaoImpl implements OrderDao {
 			Order orderUpdated = null;
 			orderUpdated = session.load(Order.class, orderId);
 			order.setUpdatedOn(TimeStampUtil.getTimeStamp());
-			order.setId(orderId);
+		    order.setId(orderId);
 			order.setCreatedOn(orderUpdated.getCreatedOn());
 			order.setDate(TimeStampUtil.getTimeStamp());
 			Object value = session.merge(order);
@@ -155,11 +155,23 @@ public class OrderDaoImpl implements OrderDao {
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
 		}
 	}
+	
+	@Override
+	public List<Order> getAllSuccessOrder() {
+		logger.info("Entering getAllSuccessOrder method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Order> query = session.createQuery("FROM Order o where o.status='Success'", Order.class);
+			return query.list();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+	}
 
 	@Override
-	public boolean updateOrderStatus(Long orderId, String status) {
+	public Order updateOrderStatus(Long orderId, String status) {
 		logger.info("Entering updateOrderStatus method");
-		boolean flag = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Order orderUpdated = null;
@@ -167,12 +179,9 @@ public class OrderDaoImpl implements OrderDao {
 			orderUpdated.setUpdatedOn(TimeStampUtil.getTimeStamp());
 			orderUpdated.setId(orderId);
 			orderUpdated.setStatus(status);
-			Object value = session.merge(orderUpdated);
-			if (value != null) {
-				flag = true;
-			}
+			Order order=(Order) session.merge(orderUpdated);
 			session.flush();
-			return flag;
+			return order;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+ApplicationConstants.ORDER_UPDATE_ERROR);

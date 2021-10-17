@@ -35,12 +35,13 @@ public class CustomerDaoImpl implements CustomerDao {
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			customer.setCreatedOn(TimeStampUtil.getTimeStamp());
+			System.out.println(customer.toString());
 			Long value = (Long) session.save(customer);
 			session.flush();
 			return value;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			throw new DataBaseException(ApplicationConstants.COUNTRY_SAVE_ERROR);
+			throw new DataBaseException(ApplicationConstants.CUSTOMER_SAVE_ERROR);
 		}
 	}
 
@@ -106,6 +107,24 @@ public class CustomerDaoImpl implements CustomerDao {
 			Customer customerObj = null;
 			customerObj = query.getSingleResult();
 			return customerObj;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+	}
+	
+	@Override
+	public Long getCustomerByPhone(Long phoneNumber) {
+		logger.info("Entering getCustomerByEmail method");
+		try { 
+			Session session = sessionFactory.getCurrentSession();
+			Query<Customer> query = session.createQuery("FROM Customer c where c.phoneNumber=:phoneNumber", Customer.class);
+			query.setParameter("phoneNumber",phoneNumber);
+			Customer customerObj = null;
+			customerObj = query.getSingleResult();
+			return customerObj.getId();
+		}catch(NoResultException e) {
+			return null;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);

@@ -56,10 +56,9 @@ public class LoginDaoImpl implements LoginDao {
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Login loginObj = null;
-			loginObj = session.load(Login.class, email);
+			loginObj = getLoginByMail(email);
 			loginObj.setUpdatedOn(TimeStampUtil.getTimeStamp());
-			loginObj.setEmail(email);
-			loginObj.setPassword(password);
+			loginObj.setPassword(PasswordEncryptionUtil.getPassword(password));
 			Object obj = session.merge(loginObj);
 			if (obj != null) {
 				flag = true;

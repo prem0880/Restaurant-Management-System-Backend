@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -19,6 +20,8 @@ import com.rms.exception.IdNotFoundException;
 import com.rms.exception.NoRecordFoundException;
 import com.rms.service.CustomerService;
 import com.rms.util.CustomerUtil;
+import com.rms.util.MailPasswordUtil;
+import com.rms.util.RandomPassword;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -26,16 +29,23 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private CustomerDao customerDao;
 	
+	@Autowired
+	private JavaMailSender javaMailSender;
+	
+	
+	
 	private static final Logger logger = LogManager.getLogger(CustomerServiceImpl.class);
 
 
 	@Override
-	public Long addCustomer(CustomerDto customerDto) {
+	public CustomerDto addCustomer(CustomerDto customerDto) {
 		logger.info("Entering addCustomer method");
 		try {
 			Customer customer = CustomerUtil.toEntity(customerDto);
-			customer.setPassword(String.valueOf(customer.getPhoneNumber()));
-			return customerDao.addCustomer(customer);
+			customer.setPassword(RandomPassword.getRandomPassword());
+			MailPasswordUtil.sendPassword(javaMailSender, customer);
+			System.out.println(customer.getPassword()+"customer");
+			return CustomerUtil.toDto(customerDao.getCustomerById(customerDao.addCustomer(customer)));
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
@@ -109,7 +119,24 @@ public class CustomerServiceImpl implements CustomerService {
 			if (customerDao.getCustomerById(id)!=null) {
 				return id;
 			}else {
-				throw new IdNotFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
+				throw new NoRecordFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
+			}
+		} catch (DataBaseException e) {
+			logger.error(e.getMessage());
+			throw new BusinessLogicException(e.getMessage());
+		}
+	}
+	
+	@Override
+	public Long getCustomerByPhone(Long phoneNumber) {
+		logger.info("Entering getCustomerByPhone method");
+		try {
+			System.out.println(phoneNumber);
+			Long id=customerDao.getCustomerByPhone(phoneNumber);
+			if (customerDao.getCustomerById(id)!=null) {
+				return id;
+			}else {
+				throw new NoRecordFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
 			}
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());

@@ -5,10 +5,10 @@ import java.time.temporal.ChronoUnit;
 
 public class TimeConverterUtil {
 	
-	  private static final LocalTime MORNING = LocalTime.of(9, 0, 0);
+	  private static final LocalTime MORNING = LocalTime.of(0, 0, 0);
 	  private static final LocalTime AFTER_NOON = LocalTime.of(11, 59, 59);
 	  private static final LocalTime EVENING = LocalTime.of(17, 59, 59);
-	  private static final LocalTime NIGHT = LocalTime.of(21, 59, 59);
+	  private static final LocalTime NIGHT = LocalTime.of(23, 59, 59);
 	  	  
 	  private static LocalTime now;
 	  

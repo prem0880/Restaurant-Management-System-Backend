@@ -33,10 +33,13 @@ public class LoginServiceImpl implements LoginService{
 	public String saveLogin(LoginDto loginDto) {
 		logger.info("Entering saveLogin method");
 		try {
+			System.out.println(loginDto.getPassword()+"36");
 			Login entity = LoginUtil.toEntity(loginDto);
 			Login loginCheck = null;
 			loginCheck = loginDao.getByEmail(entity.getEmail());
+			System.out.println(loginCheck);
 			if(loginCheck == null) {
+				System.out.println(entity.getPassword()+"40");
 				boolean result = loginDao.saveLogin(entity);	
 				if(result) {
 					return ApplicationConstants.LOGIN_SAVE_SUCCESS;
@@ -51,30 +54,6 @@ public class LoginServiceImpl implements LoginService{
 		return "";
 	}
 
-	@Override
-	public String updateLogin(String email, String password) {
-		logger.info("Entering updateLogin method");
-		try {
-			if(loginDao.getByEmail(email)!=null) {
-			Login loginCheck = null;
-			loginCheck = loginDao.getByEmail(email);
-			if(loginCheck != null) {
-				
-				boolean result = loginDao.updateLogin(email, password);
-				if(result)
-					return "Password Updated Successfully";
-				
-				
-			}
-			}else {
-				throw new NoRecordFoundException(ApplicationConstants.CUSTOMER_NOT_FOUND);
-			} 
-		} catch(DataBaseException e) {
-			logger.error(e.getMessage());
-			throw new BusinessLogicException(e.getMessage());
-		}
-		return "";
-	}
 
 	@Override
 	public LoginDto getByEmail(String email) {
@@ -101,6 +80,8 @@ public class LoginServiceImpl implements LoginService{
 			String result = null;
 			Login login=LoginUtil.toEntity(loginDto);
 			Login loginEntity=loginDao.getLoginByMail(login.getEmail());
+			System.out.println(loginEntity.getPassword()+"107");
+			System.out.println(login.getPassword()+"108");
 			if (loginEntity != null && loginEntity.getPassword().equals(PasswordEncryptionUtil.getPassword(login.getPassword()))) {
 				result=loginEntity.getRole();	
 			}
@@ -132,6 +113,38 @@ public class LoginServiceImpl implements LoginService{
 			logger.error(e.getMessage());
 			throw new BusinessLogicException(e.getMessage());
 		}
+	}
+
+	@Override
+	public String updatePassword(LoginDto loginDto, String password) {
+		logger.info("Entering checkCredential method");
+		try {
+			if(loginDao.getByEmail(loginDto.getEmail())!=null) {
+			String result = null;
+			boolean value=false;
+			Login login=LoginUtil.toEntity(loginDto);
+			Login loginEntity=loginDao.getLoginByMail(login.getEmail());
+			System.out.println(loginEntity.getPassword()+"127");
+			System.out.println(login.getPassword()+"128");
+			System.out.println(password+"129");
+			if (loginEntity != null && loginEntity.getPassword().equals(PasswordEncryptionUtil.getPassword(login.getPassword()))) {
+				value=loginDao.updateLogin(login.getEmail(), password);
+			}
+			if(value) {
+			result="Password Updated Successfully";
+			}
+			return result;
+			}
+			else {
+				throw new NoRecordFoundException(ApplicationConstants.LOGIN_NOT_FOUND);
+			}
+					
+		}catch (DataBaseException e) {
+			logger.error(e.getMessage());
+			throw new BusinessLogicException(e.getMessage());
+		}
+
+		
 	}
 	
 	

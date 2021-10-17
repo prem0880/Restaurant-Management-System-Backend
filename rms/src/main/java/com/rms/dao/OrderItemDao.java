@@ -26,5 +26,20 @@ public interface OrderItemDao {
 	 * @return  order Item identifier
 	 */
 	Long saveOrderItem(OrderItem orderItem);
+	
+	/**
+	 * 
+	 * @param productId as input
+	 * @param orderId as order
+	 * @return order Item Entity Object
+	 */
+	OrderItem checkOrderedItems(Long productId,Long orderId);
+	
+	/**
+	 * 
+	 * @param orderItem Entity Object
+	 * @return boolean values
+	 */
+	boolean updateOrderItems(OrderItem orderItem);
 
 }

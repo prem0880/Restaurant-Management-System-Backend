@@ -1,5 +1,10 @@
 package com.rms.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
@@ -7,8 +12,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -133,6 +141,26 @@ public class ProductController {
 					HttpStatus.OK);
 		
 	}
+	
+//	@ExceptionHandler(MethodArgumentNotValidException.class)
+//	public ResponseEntity<HttpResponseStatus> validationFailed(MethodArgumentNotValidException e) {
+//	logger.error("Validation fails, Check your input!");
+//	ResponseEntity<HttpResponseStatus> responseEntity = null;
+//	responseEntity = new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validation Failed!"),
+//			HttpStatus.UNPROCESSABLE_ENTITY);
+//	return responseEntity;
+//	}
+	
+//	@ExceptionHandler(HttpMessageNotReadableException.class)
+//	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
+//		logger.error(e.getMessage());
+//		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
+//				HttpStatus.UNPROCESSABLE_ENTITY);
+//	}
+	
+	
+	//@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+
 
 
 }

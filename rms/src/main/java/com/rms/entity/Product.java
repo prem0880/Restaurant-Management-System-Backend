@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -45,7 +44,6 @@ public class Product implements Serializable {
 	@Column(name = "price")
 	private Double price;
 
-	@Max(value = 50, message = "Description should not be greater than 50")
 	@Column(name = "description")
 	private String description;
 

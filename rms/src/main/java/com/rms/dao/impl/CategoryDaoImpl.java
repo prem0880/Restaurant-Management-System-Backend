@@ -60,7 +60,7 @@ public class CategoryDaoImpl implements CategoryDao {
 			category.setId(id);
 			category.setUpdatedOn(TimeStampUtil.getTimeStamp());
 			Object obj = session.merge(category);
-			if (obj != null) {
+			if (obj != null) { 
 				flag = true;
 			}
 			session.flush();

@@ -59,6 +59,12 @@ public interface OrderService {
 	
 	/**
 	 * 
+	 * @return  List of order DTO objects
+	 */
+	List<OrderDto> getAllSuccessOrder();
+	
+	/**
+	 * 
 	 * @param order id as input
 	 * @param order status string
 	 * @return	success string message

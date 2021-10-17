@@ -1,12 +1,17 @@
 package com.rms.controller;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +53,7 @@ public class CountryController {
      *@return This method returns success message if country is created successfully
 	 */
 	@PostMapping
-	public ResponseEntity<HttpResponseStatus> addCountry(@RequestBody CountryDto countryDto) {
+	public ResponseEntity<HttpResponseStatus> addCountry(@Valid @RequestBody CountryDto countryDto) {
 		logger.debug("Entering addCountry method");
 		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), countryService.addCountry(countryDto)),
 					HttpStatus.OK);
@@ -60,7 +65,7 @@ public class CountryController {
 	 *@return This method returns country object for given id currently in the database.
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<HttpResponseStatus> getCountryById(@PathVariable Long id) {
+	public ResponseEntity<HttpResponseStatus> getCountryById(@Valid @PathVariable Long id) {
 		logger.debug("Entering getCountryById method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.COUNTRY_FETCH_SUCCESS, countryService.getCountryById(id)),
@@ -73,7 +78,7 @@ public class CountryController {
 	 *@return This method returns success message if country is updated successfully with id
      */
 	@PutMapping("/{id}")
-	public ResponseEntity<HttpResponseStatus> updateCountry(@PathVariable Long id, @RequestBody CountryDto countryDto) {
+	public ResponseEntity<HttpResponseStatus> updateCountry(@PathVariable Long id,@Valid @RequestBody CountryDto countryDto) {
 		logger.debug("Entering updateCountry method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), countryService.updateCountry(id, countryDto)),
@@ -92,6 +97,22 @@ public class CountryController {
 					HttpStatus.OK);
 		
 	}
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<HttpResponseStatus> validationFailed(MethodArgumentNotValidException e) {
+	logger.error("Validation fails, Check your input!");
+	ResponseEntity<HttpResponseStatus> responseEntity = null;
+	responseEntity = new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validation Failed!"),
+			HttpStatus.UNPROCESSABLE_ENTITY);
+	return responseEntity;
+	}
 
 
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
+		logger.error(e.getMessage());
+		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
+				HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+	
 }

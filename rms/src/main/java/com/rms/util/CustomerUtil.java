@@ -20,7 +20,7 @@ public class CustomerUtil {
 		customerDto.setName(customer.getName());
 		customerDto.setEmail(customer.getEmail());
 		customerDto.setPhoneNumber(customer.getPhoneNumber());
-		customerDto.setPassword(String.valueOf(customer.getPhoneNumber()));
+		customerDto.setPassword(customer.getPassword());
 		customerDto.setCreatedOn(customer.getCreatedOn());
 		customerDto.setUpdatedOn(customer.getUpdatedOn());
 		return customerDto;

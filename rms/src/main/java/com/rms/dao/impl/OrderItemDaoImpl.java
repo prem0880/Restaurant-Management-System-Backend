@@ -2,6 +2,7 @@ package com.rms.dao.impl;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dao.OrderItemDao;
+import com.rms.entity.Order;
 import com.rms.entity.OrderItem;
 import com.rms.exception.DataBaseException;
 import com.rms.util.TimeStampUtil;
@@ -69,5 +71,55 @@ public class OrderItemDaoImpl implements OrderItemDao {
 			throw new DataBaseException(ApplicationConstants.ORDERITEM_SAVE_ERROR);
 		}
 	}
+	
+	@Override
+	public OrderItem checkOrderedItems(Long productId,Long orderId) {
+		logger.info("Entering checkOrderedItems method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<OrderItem> query = session.createQuery("FROM OrderItem o WHERE o.order.id=:orderId AND o.product.id=:productId ", OrderItem.class);
+			query.setParameter("productId", productId);
+			query.setParameter("orderId", orderId);
+			System.out.println("DAO"+query.getSingleResult());
+			return query.getSingleResult();
+			
+		}catch(NoResultException e) {
+			return null;
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+	}
+	
+	@Override
+	public boolean updateOrderItems(OrderItem orderItem) {
+		logger.info("Entering updateOrderItems method");
+		boolean flag = false;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			OrderItem orderItemUpdated = null;
+			orderItemUpdated = session.load(OrderItem.class, orderItem.getId());
+			//orderItem.setCreatedOn(orderItemUpdated.getCreatedOn());
+			orderItemUpdated.setPrice(orderItem.getPrice());
+			orderItemUpdated.setQuantity(orderItem.getQuantity());
+			orderItemUpdated.setUpdatedOn(TimeStampUtil.getTimeStamp());
+			//orderItemUpdated.setId(orderItem.getId());
+			System.out.println(orderItemUpdated);
+			Object value = session.merge(orderItemUpdated);
+			System.out.println(value);
+			if (value != null) {
+				flag = true;
+			}
+			session.flush();
+			return flag;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+ApplicationConstants.ORDERITEM_SAVE_ERROR);
+		}
+
+	}
+
+	
 
 }

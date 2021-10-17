@@ -43,6 +43,13 @@ public interface CustomerDao {
 	
 	/**
 	 * 
+	 * @param customer phone Number as input
+	 * @return  customer Entity object
+	 */
+	Long getCustomerByPhone(Long phoneNumber);
+	
+	/**
+	 * 
 	 * @param customer email as input
 	 * @return  customer id
 	 */

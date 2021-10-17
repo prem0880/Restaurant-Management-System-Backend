@@ -9,9 +9,9 @@ public interface CustomerService {
 	/**
 	 * 
 	 * @param customer DTO object as input
-	 * @return  success string message
+	 * @return  customer DTO object
 	 */
-	Long addCustomer(CustomerDto customerDto);
+	CustomerDto addCustomer(CustomerDto customerDto);
 
 	/**
 	 * 
@@ -40,5 +40,13 @@ public interface CustomerService {
 	 * @return  customer id
 	 */
 	Long getCustomerByMail(String email);
+	
+	
+	/**
+	 * 
+	 * @param customer phone Number as input
+	 * @return  customer id
+	 */
+	Long getCustomerByPhone(Long phoneNumber);
 	
 }

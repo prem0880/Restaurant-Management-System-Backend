@@ -13,11 +13,11 @@ public interface LoginService {
 	
 	/**
 	 * 
-	 * @param email string as input
+	 * @param login DTO object as input
 	 * @param password as input
-	 * @return	 success string message
+	 * @return	success string message
 	 */
-	String updateLogin(String email, String password);
+	String updatePassword(LoginDto loginDto, String password);
 	
 	/**
 	 * 
