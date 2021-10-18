@@ -3,6 +3,10 @@ package com.rms.util;
 import java.util.Random;
 
 public class RandomPassword {
+	
+	private RandomPassword() {
+		
+	}
 
 public static String getRandomPassword() {
 		
@@ -12,7 +16,6 @@ public static String getRandomPassword() {
             int index = (int) (new Random().nextFloat() * str.length());
             sb.append(str.charAt(index));
         }
-        String	password = sb.toString();
-        return password;
+        return sb.toString();
 	}
 }

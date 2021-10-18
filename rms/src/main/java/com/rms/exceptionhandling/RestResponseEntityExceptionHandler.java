@@ -16,9 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.rms.dao.impl.CategoryDaoImpl;
 import com.rms.exception.BusinessLogicException;
 import com.rms.exception.DataBaseException;
 import com.rms.exception.DuplicateIdException;
@@ -26,7 +24,6 @@ import com.rms.exception.IdNotFoundException;
 import com.rms.exception.NoRecordFoundException;
 import com.rms.response.HttpResponseStatus;
 
-import net.bytebuddy.asm.Advice.This;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -80,7 +77,7 @@ public class RestResponseEntityExceptionHandler
 	public ResponseEntity<HttpResponseStatus> handleValidationExceptions(MethodArgumentNotValidException ex) {
 	Map<String, String> errors = new HashMap<>();
 	List<String > l=new ArrayList<>();
-	ex.getBindingResult().getAllErrors().forEach((error) -> {
+	ex.getBindingResult().getAllErrors().forEach(error -> {
 	String fieldName = error.getObjectName();
 	String errorMessage = error.getDefaultMessage();
 	l.add(errorMessage);
@@ -96,7 +93,7 @@ public class RestResponseEntityExceptionHandler
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
 		logger.error(e.getMessage());
-		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getRootCause().toString()),
+		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage()),
 				HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 		

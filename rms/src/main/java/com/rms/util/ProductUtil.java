@@ -4,6 +4,10 @@ import com.rms.dto.ProductDto;
 import com.rms.entity.Product;
 
 public class ProductUtil {
+	
+	private ProductUtil() {
+		
+	}
 
 	public static Product toEntity(ProductDto productDto) {
 		Product product = new Product();

@@ -4,6 +4,10 @@ import com.rms.dto.MealDto;
 import com.rms.entity.Meal;
 
 public class MealUtil {
+	
+	private MealUtil() {
+		
+	}
 
 	public static Meal toEntity(MealDto mealDto) {
 		Meal meal = new Meal();

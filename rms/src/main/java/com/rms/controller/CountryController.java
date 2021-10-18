@@ -7,11 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +38,7 @@ public class CountryController {
 	 */
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllCountry() {
-		logger.debug("Entering getAllCountry method");
+		logger.info("Entering getAllCountry method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.COUNTRY_FETCH_SUCCESS, countryService.getAllCountry()),
 					HttpStatus.OK);
@@ -54,7 +51,7 @@ public class CountryController {
 	 */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addCountry(@Valid @RequestBody CountryDto countryDto) {
-		logger.debug("Entering addCountry method");
+		logger.info("Entering addCountry method");
 		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), countryService.addCountry(countryDto)),
 					HttpStatus.OK);
 		
@@ -66,7 +63,7 @@ public class CountryController {
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getCountryById(@Valid @PathVariable Long id) {
-		logger.debug("Entering getCountryById method");
+		logger.info("Entering getCountryById method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.COUNTRY_FETCH_SUCCESS, countryService.getCountryById(id)),
 					HttpStatus.OK);
@@ -79,7 +76,7 @@ public class CountryController {
      */
 	@PutMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> updateCountry(@PathVariable Long id,@Valid @RequestBody CountryDto countryDto) {
-		logger.debug("Entering updateCountry method");
+		logger.info("Entering updateCountry method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), countryService.updateCountry(id, countryDto)),
 					HttpStatus.OK);
@@ -92,27 +89,12 @@ public class CountryController {
 	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> deleteCountry(@PathVariable Long id) {
-		logger.debug("Entering deleteCountry method");
+		logger.info("Entering deleteCountry method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), countryService.deleteCountry(id)),
 					HttpStatus.OK);
 		
 	}
 	
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<HttpResponseStatus> validationFailed(MethodArgumentNotValidException e) {
-	logger.error("Validation fails, Check your input!");
-	ResponseEntity<HttpResponseStatus> responseEntity = null;
-	responseEntity = new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validation Failed!"),
-			HttpStatus.UNPROCESSABLE_ENTITY);
-	return responseEntity;
-	}
 
-
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
-		logger.error(e.getMessage());
-		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
-				HttpStatus.UNPROCESSABLE_ENTITY);
-	}
 	
 }

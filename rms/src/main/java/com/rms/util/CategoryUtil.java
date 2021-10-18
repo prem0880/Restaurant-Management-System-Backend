@@ -4,6 +4,10 @@ import com.rms.dto.CategoryDto;
 import com.rms.entity.Category;
 
 public class CategoryUtil {
+	
+	private CategoryUtil() {
+		
+	}
 
 	public static Category toEntity(CategoryDto categoryDto) {
 		Category category = new Category();

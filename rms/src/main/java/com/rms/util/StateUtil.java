@@ -4,6 +4,10 @@ import com.rms.dto.StateDto;
 import com.rms.entity.State;
 
 public class StateUtil {
+	
+	private StateUtil() {
+		
+	}
 
 	public static State toEntity(StateDto stateDto) {
 		State state = new State();

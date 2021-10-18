@@ -44,7 +44,6 @@ public class CustomerServiceImpl implements CustomerService {
 			Customer customer = CustomerUtil.toEntity(customerDto);
 			customer.setPassword(RandomPassword.getRandomPassword());
 			MailPasswordUtil.sendPassword(javaMailSender, customer);
-			System.out.println(customer.getPassword()+"customer");
 			return CustomerUtil.toDto(customerDao.getCustomerById(customerDao.addCustomer(customer)));
 		} catch (DataBaseException e) {
 			logger.error(e.getMessage());
@@ -131,7 +130,6 @@ public class CustomerServiceImpl implements CustomerService {
 	public Long getCustomerByPhone(Long phoneNumber) {
 		logger.info("Entering getCustomerByPhone method");
 		try {
-			System.out.println(phoneNumber);
 			Long id=customerDao.getCustomerByPhone(phoneNumber);
 			if (customerDao.getCustomerById(id)!=null) {
 				return id;

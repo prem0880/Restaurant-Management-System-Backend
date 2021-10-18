@@ -23,7 +23,7 @@ import com.rms.exception.DataBaseException;
 import com.rms.exception.IdNotFoundException;
 import com.rms.exception.NoRecordFoundException;
 import com.rms.service.OrderService;
-import com.rms.util.OrderApprovedMail;
+import com.rms.util.OrderApprovedMailUtil;
 import com.rms.util.OrderUtil;
 
 @Service
@@ -227,7 +227,7 @@ public class OrderServiceImpl implements OrderService {
 			Order order= orderDao.updateOrderStatus(orderId, status);
 			if (order!=null) {
 				result = ApplicationConstants.ORDER_UPDATE_STATUS+" "+status;
-				OrderApprovedMail.orderConfirmation(javaMailSender, order);
+				OrderApprovedMailUtil.orderConfirmation(javaMailSender, order);
 			}
 			return result;
 			}

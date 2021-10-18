@@ -4,6 +4,11 @@ import com.rms.dto.AddressDto;
 import com.rms.entity.Address;
 
 public class AddressUtil {
+	
+	
+	private AddressUtil() {
+		
+	}
 
 	public static Address toEntity(AddressDto addressDto) {
 		Address address = new Address();

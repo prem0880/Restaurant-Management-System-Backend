@@ -1,10 +1,5 @@
 package com.rms.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,11 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +38,7 @@ public class ProductController {
 	 */
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllProduct() {
-		logger.debug("Entering getAllProduct method");
+		logger.info("Entering getAllProduct method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.PRODUCT_FETCH_SUCCESS, productService.getAllProduct()),
 					HttpStatus.OK);
@@ -59,7 +51,7 @@ public class ProductController {
 	 */
 	@GetMapping("/meal")
 	public ResponseEntity<HttpResponseStatus> getAllProductByMeal() {
-		logger.debug("Entering getAllProductByMeal method");
+		logger.info("Entering getAllProductByMeal method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.PRODUCT_FETCH_SUCCESS, productService.getAllProductByMeal()),
 					HttpStatus.OK);
@@ -72,7 +64,7 @@ public class ProductController {
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getProductById(@PathVariable Long id) {
-		logger.debug("Entering getProductById method");
+		logger.info("Entering getProductById method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.PRODUCT_FETCH_SUCCESS, productService.getProductById(id)),
 					HttpStatus.OK);
@@ -85,7 +77,7 @@ public class ProductController {
 	 */
 	@GetMapping("/category/{id}/type/{type}")
 	public ResponseEntity<HttpResponseStatus> getProductByTypeAndCategory(@PathVariable Long id, @PathVariable String type) {
-		logger.debug("Entering getProductByTypeAndCategory method");
+		logger.info("Entering getProductByTypeAndCategory method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.PRODUCT_FETCH_SUCCESS,
 					productService.getProductByTypeAndCategory(id, type)), HttpStatus.OK);
 		
@@ -97,7 +89,7 @@ public class ProductController {
      */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addProduct(@Valid @RequestBody ProductDto productDto) {
-		logger.debug("Entering addProduct method");
+		logger.info("Entering addProduct method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), productService.addProduct(productDto)),
 					HttpStatus.OK);
 		
@@ -110,7 +102,7 @@ public class ProductController {
 	@PutMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> updateProduct(@PathVariable("id") Long id,
 			@Valid @RequestBody ProductDto productDto) {
-		logger.debug("Entering updateProduct method");
+		logger.info("Entering updateProduct method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), productService.updateProduct(id, productDto)),
 					HttpStatus.OK);
@@ -123,7 +115,7 @@ public class ProductController {
 	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> deleteProduct(@PathVariable("id") Long id) {
-		logger.debug("Entering deleteProduct method");
+		logger.info("Entering deleteProduct method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), productService.deleteProduct(id)),
 					HttpStatus.OK);
 		
@@ -135,32 +127,12 @@ public class ProductController {
 	 */
 	@GetMapping("/meal/{id}")
 	public ResponseEntity<HttpResponseStatus> getProductByMeal(@PathVariable("id") Long id) {
-		logger.debug("Entering getProductByMeal method");
+		logger.info("Entering getProductByMeal method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.PRODUCT_FETCH_SUCCESS,productService.getProductByMeal(id)),
 					HttpStatus.OK);
 		
 	}
 	
-//	@ExceptionHandler(MethodArgumentNotValidException.class)
-//	public ResponseEntity<HttpResponseStatus> validationFailed(MethodArgumentNotValidException e) {
-//	logger.error("Validation fails, Check your input!");
-//	ResponseEntity<HttpResponseStatus> responseEntity = null;
-//	responseEntity = new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validation Failed!"),
-//			HttpStatus.UNPROCESSABLE_ENTITY);
-//	return responseEntity;
-//	}
-	
-//	@ExceptionHandler(HttpMessageNotReadableException.class)
-//	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
-//		logger.error(e.getMessage());
-//		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
-//				HttpStatus.UNPROCESSABLE_ENTITY);
-//	}
-	
-	
-	//@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-
-
 
 }

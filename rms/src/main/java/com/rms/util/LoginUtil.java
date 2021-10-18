@@ -6,6 +6,10 @@ import com.rms.entity.Login;
 
 public class LoginUtil {
 	
+		private LoginUtil() {
+			
+		}
+		
 
 		public static LoginDto toDto(Login login) {
 			

@@ -5,6 +5,10 @@ import com.rms.entity.Customer;
 
 public class CustomerUtil {
 
+	
+	private CustomerUtil() {
+		
+	}
 	public static Customer toEntity(CustomerDto customerDto) {
 		Customer customer = new Customer();
 		customer.setName(customerDto.getName());

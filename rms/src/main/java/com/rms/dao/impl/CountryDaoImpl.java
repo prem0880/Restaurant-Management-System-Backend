@@ -72,7 +72,7 @@ public class CountryDaoImpl implements CountryDao {
 			country = session.load(Country.class, id);
 			session.delete(country);
 			session.flush();
-			result = ApplicationConstants.COUNTRY_DELETE_SUCCESS + id;
+			result = ApplicationConstants.COUNTRY_DELETE_SUCCESS;
 			return result;
 		} catch (Exception e) {
 			logger.error(e.getMessage());

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dao.OrderItemDao;
-import com.rms.entity.Order;
 import com.rms.entity.OrderItem;
 import com.rms.exception.DataBaseException;
 import com.rms.util.TimeStampUtil;
@@ -80,7 +79,6 @@ public class OrderItemDaoImpl implements OrderItemDao {
 			Query<OrderItem> query = session.createQuery("FROM OrderItem o WHERE o.order.id=:orderId AND o.product.id=:productId ", OrderItem.class);
 			query.setParameter("productId", productId);
 			query.setParameter("orderId", orderId);
-			System.out.println("DAO"+query.getSingleResult());
 			return query.getSingleResult();
 			
 		}catch(NoResultException e) {
@@ -100,14 +98,10 @@ public class OrderItemDaoImpl implements OrderItemDao {
 			Session session = sessionFactory.getCurrentSession();
 			OrderItem orderItemUpdated = null;
 			orderItemUpdated = session.load(OrderItem.class, orderItem.getId());
-			//orderItem.setCreatedOn(orderItemUpdated.getCreatedOn());
 			orderItemUpdated.setPrice(orderItem.getPrice());
 			orderItemUpdated.setQuantity(orderItem.getQuantity());
 			orderItemUpdated.setUpdatedOn(TimeStampUtil.getTimeStamp());
-			//orderItemUpdated.setId(orderItem.getId());
-			System.out.println(orderItemUpdated);
 			Object value = session.merge(orderItemUpdated);
-			System.out.println(value);
 			if (value != null) {
 				flag = true;
 			}

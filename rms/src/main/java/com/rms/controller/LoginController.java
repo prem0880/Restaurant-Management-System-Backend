@@ -7,10 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +37,7 @@ public class LoginController {
 	 */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> saveLogin(@Valid @RequestBody LoginDto loginDto) {
-		logger.debug("Entering saveLogin method");
+		logger.info("Entering saveLogin method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), loginService.saveLogin(loginDto)),  HttpStatus.OK);
 		
 	}
@@ -51,7 +48,7 @@ public class LoginController {
 	*/
 	@PostMapping("/credential")
 	public ResponseEntity<HttpResponseStatus> checkCredential(@Valid @RequestBody LoginDto loginDto) {
-		logger.debug("Entering checkCredential method");
+		logger.info("Entering checkCredential method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMER_LOGIN_SUCCESS,loginService.checkCredential(loginDto)),  HttpStatus.OK);
 		
 	}
@@ -62,7 +59,7 @@ public class LoginController {
 	*/
 	@PutMapping("/{password}")
 	public ResponseEntity<HttpResponseStatus> updatePassword(@Valid @RequestBody LoginDto loginDto,@PathVariable String password) { 
-		logger.debug("Entering updatePassword method");
+		logger.info("Entering updatePassword method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),loginService.updatePassword(loginDto,password)),  HttpStatus.OK);
 		
 	}
@@ -78,20 +75,6 @@ public class LoginController {
 		
 	}
 	
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<HttpResponseStatus> validationFailed(MethodArgumentNotValidException e) {
-	logger.error("Validation fails, Check your input!");
-	ResponseEntity<HttpResponseStatus> responseEntity = null;
-	responseEntity = new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validation Failed!"),
-			HttpStatus.UNPROCESSABLE_ENTITY);
-	return responseEntity;
-	}
 	
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
-		logger.error(e.getMessage());
-		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
-				HttpStatus.UNPROCESSABLE_ENTITY);
-	}
 	
 }

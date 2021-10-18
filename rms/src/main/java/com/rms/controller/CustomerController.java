@@ -7,10 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +37,7 @@ public class CustomerController {
 	 */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addCustomer(@Valid @RequestBody CustomerDto customerDto) {
-		logger.debug("Entering addCustomer method");
+		logger.info("Entering addCustomer method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), ApplicationConstants.CUSTOMER_SAVE_SUCCESS,
 					customerService.addCustomer(customerDto)), HttpStatus.OK);
 		
@@ -53,7 +50,7 @@ public class CustomerController {
 	 */
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllCustomer() {
-		logger.debug("Entering getAllCustomer method");
+		logger.info("Entering getAllCustomer method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMER_FETCH_SUCCESS, customerService.getAllCustomer()),
 					HttpStatus.OK);
@@ -68,7 +65,7 @@ public class CustomerController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getCustomerById(@PathVariable("id") Long id) {
-		logger.debug("Entering getCustomerById method");
+		logger.info("Entering getCustomerById method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMER_FETCH_SUCCESS, customerService.getCustomerById(id)),
 					HttpStatus.OK);
@@ -83,7 +80,7 @@ public class CustomerController {
 	@PutMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> updateCustomer(@PathVariable("id") Long id,
 			@Valid @RequestBody CustomerDto customerDto) {
-		logger.debug("Entering updateCustomer method");
+		logger.info("Entering updateCustomer method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), customerService.updateCustomer(id, customerDto)),
 					HttpStatus.OK);
@@ -97,7 +94,7 @@ public class CustomerController {
 	
 	@GetMapping("/mail/{email}")
 	public ResponseEntity<HttpResponseStatus> getCustomerByMail(@PathVariable("email") String mail) {
-		logger.debug("Entering getCustomerByMail method");
+		logger.info("Entering getCustomerByMail method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.CUSTOMER_FETCH_SUCCESS, customerService.getCustomerByMail(mail)),
 					HttpStatus.OK);
@@ -117,22 +114,7 @@ public class CustomerController {
 					HttpStatus.OK);
 		
 	}
-	
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public HttpResponseStatus validationFailed(MethodArgumentNotValidException e) {
-	logger.error("Validation fails, Check your input!");
-	HttpResponseStatus responseEntity = null;
-	responseEntity = new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(),"Validation Failed",
-			HttpStatus.UNPROCESSABLE_ENTITY);
-	return responseEntity;
-	}
 
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
-		logger.error(e.getMessage());
-		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
-				HttpStatus.UNPROCESSABLE_ENTITY);
-	}
 
 }
 

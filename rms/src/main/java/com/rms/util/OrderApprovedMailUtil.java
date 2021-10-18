@@ -5,9 +5,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import com.rms.entity.Order;
 import com.rms.entity.OrderItem;
 
-public class OrderApprovedMail {
+public class OrderApprovedMailUtil {
 
-	private OrderApprovedMail() {}
+	private OrderApprovedMailUtil() {}
 	
 	public static void orderConfirmation(JavaMailSender javaMailSender,Order order) {
 		

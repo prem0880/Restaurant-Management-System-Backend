@@ -4,6 +4,10 @@ import com.rms.dto.CountryDto;
 import com.rms.entity.Country;
 
 public class CountryUtil {
+	
+	private CountryUtil() {
+		
+	}
 
 	public static Country toEntity(CountryDto countryDto) {
 		Country country = new Country();

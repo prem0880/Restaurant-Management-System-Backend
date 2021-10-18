@@ -33,13 +33,10 @@ public class LoginServiceImpl implements LoginService{
 	public String saveLogin(LoginDto loginDto) {
 		logger.info("Entering saveLogin method");
 		try {
-			System.out.println(loginDto.getPassword()+"36");
 			Login entity = LoginUtil.toEntity(loginDto);
 			Login loginCheck = null;
 			loginCheck = loginDao.getByEmail(entity.getEmail());
-			System.out.println(loginCheck);
 			if(loginCheck == null) {
-				System.out.println(entity.getPassword()+"40");
 				boolean result = loginDao.saveLogin(entity);	
 				if(result) {
 					return ApplicationConstants.LOGIN_SAVE_SUCCESS;
@@ -80,8 +77,6 @@ public class LoginServiceImpl implements LoginService{
 			String result = null;
 			Login login=LoginUtil.toEntity(loginDto);
 			Login loginEntity=loginDao.getLoginByMail(login.getEmail());
-			System.out.println(loginEntity.getPassword()+"107");
-			System.out.println(login.getPassword()+"108");
 			if (loginEntity != null && loginEntity.getPassword().equals(PasswordEncryptionUtil.getPassword(login.getPassword()))) {
 				result=loginEntity.getRole();	
 			}
@@ -124,9 +119,6 @@ public class LoginServiceImpl implements LoginService{
 			boolean value=false;
 			Login login=LoginUtil.toEntity(loginDto);
 			Login loginEntity=loginDao.getLoginByMail(login.getEmail());
-			System.out.println(loginEntity.getPassword()+"127");
-			System.out.println(login.getPassword()+"128");
-			System.out.println(password+"129");
 			if (loginEntity != null && loginEntity.getPassword().equals(PasswordEncryptionUtil.getPassword(login.getPassword()))) {
 				value=loginDao.updateLogin(login.getEmail(), password);
 			}

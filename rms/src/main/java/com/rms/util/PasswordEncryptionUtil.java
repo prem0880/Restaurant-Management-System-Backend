@@ -7,6 +7,10 @@ import java.security.NoSuchAlgorithmException;
 import com.rms.exception.BusinessLogicException;
 
 public class PasswordEncryptionUtil {
+	
+	private PasswordEncryptionUtil() {
+		
+	}
 
 	
 	public static String getPassword(String str) {

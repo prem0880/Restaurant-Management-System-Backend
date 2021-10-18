@@ -3,6 +3,10 @@ package com.rms.constants;
 public class ApplicationConstants {
 
 	
+	private ApplicationConstants() {
+		
+	}
+	
 	public static final String ADDRESS_FETCH_SUCCESS = "Address Data Retrieval is Success";
 	public static final String ADDRESS_NOT_FOUND = "No records Found for Address";
 	public static final String ADDRESS_SAVE_SUCCESS = "Address Creation is Success";	

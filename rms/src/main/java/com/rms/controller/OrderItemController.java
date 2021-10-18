@@ -7,10 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +36,7 @@ public class OrderItemController {
      */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addItems(@Valid @RequestBody OrderItemDto orderItemDto) {
-		logger.debug("Entering addItems method");
+		logger.info("Entering addItems method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.CREATED.value(), orderItemService.addItems(orderItemDto)), HttpStatus.OK);
 		
@@ -51,26 +48,11 @@ public class OrderItemController {
 	 */
 	@GetMapping("/{orderId}")
 	public ResponseEntity<HttpResponseStatus> getOrderedItems(@PathVariable("orderId") Long orderId) {
-		logger.debug("Entering getOrderedItems method");
+		logger.info("Entering getOrderedItems method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ORDERITEM_FETCH_SUCCESS,
 					orderItemService.getOrderedItems(orderId)), HttpStatus.OK);
 		
 	}
 	
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<HttpResponseStatus> validationFailed(MethodArgumentNotValidException e) {
-	logger.error("Validation fails, Check your input!");
-	ResponseEntity<HttpResponseStatus> responseEntity = null;
-	responseEntity = new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validation Failed!"),
-			HttpStatus.UNPROCESSABLE_ENTITY);
-	return responseEntity;
-	}
-	
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
-		logger.error(e.getMessage());
-		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
-				HttpStatus.UNPROCESSABLE_ENTITY);
-	}
 
 }

@@ -1,15 +1,12 @@
 package com.rms.controller;
 
-import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +36,7 @@ public class OrderController {
      */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addOrder( @RequestBody OrderDto orderDto) {
-		logger.debug("Entering addOrder method");
+		logger.info("Entering addOrder method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), orderService.addOrder(orderDto)),
 					HttpStatus.OK);
 		
@@ -51,7 +48,7 @@ public class OrderController {
 	 */
 	@GetMapping("/order/{customerId}")
 	public ResponseEntity<HttpResponseStatus> getOrderId(@PathVariable Long customerId) {
-		logger.debug("Entering getOrderId method");
+		logger.info("Entering getOrderId method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMERID_FETCH_SUCCESS,
 					orderService.getOrderId(customerId)), HttpStatus.OK);
 		
@@ -63,7 +60,7 @@ public class OrderController {
 	 */
 	@GetMapping("/customer/{customerId}")
 	public ResponseEntity<HttpResponseStatus> getOrderByCustomerId(@PathVariable Long customerId) {
-		logger.debug("Entering getOrderByCustomerId method");
+		logger.info("Entering getOrderByCustomerId method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(),ApplicationConstants.CUSTOMERID_FETCH_SUCCESS,
 					orderService.getOrderByCustomerId(customerId)), HttpStatus.OK);
 		
@@ -75,7 +72,7 @@ public class OrderController {
 	 */
 	@GetMapping
 	public ResponseEntity<HttpResponseStatus> getAllOrder() {
-		logger.debug("Entering getAllOrder method");
+		logger.info("Entering getAllOrder method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ORDER_FETCH_SUCCESS,
 					orderService.getAllOrder()), HttpStatus.OK);
 		
@@ -87,7 +84,7 @@ public class OrderController {
 	 */
 	@GetMapping("/success")
 	public ResponseEntity<HttpResponseStatus> getAllSuccessOrder() {
-		logger.debug("Entering getAllSuccessOrder method");
+		logger.info("Entering getAllSuccessOrder method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ORDER_FETCH_SUCCESS,
 					orderService.getAllSuccessOrder()), HttpStatus.OK);
 		
@@ -99,7 +96,7 @@ public class OrderController {
 	 */
 	@GetMapping("/{orderId}")
 	public ResponseEntity<HttpResponseStatus> getOrderById(@PathVariable("orderId") Long orderId) {
-		logger.debug("Entering getOrderById method");
+		logger.info("Entering getOrderById method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.ORDERID_FETCH_SUCCESS,
 					orderService.getOrderById(orderId)), HttpStatus.OK);
 		
@@ -112,7 +109,7 @@ public class OrderController {
 	@PutMapping("/{orderId}")
 	public ResponseEntity<HttpResponseStatus> updateOrder(@PathVariable("orderId") Long orderId,
 			@RequestBody OrderDto orderDto) {
-		logger.debug("Entering updateOrder method");
+		logger.info("Entering updateOrder method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), orderService.updateOrder(orderId, orderDto)),
 					HttpStatus.OK);
@@ -125,18 +122,12 @@ public class OrderController {
      */
 	@PutMapping("/{orderId}/{status}")
 	public ResponseEntity<HttpResponseStatus> updateOrderStatus(@PathVariable("orderId") Long orderId,@PathVariable("status") String status) {
-		logger.debug("Entering updateOrderStatus method");
+		logger.info("Entering updateOrderStatus method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), orderService.updateOrderStatus(orderId, status)),
 					HttpStatus.OK);
 		
 	}
 	
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
-		logger.error(e.getMessage());
-		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Wrong Inputs are provided"),
-				HttpStatus.UNPROCESSABLE_ENTITY);
-	}
 	
 }

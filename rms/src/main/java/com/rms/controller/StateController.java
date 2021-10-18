@@ -6,9 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +35,7 @@ public class StateController {
 	 */
 	@GetMapping("/{countryId}")
 	public ResponseEntity<HttpResponseStatus> getStatesByCountry(@PathVariable("countryId") Long countryId) {
-		logger.debug("Entering getStatesByCountry method");
+		logger.info("Entering getStatesByCountry method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.STATE_FETCH_SUCCESS,
 					stateService.getStatesByCountry(countryId)), HttpStatus.OK);
 		
@@ -49,17 +47,10 @@ public class StateController {
      */
 	@PostMapping
 	public ResponseEntity<HttpResponseStatus> addState(@RequestBody StateDto stateDto) {
-		logger.debug("Entering addState method");
+		logger.info("Entering addState method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.CREATED.value(), stateService.addState(stateDto)),
 					HttpStatus.OK);
 		
-	}
-	
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<HttpResponseStatus> inputMismatch(HttpMessageNotReadableException e) {
-		logger.error(e.getMessage());
-		return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY.value(),"Wrong Inputs are provided"),
-				HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	
 

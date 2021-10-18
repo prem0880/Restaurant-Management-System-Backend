@@ -35,7 +35,6 @@ public class CustomerDaoImpl implements CustomerDao {
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			customer.setCreatedOn(TimeStampUtil.getTimeStamp());
-			System.out.println(customer.toString());
 			Long value = (Long) session.save(customer);
 			session.flush();
 			return value;

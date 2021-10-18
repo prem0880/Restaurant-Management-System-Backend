@@ -4,6 +4,8 @@ import com.rms.dto.OrderDto;
 import com.rms.entity.Order;
 
 public class OrderUtil {
+	
+	private OrderUtil() {}
 
 	public static Order toEntity(OrderDto orderDto) {
 		Order order = new Order();

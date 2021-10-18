@@ -55,19 +55,14 @@ public class OrderItemServiceImpl implements OrderItemService {
 				if (order != null) {
 					orderItem.setOrder(order);
 					orderItem.setPrice((product.getPrice() * orderItem.getQuantity()) + product.getTax());
-					//orderItemDao.saveOrderItem(orderItem);
-					System.out.println(orderItem.getProduct().getId()+" " + orderItem.getOrder().getId());
 					OrderItem orderItems=orderItemDao.checkOrderedItems(orderItem.getProduct().getId(), orderItem.getOrder().getId());
 					if(orderItems==null) {
-						Long value=orderItemDao.saveOrderItem(orderItem);
-						System.out.println("63"+value);
+						orderItemDao.saveOrderItem(orderItem);
+					
 					}
 					else{
 						orderItems.setQuantity(orderItem.getQuantity()+orderItems.getQuantity());
-						System.out.println(orderItem.getQuantity());
 						orderItems.setPrice(orderItem.getPrice()+(product.getPrice() * orderItems.getQuantity()) + product.getTax());
-						System.out.println(orderItem.getPrice());
-						System.out.println("service "+orderItems.getId());
 						orderItemDao.updateOrderItems(orderItems);
 					}
 					Double sum = null;
