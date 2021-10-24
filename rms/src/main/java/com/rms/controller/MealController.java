@@ -98,7 +98,7 @@ public class MealController {
 	 */
 	@GetMapping("/name/{meal}")
 	public ResponseEntity<HttpResponseStatus> getMealByName(@PathVariable String meal) {
-		logger.info("Entering getMealById method");
+		logger.info("Entering getMealByName method");
 			return new ResponseEntity<>(
 					new HttpResponseStatus(HttpStatus.OK.value(), ApplicationConstants.MEAL_FETCH_SUCCESS, mealService.getMealByName(meal)), HttpStatus.OK);
 		

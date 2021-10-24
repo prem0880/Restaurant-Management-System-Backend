@@ -1,6 +1,5 @@
 package com.rms.service;
 
-import java.util.List;
 import com.rms.dto.AddressDto;
 
 public interface AddressService {
@@ -15,9 +14,9 @@ public interface AddressService {
 	/**
 	 * 
 	 * @param  phoneNumber as input
-	 * @return   List of address DTO objects for given phoneNumber
+	 * @return address DTO object for given phoneNumber
 	 */
-	List<AddressDto> getAddressByPhoneNumber(Long phoneNumber);
+	AddressDto getAddressByPhoneNumber(Long phoneNumber);
 
 	/**
 	 * 

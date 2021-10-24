@@ -70,7 +70,7 @@ public class LoginController {
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<HttpResponseStatus> getRoleById(@PathVariable Long id) {
-		logger.info("Entering save method");
+		logger.info("Entering getRoleById method");
 			return new ResponseEntity<>(new HttpResponseStatus(HttpStatus.OK.value(), loginService.getRoleById(id)),  HttpStatus.OK);
 		
 	}

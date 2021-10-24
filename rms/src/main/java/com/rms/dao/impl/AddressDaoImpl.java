@@ -1,6 +1,5 @@
 package com.rms.dao.impl;
 
-import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -48,14 +47,14 @@ public class AddressDaoImpl implements AddressDao {
 	}
 
 	@Override
-	public List<Address> getAddressByPhoneNumber(Long phoneNumber) {
+	public Address getAddressByPhoneNumber(Long phoneNumber) {
 		logger.debug("Entering getAddressByPhoneNumber method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Address> query = session.createQuery("FROM Address a WHERE a.customer.phoneNumber=:phoneNumber",
 					Address.class);
 			query.setParameter("phoneNumber", phoneNumber);
-			return query.list();
+			return query.getSingleResult();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);

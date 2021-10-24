@@ -114,7 +114,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	
 	@Override
 	public Long getCustomerByPhone(Long phoneNumber) {
-		logger.info("Entering getCustomerByEmail method");
+		logger.info("Entering getCustomerByPhone method");
 		try { 
 			Session session = sessionFactory.getCurrentSession();
 			Query<Customer> query = session.createQuery("FROM Customer c where c.phoneNumber=:phoneNumber", Customer.class);

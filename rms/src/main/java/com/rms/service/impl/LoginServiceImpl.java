@@ -122,8 +122,11 @@ public class LoginServiceImpl implements LoginService{
 			if (loginEntity != null && loginEntity.getPassword().equals(PasswordEncryptionUtil.getPassword(login.getPassword()))) {
 				value=loginDao.updateLogin(login.getEmail(), password);
 			}
+			else {
+				throw new NoRecordFoundException(ApplicationConstants.LOGIN_NOT_FOUND);
+			}
 			if(value) {
-			result="Password Updated Successfully";
+				result="Password Updated Successfully";
 			}
 			return result;
 			}

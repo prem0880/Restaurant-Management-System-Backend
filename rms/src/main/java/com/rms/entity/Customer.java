@@ -39,7 +39,7 @@ public class Customer implements Serializable {
 
 	@Column(name = "phone_number", unique = true)
 	private Long phoneNumber;
-
+	
 	@Column(name = "created_on")
 	private Timestamp createdOn;
 

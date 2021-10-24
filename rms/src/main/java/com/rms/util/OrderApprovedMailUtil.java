@@ -16,11 +16,11 @@ public class OrderApprovedMailUtil {
 		if(order.getStatus().equals("Approved")) {
 		
 		
-		String message="Hi "+order.getCustomer().getName()+"\n\n"+"Order Details\n\n";
+		String message="Hi "+order.getCustomer().getName()+","+"\n\n"+"Your Order Details\n\n";
 		
-		message+="Product name "+" Quantity "+" Price\n";
+		message+="Food Item "+" Quantity "+" Price\n";
 		for(OrderItem orderItem:order.getOrderItem()) {
-			message+=orderItem.getProduct().getName()+" "+orderItem.getQuantity()+" "+orderItem.getPrice()+"\n";
+			message+=orderItem.getProduct().getName()+"            "+orderItem.getQuantity()+"      "+orderItem.getPrice()+"\n";
 		}
 		message+="Your Order has been "+order.getStatus()+"\nTotal Amount= "+order.getTotalPrice()+"\n Thank you.";
 		

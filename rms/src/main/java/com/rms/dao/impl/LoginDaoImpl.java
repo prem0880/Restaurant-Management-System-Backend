@@ -106,7 +106,7 @@ public class LoginDaoImpl implements LoginDao {
 
 	@Override
 	public Login getLoginByMail(String email) {
-		logger.info("Entering getBymail method");
+		logger.info("Entering getLoginByMail method");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			Query<Login> query=session.createQuery("FROM Login l where l.email=:email",Login.class);

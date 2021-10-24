@@ -66,7 +66,7 @@ public interface OrderDao {
 	 * 
 	 * @param order id as input
 	 * @param order status string
-	 * @return boolean value
+	 * @return Order Entity Object
 	 */
 	Order updateOrderStatus(Long orderId,String status);
 }

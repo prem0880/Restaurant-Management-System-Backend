@@ -1,6 +1,5 @@
 package com.rms.dao;
 
-import java.util.List;
 
 import com.rms.entity.Address;
 
@@ -14,9 +13,9 @@ public interface AddressDao {
 	/**
 	 * 
 	 * @param  phoneNumber as input
-	 * @return   List of address Entity objects for given phoneNumber
+	 * @return  address Entity object for given phoneNumber
 	 */
-	List<Address> getAddressByPhoneNumber(Long phoneNumber);
+	Address getAddressByPhoneNumber(Long phoneNumber);
 
 	/**
 	 * 

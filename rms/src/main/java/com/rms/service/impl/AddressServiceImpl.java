@@ -1,13 +1,10 @@
 package com.rms.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.rms.constants.ApplicationConstants;
 import com.rms.dao.AddressDao;
@@ -50,17 +47,15 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public List<AddressDto> getAddressByPhoneNumber(Long phoneNumber) {
+	public AddressDto getAddressByPhoneNumber(Long phoneNumber) {
 		logger.info("Entering getAddressByPhoneNumber method");
 		try {
-			List<Address> addressEntity = addressDao.getAddressByPhoneNumber(phoneNumber);
+			Address address = addressDao.getAddressByPhoneNumber(phoneNumber);
 			
-			if (CollectionUtils.isEmpty(addressEntity)) {
-				throw new NoRecordFoundException(ApplicationConstants.ADDRESS_NOT_FOUND);
+			if (address != null) {
+				return AddressUtil.toDto(address);
 			} else {
-				List<AddressDto> addressDto = new ArrayList<>();
-				addressEntity.stream().forEach(entity -> addressDto.add(AddressUtil.toDto(entity)));
-				return addressDto;
+				throw new NoRecordFoundException(ApplicationConstants.ADDRESS_NOT_FOUND);
 			}
 			
 		} catch (DataBaseException e) {

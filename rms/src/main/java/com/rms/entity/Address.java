@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -44,8 +45,8 @@ public class Address implements Serializable {
 	@JoinColumn(name = "state_id", foreignKey = @ForeignKey(name = "FK_STATE_ID"))
 	private State state;
 
-	@ManyToOne
-	@JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "FK_CUSTOMER_ID"))
+	@OneToOne
+	@JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "FK_CUSTOMER_ID"),nullable=false,unique=true)
 	private Customer customer;
 
 	@Column(name = "created_on")
