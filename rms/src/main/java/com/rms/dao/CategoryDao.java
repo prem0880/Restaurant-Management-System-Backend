@@ -6,15 +6,39 @@ import com.rms.entity.Category;
 
 public interface CategoryDao {
 
-    public String deleteCategory(Long id);
-	
-	public String updateCategory(Long id, Category category);
-	
-	public String addCategory(Category category);
-	
-	public Category getCategoryById(Long id);
-	
-	public List<Category> getAllCategory();
-	
-	
+	/**
+	 * 
+	 * @param category id as input
+	 * @return  success string message
+	 */
+	String deleteCategory(Long id);
+
+	/**
+	 * 
+	 * @param category id as input
+	 * @param category Entity object
+	 * @return boolean value
+	 */
+	boolean updateCategory(Long id, Category category);
+
+	/**
+	 * 
+	 * @param category Entity object as input
+	 * @return  boolean value
+	 */
+	boolean addCategory(Category category);
+
+	/**
+	 * 
+	 * @param category id as input
+	 * @return  category Entity object
+	 */
+	Category getCategoryById(Long id);
+
+	/**
+	 * 
+	 * @return  List of Category Entity objects
+	 */
+	List<Category> getAllCategory();
+
 }

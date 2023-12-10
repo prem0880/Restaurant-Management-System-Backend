@@ -1,17 +1,14 @@
 package com.rms.entity;
 
-import java.util.Set;
+import java.io.Serializable;
+import java.sql.Timestamp;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,23 +18,23 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="Category")
-public class Category {
+@Table(name = "category")
+public class Category implements Serializable {
 
-	
+	private static final long serialVersionUID = 1L;
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
-	
-	@Column(name="name",nullable=false)
-	private String name;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
-    private Set<Product> product;
 
-	
-	
-	
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "created_on")
+	private Timestamp createdOn;
+
+	@Column(name = "updated_on")
+	private Timestamp updatedOn;
+
 }

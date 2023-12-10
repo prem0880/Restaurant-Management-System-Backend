@@ -3,19 +3,64 @@ package com.rms.service;
 import java.util.List;
 
 import com.rms.dto.ProductDto;
-import com.rms.entity.Product;
 
 public interface ProductService {
-
 	
-	public String deleteProduct(Long id,Long categoryId,Long mealId);
+	/**
+	 * 
+	 * @param product id as input
+	 * @return  success string message
+	 */
+	String deleteProduct(Long id);
 
-	public String updateProduct(Long id, ProductDto productDto);
+	/**
+	 * 
+	 * @param product id as input
+	 * @param product DTO object
+	 * @return	 success string message
+	 */
+	String updateProduct(Long id, ProductDto productDto);
 
-	public String addProduct(ProductDto productDto);
+	/**
+	 * 
+	 * @param product DTO object as input
+	 * @return  success string message
+	 */
+	String addProduct(ProductDto productDto);
 
-	public Product getProductById(Long id);
+	/**
+	 * 
+	 * @param product id as input
+	 * @return  product DTO object
+	 */
+	ProductDto getProductById(Long id);
 
-	public List<Product> getAllProduct();
+	/**
+	 * 
+	 * @return  List of product DTO objects
+	 */
+	List<ProductDto> getAllProduct();
 	
+	/**
+	 * 
+	 * @return  List of product DTO objects
+	 */
+	List<ProductDto> getAllProductByMeal();
+
+	/**
+	 * 
+	 * @param category id as input
+	 * @param product type string
+	 * @return	 List of  product DTO objects
+	 */	
+	List<ProductDto> getProductByTypeAndCategory(Long categoryId, String type);
+	
+	/**
+	 * 
+	 * @param meal id as input
+	 * @return List of  product DTO objects
+	 */
+	List<ProductDto> getProductByMeal(Long mealId);
+		
+
 }

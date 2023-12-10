@@ -4,113 +4,130 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.MealDao;
 import com.rms.entity.Meal;
-import com.rms.exception.IdNotFoundException;
-
+import com.rms.exception.DataBaseException;
+import com.rms.util.TimeStampUtil;
 
 @Repository
 @Transactional
 public class MealDaoImpl implements MealDao {
 
-	
-	static final String ID_NOT_FOUND="Meal not found with id ";
-	static final String COULDNT_UPDATE="Couldn't update Meal...";
-
-	
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	
+	private static final Logger logger = LogManager.getLogger(MealDaoImpl.class);
+
+
 	@Override
 	public String deleteMeal(Long id) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		Meal meal=null;
-		boolean stat=false;
+		logger.info("Entering deleteMeal method");
 		try {
-			meal=session.load(Meal.class, id);
-			if(meal.getName()!=null) {
-				stat=true;
-			}
-		}
-		catch(org.hibernate.ObjectNotFoundException e)
-		{
-			throw new IdNotFoundException("Deletion has failed. "+ID_NOT_FOUND+id);
-		}
-		if(stat)
-		{
+			String result = null;
+			Meal meal = null;
+			Session session = sessionFactory.getCurrentSession();
+			meal = session.load(Meal.class, id);
 			session.delete(meal);
 			session.flush();
-			result="Deletion is successful with id: "+id;
+			result = ApplicationConstants.MEAL_DELETE_SUCCESS;
+			return result;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.MEAL_NOT_FOUND+ApplicationConstants.MEAL_DELETE_ERROR);
 		}
-		return result;
-		
-		
 	}
 
 	@Override
-	public String updateMeal(Long id, Meal meal) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		Meal mealEntity=null;
-		boolean stat=false;
+	public boolean updateMeal(Long id, Meal meal) {
+		logger.info("Entering updateMeal method");
+		boolean flag = false;
 		try {
-				mealEntity=session.load(Meal.class, id);
-				if(mealEntity.getName()!=null) {
-					stat=true;
-				}
-		}
-		catch(org.hibernate.ObjectNotFoundException e)
-		{
-			throw new IdNotFoundException(COULDNT_UPDATE+ID_NOT_FOUND+id);
-		}
-		
-		if(stat) {
-			mealEntity.setName(meal.getName());
+			Session session = sessionFactory.getCurrentSession();
+			Meal mealEntity = null;
+			mealEntity = session.load(Meal.class, id);
+			meal.setCreatedOn(mealEntity.getCreatedOn());
+			meal.setId(id);
+			meal.setUpdatedOn(TimeStampUtil.getTimeStamp());
+			Object value = session.merge(meal);
+			if (value != null) {
+				flag = true;
+			}
 			session.flush();
-			result="Meal Updation is successful for id: "+id;
+			return flag;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.MEAL_NOT_FOUND+ ApplicationConstants.MEAL_UPDATE_ERROR);
 		}
-	
-		return result;
 	}
 
 	@Override
-	public String addMeal(Meal meal) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		session.save(meal);
-		result="Meal added successfully.....";
-		session.flush();
-		return result;
-		
-		
+	public boolean addMeal(Meal meal) {
+		logger.info("Entering addMeal method");
+		boolean flag = false;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			meal.setCreatedOn(TimeStampUtil.getTimeStamp());
+			Long value = (Long) session.save(meal);
+			if (value != null) {
+				flag = true;
+			}
+			session.flush();
+			return flag;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.MEAL_SAVE_ERROR);
+		}
 	}
 
 	@Override
 	public Meal getMealById(Long id) {
-		Session session=sessionFactory.getCurrentSession();
-		Meal meal =null;
-		meal=session.get(Meal.class, id);
-		if(meal!=null)
-		{
+		logger.info("Entering getMealById method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Meal meal = null;
+			meal = session.get(Meal.class, id);
 			return meal;
-			
-		}else {
-    		throw new IdNotFoundException("Sorry, Meal could not be retrived " + ID_NOT_FOUND+ id);
-    	}
-		
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR + e.getMessage());
+		}
+
 	}
 
 	@Override
 	public List<Meal> getAllMeal() {
-		Session session=sessionFactory.getCurrentSession();
-		return session.createQuery("from Meal",Meal.class).getResultList();
+		logger.info("Entering getAllMeal method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Meal> query = session.createQuery("from Meal", Meal.class);
+			return query.list();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+	}
+
+	@Override
+	public Meal getMealByName(String meal) {
+		logger.info("Entering getMealByName method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Meal> query = session.createQuery("from Meal m where m.name=:meal", Meal.class);
+			query.setParameter("meal", meal);
+			return query.getSingleResult();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
 	}
 
 }

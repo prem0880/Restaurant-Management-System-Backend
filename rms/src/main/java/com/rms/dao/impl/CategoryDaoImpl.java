@@ -4,114 +4,121 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.CategoryDao;
 import com.rms.entity.Category;
-import com.rms.exception.IdNotFoundException;
-                       
+import com.rms.exception.DataBaseException;
+import com.rms.util.TimeStampUtil;
+
 @Repository
 @Transactional
-public class CategoryDaoImpl implements CategoryDao{
+public class CategoryDaoImpl implements CategoryDao {
 
-	
-	static final String ID_NOT_FOUND="Category not found with id ";
-	static final String COULDNT_UPDATE="Couldn't update Category...";
 
-	
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	
-	
+	private static final Logger logger = LogManager.getLogger(CategoryDaoImpl.class);
+
+
 	@Override
 	public String deleteCategory(Long id) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		Category category=null;
-		boolean stat=false;
+		logger.info("Entering deleteCategory method");
 		try {
-			category=session.load(Category.class, id);
-			if(category.getName()!=null) {
-				stat=true;
-			}
-		}
-		catch(org.hibernate.ObjectNotFoundException e)
-		{
-			throw new IdNotFoundException("Deletion has failed."+ID_NOT_FOUND+id);
-		}
-		if(stat)
-		{
+			Session session = sessionFactory.getCurrentSession();
+			Category category = null;
+			String result = null;
+			category = session.load(Category.class, id);
 			session.delete(category);
 			session.flush();
-			result="Deletion is successful with id: "+id;
+			result = ApplicationConstants.CATEGORY_DELETE_SUCCESS;
+			return result;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.COULDNT_DELETE+e.getMessage());
 		}
-		return result;
+
 	}
 
 	@Override
-	public String updateCategory(Long id, Category category) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		Category categoryEntity=null;
-		boolean stat=false;
+	public boolean updateCategory(Long id, Category category) {
+		logger.info("Entering updateCategory method");
+		boolean flag = false;
 		try {
-				categoryEntity=session.load(Category.class, id);
-				if(categoryEntity.getName()!=null) {
-					stat=true;
-				}
-		}
-		catch(org.hibernate.ObjectNotFoundException e)
-		{
-			throw new IdNotFoundException(COULDNT_UPDATE+ID_NOT_FOUND+id);
-		}
-		
-		if(stat) {
-			categoryEntity.setName(category.getName());
+			Session session = sessionFactory.getCurrentSession();
+			Category categoryObj = null;
+			categoryObj = session.load(Category.class, id);
+			category.setCreatedOn(categoryObj.getCreatedOn());
+			category.setId(id);
+			category.setUpdatedOn(TimeStampUtil.getTimeStamp());
+			Object obj = session.merge(category);
+			if (obj != null) { 
+				flag = true;
+			}
 			session.flush();
-			result="Category Updation is successful for id: "+id;
+			return flag;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.CATEGORY_NOT_FOUND + ApplicationConstants.COULDNT_UPDATE);
 		}
-	
-		return result;
+
 	}
 
 	@Override
-	public String addCategory(Category category) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		session.save(category);
-		result="Category added successfully.....";
-		session.flush();
-		return result;
+	public boolean addCategory(Category category) {
+		logger.info("Entering addCategory method");
+		boolean flag = false;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			category.setCreatedOn(TimeStampUtil.getTimeStamp());
+			Long value = (Long) session.save(category);
+			if (value != null) {
+				flag = true;
+			}
+			session.flush();
+			return flag;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.CATEGORY_SAVE_ERROR);
+		}
+
 	}
 
 	@Override
 	public Category getCategoryById(Long id) {
-		Session session=sessionFactory.getCurrentSession();
-		Category category =null;
-		category=session.get(Category.class, id);
-		if(category!=null)
-		{
+		logger.info("Entering getCategoryById method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Category category = null;
+			category = session.get(Category.class, id);
 			return category;
-			
-		}else {
-    		throw new IdNotFoundException("Sorry, Category could not be retrived " + ID_NOT_FOUND+ id);
-    	}
-		
-	
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+ ApplicationConstants.CATEGORY_NOT_FOUND + e.getMessage());
+		}
 	}
 
 	@Override
 	public List<Category> getAllCategory() {
-		Session session=sessionFactory.getCurrentSession();
-		return session.createQuery("from Category",Category.class).getResultList();
+		logger.info("Entering getAllCategory method");
+		List<Category> list = null;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Category> query = session.createQuery("from Category", Category.class);
+			list = query.list();
+			return list;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
 	}
 
-		
-	
-	
 }

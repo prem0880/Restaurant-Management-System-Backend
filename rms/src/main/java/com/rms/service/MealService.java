@@ -3,20 +3,48 @@ package com.rms.service;
 import java.util.List;
 
 import com.rms.dto.MealDto;
-import com.rms.entity.Meal;
 
 public interface MealService {
+	
+	/**
+	 * 
+	 * @param meal id as input
+	 * @return  success string message
+	 */
+	String deleteMeal(Long id);
 
+	/**
+	 * 
+	 * @param meal id as input
+	 * @param meal DTO object
+	 * @return	 success string message
+	 */
+	String updateMeal(Long id, MealDto mealDto);
+
+	/**
+	 * 
+	 * @param meal DTO object as input
+	 * @return  success string message
+	 */	
+	String addMeal(MealDto mealDto);
+
+	/**
+	 * 
+	 * @param meal id as input
+	 * @return  meal DTO object
+	 */
+	MealDto getMealById(Long id);
+
+	/**
+	 * 
+	 * @return  List of meal DTO objects
+	 */
+	List<MealDto> getAllMeal();
 	
-	public String deleteMeal(Long id);
-	
-	public String updateMeal(Long id, MealDto mealDto);
-	
-	public String addMeal(MealDto mealDto);
-	
-	public Meal getMealById(Long id);
-	
-	public List<Meal> getAllMeal();
-	
-	
+	/**
+	 * 
+	 * @param meal name as input
+	 * @return  meal identifier
+	 */
+	Long getMealByName(String meal);
 }

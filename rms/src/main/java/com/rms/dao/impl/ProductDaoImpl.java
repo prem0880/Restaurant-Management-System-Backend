@@ -4,99 +4,148 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.rms.constants.ApplicationConstants;
 import com.rms.dao.ProductDao;
 import com.rms.entity.Product;
-import com.rms.exception.IdNotFoundException;
-
+import com.rms.exception.DataBaseException;
+import com.rms.util.TimeStampUtil;
 
 @Repository
 @Transactional
 public class ProductDaoImpl implements ProductDao {
 
-	static final String ID_NOT_FOUND="Product not found with id ";
-	static final String COULDNT_UPDATE="Couldn't update Product...";
-		
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	private static final Logger logger = LogManager.getLogger(ProductDaoImpl.class);
+
+
 	@Override
 	public String deleteProduct(Product product) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		session.delete(product);
-		session.flush();
-		result="Product Deletion is Successfully!";
-		return result;
-		
-	}
-
-	@Override
-	public String updateProduct(Long id, Product product) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		Product updateProduct=null;
-		boolean stat=false;
+		logger.info("Entering deleteProduct method");
 		try {
-				updateProduct=session.load(Product.class, id);
-				if(updateProduct.getName()!=null) {
-					stat=true;
-				}
-		}
-		catch(org.hibernate.ObjectNotFoundException e)
-		{
-			throw new IdNotFoundException(COULDNT_UPDATE+ID_NOT_FOUND+id);
-		}
-		
-		if(stat) {
-			updateProduct.setImage(product.getName());
-			updateProduct.setCategory(product.getCategory());
-			updateProduct.setDescription(product.getDescription());
-			updateProduct.setMeal(product.getMeal());
-			updateProduct.setPrice(product.getPrice());
-			updateProduct.setTax(product.getTax());
-			updateProduct.setType(product.getType());
+			String result = null;
+			Session session = sessionFactory.getCurrentSession();
+			session.delete(product);
 			session.flush();
-			result="Product Updation is successful for id: "+id;
+			result = ApplicationConstants.PRODUCT_DELETE_SUCCESS;
+			return result;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.PRODUCT_DELETE_ERROR);
 		}
-	
-		return result;
+
 	}
 
 	@Override
-	public String addProduct(Product product) {
-		Session session=sessionFactory.getCurrentSession();
-		String result = null;
-		session.save(product);
-		session.flush();
-		result="Product Added Successfully...";
-		return result;
+	public boolean updateProduct(Long id, Product product) {
+		logger.info("Entering updateProduct method");
+		boolean flag = false;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Product updateProduct = null;
+			updateProduct = session.load(Product.class, id);
+			product.setCreatedOn(updateProduct.getCreatedOn());
+			product.setId(id);
+			product.setUpdatedOn(TimeStampUtil.getTimeStamp());
+			Object value = session.merge(product);
+			if (value != null) {
+				flag = true;
+			}
+			session.flush();
+			return flag;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.PRODUCT_NOT_FOUND+ApplicationConstants.PRODUCT_UPDATE_ERROR);
+		}
+	}
+
+	@Override
+	public boolean addProduct(Product product) {
+		logger.info("Entering addProduct method");
+		boolean flag = false;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			product.setCreatedOn(TimeStampUtil.getTimeStamp());
+			Long value = (Long) session.save(product);
+			if (value != null) {
+				flag = true;
+			}
+			session.flush();
+			return flag;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.PRODUCT_SAVE_ERROR);
+		}
 	}
 
 	@Override
 	public Product getProductById(Long id) {
-		Session session=sessionFactory.getCurrentSession();
-		Product product =null;
-		product=session.get(Product.class, id);
-		if(product!=null)
-		{
+		logger.info("Entering getProductById method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Product product = null;
+			product = session.get(Product.class, id);
 			return product;
-			
-		}else {
-    		throw new IdNotFoundException("Sorry, Product could not be retrived " + ID_NOT_FOUND+ id);
-    	}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR+ApplicationConstants.PRODUCT_NOT_FOUND);
+		}
 
 	}
 
 	@Override
 	public List<Product> getAllProduct() {
-		Session session=sessionFactory.getCurrentSession();
-		return session.createQuery("from Product",Product.class).getResultList();
+		logger.info("Entering getAllProduct method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Product> query = session.createQuery("from Product", Product.class);
+			return query.list();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
 	}
 
-	
+	@Override
+	public List<Product> getProductByTypeAndCategory(Long categoryId, String type) {
+		logger.info("Entering getProductByTypeAndCategory method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Product> query = session
+					.createQuery("from Product p where p.category.id=:categoryId AND p.type=:type", Product.class);
+			query.setParameter("categoryId", categoryId);
+			query.setParameter("type", type);
+			return query.list();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+
+	}
+
+	@Override
+	public List<Product> getProductByMeal(Long mealId) {
+		logger.info("Entering getProductByMeal method");
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Product> query = session
+					.createQuery("from Product p where p.meal.id=:mealId", Product.class);
+			query.setParameter("mealId", mealId);
+			return query.list();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new DataBaseException(ApplicationConstants.DB_FETCH_ERROR);
+		}
+
+	}
 
 }

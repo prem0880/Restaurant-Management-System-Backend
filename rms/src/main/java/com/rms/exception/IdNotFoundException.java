@@ -1,7 +1,10 @@
 package com.rms.exception;
 
 public class IdNotFoundException extends RuntimeException{
-	public IdNotFoundException(String msg) {
+	private static final long serialVersionUID = 1;
+
+	public IdNotFoundException(String msg){
 		super(msg);
 	}
+
 }
